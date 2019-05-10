@@ -21,3 +21,4 @@ Suggests:
     rmarkdown
 VignetteBuilder: knitr
 Remotes: phenoscape/rphenoscape
+RoxygenNote: 6.1.1
