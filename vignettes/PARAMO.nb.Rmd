@@ -68,7 +68,7 @@ dat
 Now let's load in the Rabosky fish phylogeny and match it to the data using `treeplyr`.
 
 ```{r}
-tree <- read.tree("~/repos/ontologyPCM/data/actinopt_12k_treePL.tre")
+tree <- read.tree("../data/actinopt_12k_treePL.tre")
 td <- make.treedata(tree, dat)
 td
 ```
