@@ -13,11 +13,27 @@ Encoding: UTF-8
 LazyData: true
 Depends:
     R (>= 3.4.0)
-Imports:
     RNeXML,
-    rphenoscape (>= 0.1.2)
+    rphenoscape (>= 0.1.1),
+    treeplyr,
+    RCurl,
+    rjson,
+    readr,
+    urltools,
+    pracma, 
+    tidyverse,
+    kableExtra, 
+    ontologyIndex,
+    igraph, 
+    hashmap, 
+    sets,
+    phytools,
+    RColorBrewer,
+    magrittr
+Imports:
 Suggests: 
     knitr,
     rmarkdown
 VignetteBuilder: knitr
 Remotes: phenoscape/rphenoscape
+RoxygenNote: 6.1.1
