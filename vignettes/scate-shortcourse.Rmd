@@ -48,39 +48,104 @@ First let’s look up information about the query terms. You can use the term de
 For example, view the details for the anatomy term “fin”:
 
 ```{r}
-```pk_anatomical_detail("fin")```
+pk_anatomical_detail("fin")
 ```
 For a specific taxon, such as Siluriformes, you can view the taxon rank, term label, whether or not the taxon is extinct, its common name, and ID: 
 
 ```{r}
-```pk_taxon_detail("Siluriformes")```
-
-## Figures
-
-The figure sizes have been customised so that you can easily put two images side-by-side. 
-
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
+pk_taxon_detail("Siluriformes")
 ```
 
-You can enable figure captions by `fig_caption: yes` in YAML:
+Terms are related to each other by superclass and subclass relationships (among other relationships such as part_of). You can use the term classification functions ```pk_anatomical_class()```, ```pk_taxon_class()```,and ```pk_phenotype_class()```to view the superclass and subclass relationships for anatomy, taxonomy, or phenotypic quality terms. 
 
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
+For example, view the relationships for “fin”: 
 
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
-
-## More Examples
-
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
-
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
+```{r}
+pk_anatomical_class("fin")
 ```
 
-Also a quote using `>`:
+## 4. Retrieve study matrices in RPhenoscape
 
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
+Now we will query for Ictaluridae (bullhead catfishes) and ‘fin’ (including parts) to retrieve the list of studies that contain fin characters for this taxon.  
+
+The list is returned as a ```data.frame``` containing the study IDs and citations. Navigate to Global Environment and click on ‘slist’ to view the study ID and citation (author, year) for each study in the upper left hand pane.  Note that taxon, entity, and quality are optional arguments in this query, and we have also included fin parts.  Here we found nine studies.
+
+```{r}
+slist <- pk_get_study_list(taxon = ‘Ictaluridae’, entity = "fin", relation = “part of”)
+```
+Now we want to obtain the character matrix for one of these studies. Using the study IDs from the previous step, we can get a list of the character matrices as NeXML objects.  Go to Global Environment pane and click on ‘nex_list’ to view the study ID and associated NeXML object.  
+
+```{r}
+Lundberg_nex <- pk_get_study_xml(slist$id[5])
+```
+To view the full Lundberg (1992) matrix within RStudio, we need to first retrieve the matrix as a data.frame from the NeXML objects in the list: 
+
+```{r}
+study_matrix <- pk_get_study(nex_list)
+```
+
+You can take a look at a small part of the Lundberg (1992) matrix (e.g., the first five taxa and first five characters): 
+
+```{r}
+study_matrix[[1]][1:5, 1:7]
+```
+Now navigate to Global Environment and click on ‘study_matrix’ to view the matrix, including the total number of taxa and characters (i.e., the dimensions of the data.frame). To view the entire matrix in this panel, click on the icon that appears when you hover over the second row (see below - add screenshot). 
+
+The list of identifiers for the taxa (from the Vertebrate Taxonomy Ontology) and characters associated with each character matrix (as ```data.frames```) can also be viewed:
+
+```{r}
+study_metas <- pk_get_study_meta(nex_list)
+study_metas[[1]] 
+```
+
+Note that all taxa and characters from this study are returned, not just those pertaining to our original search terms.  In this example, many anatomical entities other than ‘fin’ and its parts are returned as part of the original study matrix.
+
+## 5. Get a presence/absence character matrix using OntoTrace in RPhenoscape
+
+In the previous step, we queried the KB for studies that contain characters pertaining to the fin in Ictaluridae, and we obtained character matrices for publications including those characters. Now we want to get a matrix that synthesizes these characters into a single matrix. 
+
+OntoTrace combines characters from multiple publications into a single synthetic matrix.  It allows a user to specify one or more anatomical entities and taxa.  It returns a matrix that includes only presence or absence of anatomical entities.  It uses asserted data of presence or absence, i.e., originally described by an author, or inferred data.  Data are inferred from asserted characters, e.g., if an author describes a part of a fin such as ‘fin ray present’, the fin is inferred present and scored as such in the matrix.
+
+ The OntoTrace default settings are to include parts of the anatomical entity and to include variable-only characters, but here we will include those that are invariant as well. 
+
+```{r}
+nex <- pk_get_ontotrace_xml(taxon = "Ictaluridae", entity = "fin", variable_only = FALSE)
+```
+
+To view the matrix within RStudio, get the matrix (m) as a ```data.frame``` from the NeXML object. Opening this (‘m’) in the Global Environment shows the taxa, character names, and state assignments (0, absent; 1, present) (note: the otu and otus are NeXML-internal IDs):  
+
+```{r}
+m <- pk_get_ontotrace(nex)
+```
+
+The character and taxon lists for the matrix can also be returned. Click on ‘meta’ in the Global Environment pane to view the data.frames for taxa and entities: 
+
+```{r}
+meta <- pk_get_ontotrace_meta(nex)
+```
+The above returns 29 species of ictalurid catfishes and 123 anatomical entities for fins and their parts.  
+
+You will need to go the Phenoscape KB (http://beta.phenoscape.org/#/facet) to view the supporting states, i.e., the source data upon which inferences were made or those that were directly asserted.   
+
+
+For example, the above matrix shows that the pelvic fin is present for *Ictalurus australis*. Enter these data into the faceted browsing interface:
+Anatomical entity = ‘pelvic fin’
+Quality = ‘present’
+Taxon = ‘Ictalurus australis’
+
+Looking at ‘Taxon annotations’, you will find that there are zero phenotypes, i.e., no asserted character states to ‘pelvic fin present’.  Now click the ‘inferred presence’ radio button under Phenotypic quality.  You will find 3 phenotypes. 
+
+## 6. Subset the matrix taxonomically 
+We are interested in examining the presence and absence characters pertaining only to *Ictalurus*. We will subset the matrix to include only descendents of Ictalurus. First, we determine whether each taxon in the matrix (m) is a descendant of Ictaluridae. This returns a list of TRUE or FALSE assignments for each taxon in the matrix:
+
+```{r}
+is_desc <- pk_is_descendant('Ictalurus', m$taxa)
+```
+We then subset the matrix m to the descendants of *Ictalurus*:
+
+```{r}
+Ictalurus_m <- m[is_desc, ]
+```
+
+View the new matrix by clicking on ‘Ictalurus_m’ in the Global Environment to view the ```data.frame``` of the matrix.
+
