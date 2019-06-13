@@ -1,7 +1,5 @@
 ---
-title: "Vignette Title"
-author: "Vignette Author"
-date: "`r Sys.Date()`"
+title: "RPhenoscape Tutorial"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
@@ -15,24 +13,47 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
+## 1. Introduction
 
-Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
+The desired input of many comparative studies is a matrix that includes all the data available for a set of traits and a focal taxon.  Bringing similar types of trait data together across studies is notoriously difficult, but is straightforward with ontology annotations.  Trait data that are tagged using similar ontology terms can be automatically called using R functions. 
 
-- Never uses retina figures
-- Has a smaller default figure size
-- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
+This workshop uses trait data for vertebrates that has been annotated (tagged) with ontology terms.  These data are accessed from the Phenoscape Knowledgebase (KB).  In this lesson we use R functions to obtain and view character matrices from the KB, obtain synthetic matrices of inferred presence/absence characters, and understand the meaning and relations of ontology terms. The lesson assumes basic knowledge of R and RStudio.
 
-## Vignette Info
+## 2. Browse and filter data in the KB to understand the scope of available data.
 
-Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
+You would like to understand the evolution of morphological traits in a group, and you need a matrix to map to your (typically molecular) phylogenetic tree.  You come to the Phenoscape KB to see what types of data are available across the members of your clade.  In this exercise, you are an ichthyologist, interested in catfishes, specifically the bullhead catfishes (Ictaluridae).
+You begin by querying ‘Siluriformes’  in the Phenoscape KB faceted browsing page http://beta.phenoscape.org/#/facet. You immediately see the scope of the data:
 
-## Styles
+From left to right across the top tabs, for ‘Siluriformes’:
+- There are 4,537 unique phenotypes
+- There are 292,356 taxon annotations 
+- There are 1,452 siluriform taxa with data in the KB 
+- There are 25 publications in the KB that include catfish phenotypes
+- There are 17,883 candidate genes linked to the phenotypes
 
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
+Taxon annotations are the ontology terms tagged to free text descriptions of phenotypes for each siluriform taxon.  Click on the ‘Sources’ box on the right hand side of each row to see the publication source and free text description of the phenotype from which the ontology annotation was derived.  
 
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
+You are specifically interested in Ictaluridae (bullhead catfishes), and you click on that family in the faceted browsing interface.  Now filter using ‘fin’ as the anatomical entity and click ‘parts’.  
+
+Download these taxa and their morphological data using the link provided.  
+
+Go to the publications tab, which shows nine publications that contain fin data.  Note that any of these studies, e.g. Lundberg (1992), can be entered under ‘publications’ in faceted browsing, but the original matrix cannot be downloaded. 
+
+## 3. Retrieve term info using RPhenoscape
+
+Now we will repeat some of the above steps using RPhenoscape, beginning with a query for Ictaluridae (bullhead catfishes) and ‘fin’ (including parts) to retrieve the list of studies that contain fin characters for this taxon.  
+
+First let’s look up information about the query terms. You can use the term detail functions ```pk_anatomical_detail()```, ```pk_taxon_detail()```, ```pk_phenotype_detail()```, and ```pk_gene_detail()``` to retrieve an ontology term’s ID, label, and definition. 
+
+For example, view the details for the anatomy term “fin”:
+
+```{r}
+```pk_anatomical_detail("fin")```
+```
+For a specific taxon, such as Siluriformes, you can view the taxon rank, term label, whether or not the taxon is extinct, its common name, and ID: 
+
+```{r}
+```pk_taxon_detail("Siluriformes")```
 
 ## Figures
 
