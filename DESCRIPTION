@@ -33,7 +33,9 @@ Depends:
 Imports:
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    doParallel,
+    foreach
 VignetteBuilder: knitr
 Remotes: phenoscape/rphenoscape
 RoxygenNote: 6.1.1

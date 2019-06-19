@@ -115,6 +115,105 @@ NUM_STATES=", nrow(M), "\n",
   
   rt<-paste(dec, rt.dist, rt.moves, rt, sep = "")
   
+  rt.build <- '\nrate_matrix := fnFreeK(transition_rates=rates, rescaled=false, matrixExponentialMethod="eigen")\n'
+  rt.root <- paste('root_freq <- simplex(', paste(rep(1, nrow(M)), collapse=" ,"), ')\n', sep="")
+  
+  rt <- paste(rt, rt.build, rt.root, sep="")
+
   return(rt)
 }
 #########
+
+get_graph_matrix<-function(graph){
+  
+  g=graph  
+  
+  # dependent chars object
+  complex.char<-list()
+  complex.char$binary.matrices<-init_binary_matrix(g)
+  complex.char$comb.matrices<-list()
+  
+  # traverse graph
+  topo=topo_sort(g, mode = c("out")) %>% names()
+  complex.char$nodes.sorted=topo
+  vertex.hier=ego(g, order=1, nodes = topo, mode = c("in"), mindist = 1)
+  names(vertex.hier)<-topo
+  complex.char$vertex.hier=vertex.hier
+  
+  
+  for (i in seq_along(topo)){
+    focal.v=complex.char$vertex.hier[[i]]
+    
+    if (length(focal.v)==0){
+      complex.char$comb.matrices[[topo[i]]]$matrix=complex.char$binary.matrices[[topo[i]]]
+      complex.char$comb.matrices[[topo[i]]]$state.string=complex.char$binary.matrices[[topo[i]]] %>% row.names()
+      complex.char$comb.matrices[[topo[i]]]$state.ident=topo[i]
+      #complex.char$comb.matrices[[topo[i]]]$dependency.true=2
+      complex.char$comb.matrices[[topo[i]]]$state.observable=integer(0)
+      complex.char$comb.matrices[[topo[i]]]$state.hidden=integer(0)
+    }
+    
+    if (length(focal.v)>0){
+      
+      if (length(focal.v)==1){ # if length =1 the dependency is chain like
+        MC=complex.char$comb.matrices[[names(focal.v)]]$matrix
+        M=complex.char$binary.matrices[[topo[i]]]
+        dps=ncol(MC)
+        cmb=comb2matrices(MC, M, controlling.state=dps, diag.as = 0)
+      }
+      
+      
+      if (length(focal.v)>1){
+        # sequentially combine multiple matrices as independently coevolving
+        list.matrices=lapply(names(focal.v), function(x) complex.char$comb.matrices[[x]]$matrix)
+        #names(list.matrices)=names(focal.v)
+        #list.matrices=list.matrices[1:2]
+        comb.mt=combNmatrices(list.matrices)
+        
+        # combine matrices  from above with the focal node matrix;
+        # the state bearing dependency is where all entities=1, i.e. the last state
+        M=complex.char$binary.matrices[[topo[i]]]
+        dps=ncol(comb.mt)
+        cmb=comb2matrices(comb.mt, M, controlling.state=dps, diag.as = 0)
+      }
+      
+      # adding attributes
+      complex.char$comb.matrices[[topo[i]]]$matrix=cmb
+      complex.char$comb.matrices[[topo[i]]]$state.string<-r.name<-cmb %>% row.names()
+      
+      st.iden=lapply(names(focal.v), function(x) complex.char$comb.matrices[[x]]$state.ident) %>% unlist()
+      complex.char$comb.matrices[[topo[i]]]$state.ident<-st.iden<-c(st.iden, topo[i])
+      
+      # get observable and "hidden" states of the focal node
+      ln=length(st.iden)-1 # observable a/p are only those which have all states from other chrs=1
+      obs=which(substr(r.name, 1, ln)==paste(rep(1, ln), collapse=""))
+      names(obs)=r.name[obs]
+      complex.char$comb.matrices[[topo[i]]]$state.observable=obs
+      
+      hid=(1:length(r.name))[-obs]
+      names(hid)<-r.name[hid]
+      complex.char$comb.matrices[[topo[i]]]$state.hidden=hid
+      
+      
+      
+    } #end if (length(focal.v)>0)
+  } #end all
+  
+  return(complex.char)
+} # end function
+
+
+init_binary_matrix<-function(graph){
+  matrix.list=list()
+  n.matrix=vcount(graph)
+  vertices=V(graph)$name
+  
+  param.scheme<-matrix(seq(1:(2* n.matrix )), ncol = 2, byrow=TRUE)
+  for (i in 1:n.matrix){
+    matrix.list[[vertices[i]]]<-matrix(c(-param.scheme[i,1],param.scheme[i,1], 
+                                         param.scheme[i,2],-param.scheme[i,2]),2,2,byrow=TRUE)
+    rownames(matrix.list[[vertices[i]]])<-colnames(matrix.list[[vertices[i]]])<-c("0","1")
+  }
+  
+  return(matrix.list)
+}

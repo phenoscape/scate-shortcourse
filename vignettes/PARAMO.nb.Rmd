@@ -1,13 +1,17 @@
 ---
 title: "PARAMO Tutorial"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
 ---
 
 
 
 ```{r echo=FALSE, message=FALSE}
 #include_graphics("../icon-paramo.png")
-
+devtools::load_all("~/repos/scate-shortcourse")
+setwd("~/repos/scate-shortcourse/vignettes")
 knitr::include_graphics("../icon-paramo.png", dpi=100)
 ```
 
@@ -76,14 +80,15 @@ td
 We we want to learn about these traits, so we're going to build a nice data table to see what these traits are and their unique identifiers using the KB API and `rphenoscape` function `pk_anatomical_detail`. 
 
 ```{r}
-anatomical_details <- lapply(colnames(td$dat), function(x) pk_anatomical_detail(x))
+traits <- colnames(td$dat)
+anatomical_details <- lapply(traits, pk_anatomical_detail) # Query over traits and get anatomical details 
 
 char_info <- list()
-char_info$ID <- colnames(td$dat)
-char_info$char_statement <- sapply(anatomical_details, function(x) x$definition)
-char_info$STATE_0 <- rep(0, length(char_info$ID))
-char_info$STATE_1 <- rep(1, length(char_info$ID))
-char_info$IRI <- sapply(anatomical_details, function(x) x$'@id') 
+char_info$ID <- traits
+char_info$char_statement <- sapply(anatomical_details, function(x) x$definition) # Extract definitions
+char_info$STATE_0 <- rep(0, length(traits)) # All ontotrace matrices are binary presence/absence
+char_info$STATE_1 <- rep(1, length(traits)) # All ontotrace matrices are binary presence/absence
+char_info$IRI <- sapply(anatomical_details, function(x) x$id) # Extra a unique URL identifier called an "IRI" 
 char_info$IRI <- gsub("http://purl.obolibrary.org/obo/", "", char_info$IRI)
 char_info$IRI <- gsub("_", ":", char_info$IRI)
 
@@ -93,97 +98,133 @@ as_tibble(char_info)
 ```
 
 ```{r}
-njt <- makeTree(td, skip=NULL)
-njt <- root(njt, grep("barbel", njt$tip.label))
-plotData(td, njt, start=1)
+njt <- makeTraitTree(td, skip=NULL)
+njt <- root(multi2di(njt), grep("barbel", njt$tip.label))
+ontologyHeatMap(td, njt, start=1, cex=0.25)
 ```
 
-Some of our taxa are really data poor, so let's filter them out and deal with a smaller, more manageable dataset by excluding all taxa that don't have at least 40% of the traits as data.
+Some of our taxa are really data poor, so let's filter them out and deal with a smaller, more manageable dataset by excluding all taxa that don't have at least 50% of the traits as data.
 
 ```{r}
-tdf <- filter_coverage(td, traits=0, taxa=0.4)
-njt <- makeTree(tdf, skip=NULL)
+tdf <- filter_coverage(td, traits=0, taxa=0.5)
+njt <- makeTraitTree(tdf, skip=NULL)
 njt <- root(njt, grep("barbel", njt$tip.label))
-plotData(tdf, njt, start=1)
-```
-
-Our next step is to aggregate the traits by their trait types. This part is not quite done by the phenoscape API, so we're going to interact directly with the UBERON ontology. In the future, this will not be necessary. 
-
-```{r}
-ONT<-get_OBO("http://purl.obolibrary.org/obo/uberon/ext.obo", extract_tags="everything",
-             propagate_relationships = c("part_of", "is_a", "RO:0002371"))
-
-annot <- as.list(as.character(char_info$IRI))
-names(annot) <- as.character(char_info$ID)
-ONT$terms_selected_id <- annot
-
-BR_names <- c("dermatocranium", "paired fin", "external integument structure")
-parts <- do.call(rbind,lapply(BR_names, pk_anatomical_detail))
-parts$IRI <- sapply(parts$'@id', strip_IRI)
-levelBR <- setNames(parts$IRI, BR_names)     
-
-EF_names <- "anatomical entity"
-parts <- do.call(rbind,lapply(EF_names, pk_anatomical_detail))
-parts$IRI <- sapply(parts$'@id', strip_IRI)
-levelEF <- setNames(parts$IRI, EF_names)     
-
-BR<-lapply(levelBR, function(x)
-  get_descendants_chars(ONT, annotations="manual", terms=x)  )
-
-EF<-lapply(levelEF, function(x)
-  get_descendants_chars(ONT, annotations="manual", terms=x)  )
-
-cat("\nAggregations by Body Region:\n")
-BR
-cat("\nAll anatomical entities aggregated:\n")
-EF
+ontologyHeatMap(tdf, njt, start=1, cex=0.25)
 ```
 
 Next, we want to identify the dependencies in our traits by traversing the Uberon Ontology. 
 
 ```{r}
-deps <- get.dependencies("../data/uberon.obo",as.character(char_info$IRI))
-chrs.uber <- deps[[1]]
-chrs.uber<-as.matrix(chrs.uber[,c(1,2)])
-tmp <- setNames(char_info$ID, char_info$IRI)
-chrs.uber[,1] <- unname(as.character(tmp[chrs.uber[,1]]))
-chrs.uber[,2] <- unname(as.character(tmp[chrs.uber[,2]]))
+dep.mat <- pa_dep_matrix(gsub("N:", "N_", paste0("http://purl.obolibrary.org/obo/", char_info$IRI, sep="")), .names="label", preserveOrder=TRUE)
+diag(dep.mat) <- NA
+G1 <- graph_from_adjacency_matrix(t(as.matrix(dep.mat)))
 
-# make igraph object
-g=graph_from_edgelist(chrs.uber)
-
-# plot all dependecies
-set.seed(5)
-plot(g, vertex.color="green", vertex.size=2,
-     vertex.label.dist=0, vertex.label.cex=0.75, vertex.label=NULL, edge.arrow.size=0.75)
+plot(G1, vertex.size=5, edge.arrow.size=0.5, vertex.label.cex=0.75)
 ```
 
-Build in Dependencies (not done yet).
 
 ```{r}
+## Right now this is done manually, we are working on making it work for the graphs we created above, but lets do it one by one for each module. 
+## First, let's find all connected components
+
+con.comp=components(G1, "weak")
+M <- list() # Stores our matrices
+
+## Now let's consider mental barbels. We can see from the graph that outer and inner mental barbels depend on a mental barbel being present. We need to amalgamate
+## these into a single, multistate character. 
+
+G.mental.barbel <- induced_subgraph(G1, which(con.comp$membership==3))
+bin_mats <- init_binary_matrix(G.mental.barbel)
+gtraits <- names(bin_mats)
+newTraitName <- paste(gtraits, collapse="+")
+
+## Now we iteratively combine the matrices according to the dependencies above
+M1 <- comb2matrices(bin_mats$`mental barbel`, bin_mats$`inner mental barbel`, dependent.state = 2) ## Dependent on column 2 of the 'mental barbel' matrix.
+M[[newTraitName]] <- comb2matrices(M1, bin_mats$`outer mental barbel`, dependent.state = c(3,4)) ## `outer mental barbel` is dependent on columns 3 and 4 {10, 11} of M1 (i.e. a `mental barbel` is present)
+states <- colnames(M[[newTraitName]])
+names(states) <- 1:length(states)
+
+## Now we have to recode the data
+td.comb <-recode_td(tdf, gtraits, states, hidden0=2:3) ## hidden0 indicates which traits have hidden states when they are absent. These are dependent states.
+```
+
+
+```{r}
+## Now let's repeat it for all the other traits; 
+## Urohyal
+g <- induced_subgraph(G1, which(con.comp$membership==7))
+bin_mats <- init_binary_matrix(g)
+gtraits <- names(bin_mats)
+newTraitName <- paste(gtraits, collapse="+")
+
+## Same structure as mental barbels
+M1 <- comb2matrices(bin_mats[[1]], bin_mats[[2]], dependent.state = 2) 
+M[[newTraitName]] <- comb2matrices(M1, bin_mats[[3]], dependent.state = c(3,4)) 
+states <- colnames(M[[newTraitName]])
+names(states) <- 1:length(states)
+
+td.comb <-recode_td(td.comb, gtraits, states, hidden0=2:3) ## hidden0 indicates which traits have hidden states when they are absent. These are dependent states.
+
+## Pectoral fin
+g <- induced_subgraph(G1, which(con.comp$membership==8))
+mats <- get_graph_matrix(g)
+bin_mats <- mats$binary.matrices[mats$nodes.sorted]
+gtraits <- names(bin_mats)
+newTraitName <- paste(gtraits, collapse="+")
+
+## More complicated structure than the previous two, with more states (16)
+M1 <- comb2matrices(bin_mats[[1]], bin_mats[[2]], dependent.state = 2) 
+M2 <- comb2matrices(M1, bin_mats[[3]], dependent.state = 4) 
+M3 <- comb2matrices(M2, bin_mats[[4]], dependent.state = 8) 
+M[[newTraitName]] <- comb2matrices(M3, bin_mats[[5]], dependent.state = c(15,16)) 
+
+states <- colnames(M[[newTraitName]])
+names(states) <- 1:length(states)
+
+td.comb <-recode_td(td.comb, gtraits, states, hidden0=2:length(gtraits)) ## hidden0 indicates which traits have hidden states when they are absent. These are dependent states.
+
+## Pelvic Fin
+g <- induced_subgraph(G1, which(con.comp$membership==9))
+mats <- get_graph_matrix(g)
+bin_mats <- mats$binary.matrices[mats$nodes.sorted]
+gtraits <- names(bin_mats)
+newTraitName <- paste(gtraits, collapse="+")
+
+## Same as first two
+M1 <- comb2matrices(bin_mats[[1]], bin_mats[[2]], dependent.state = 2) 
+M[[newTraitName]] <- comb2matrices(M1, bin_mats[[3]], dependent.state = c(3,4)) 
+states <- colnames(M[[newTraitName]])
+names(states) <- 1:length(states)
+
+td.comb <-recode_td(td.comb, gtraits, states, hidden0=2:length(gtraits)) ## hidden0 indicates which traits have hidden states when they are absent. These are dependent states.
+states <- setNames(c("0", "1"), 1:2)
+td.comb <- recode_td(td.comb,"vomer", states)
+td.comb <- recode_td(td.comb, "accessory vomerine tooth plate", states)
+td.comb <- recode_td(td.comb, "anterior nasal barbel", states)
+td.comb <- recode_td(td.comb, "posterior nasal barbel", states)
+td.comb <- recode_td(td.comb, "maxillary barbel", states)
+
 
 ```
+
 
 We are going to reconstruct our stochastic character maps in RevBayes. In the workshop, we will do a Julia Child-style switch-a-roo and analyze completed analyses, rather than actually running these, because they will take too long. The following code makes a set of customized `.Rev` scripts and datasets that we can use to batch run our analyses. 
 
 
 ```{r}
-write.nexus(tdf$phy, file="../revbayes/data/fishtree.tre")
+#write.nexus(td.comb$phy, file="../revbayes/data/fishtree.tre") #This will be provided to you, but if you run your own analysis, you will want to put a tree in place that you can use in RevBayes
 
-MT <- as.data.frame(tdf$dat)
-for(i in 1:ncol(MT)){
-  MT[,i] <- factor(MT[,i], levels=c(0,1,"?"))
-  MT[is.na(MT[,i]),i] <- "?"
-  MT[grep("and", MT[,i]), i] <- "?"
-}
+MT <- as.data.frame(td.comb$dat)
 colnames(MT) <- gsub(" ", "_", colnames(MT))
 
-rownames(MT) <- tdf$phy$tip.label
+rownames(MT) <- td.comb$phy$tip.label
 for (i in 1:ncol(MT)){
   C.rev<-MT[,i]
   C.rev<-gsub("&", " ", C.rev)
+  o <- order(nchar(C.rev))
   
   out<-cbind(rownames(MT), C.rev)
+  out <- out[o,]
   write.table(file=paste0("../revbayes/data/", colnames(MT[i]), ".char"), out, quote=F, sep=" ", 
               row.names=F, col.names=F)
 }
@@ -201,8 +242,31 @@ for (i in 1:ncol(MT)){
   fl.in <- gsub(pattern = "@chrs_2_read@", 
                 replace = paste0("data/", colnames(MT[i]), ".char"), x = fl.in)
   
+  if(colnames(MT)[i] %in% gsub(" ", "_", names(M))){
+    in.rev<-Mk_Rev(M[[gsub("_", " ", colnames(MT)[i])]])
+    
+    fl.in <- gsub(pattern = "@numstates@", 
+                replace = as.character(max(dim(M[[gsub("_", " ", colnames(MT)[i])]]))), x = fl.in)
+    
+    fl.in <- gsub(pattern = "@ratematrix@", 
+                replace = in.rev, x = fl.in)
+  } else {
+    
+    fl.in <- gsub(pattern = "@numstates@", 
+                replace = "2", x = fl.in)
+    
+    fl.in <- gsub(pattern = "@ratematrix@", 
+                replace = ratemat1, x = fl.in)
+  }
+  
   cat(file=paste0("../revbayes/", colnames(MT[i]), ".Rev"), sep="\n", fl.in)
 }
+
+
+
+# dir to write and read files
+dirW= ("../revbayes/Discr_maps/")
+dirR= ("../revbayes/output/")
 
 ```
 
@@ -213,33 +277,62 @@ setwd("../revbayes/")
 # Load these packages if you have access to multiple cores and want to run in parallel
 library(foreach)
 library(doParallel)
-registerDoParallel(cores=1)
+registerDoParallel(cores=2)
 res <- foreach(i=1:ncol(MT)) %dopar% {
   cmd <- paste("./rb07 ", colnames(MT)[i], ".Rev &", sep="")
-  #system(cmd) #Don't actually run!!
+  system(cmd) #Don't actually run!!
 }
 ```
 Big long script for amalgamating regions and stochastic maps. I will distill this down and ``pre-cook'' it so it doesn't take so long. 
 
+Our next step is to aggregate the traits by their trait types. This part is not quite done by the phenoscape API, so we're going to interact directly with the UBERON ontology. In the future, this will not be necessary. 
+
+```{r}
+# let's modify our character info to drop dependent states and match our new amalgamated characters
+char_info_comb <- dropDependentTraits(char_info, dep.mat, td.comb)
+
+c <-  char_info_comb$ID
+c <- gsub(" ", "_", c)
+
+#ONT<-get_OBO("http://purl.obolibrary.org/obo/uberon/ext.obo", extract_tags="everything", propagate_relationships = c("part_of", "is_a"))
+#saveRDS(ONT, "../data/processed_UBERON.rds")
+ONT <- readRDS("../data/processed_UBERON.rds")
+
+annot <- as.list(as.character(char_info_comb$IRI))
+names(annot) <- as.character(char_info_comb$ID)
+ONT$terms_selected_id <- annot
+
+BR_names <- c("dermatocranium", "paired fin", "external integument structure")
+parts <- do.call(rbind,lapply(BR_names, pk_anatomical_detail))
+parts$IRI <- sapply(parts$id, strip_IRI)
+levelBR <- setNames(parts$IRI, BR_names)     
+
+EF_names <- "anatomical structure"
+parts <- do.call(rbind,lapply(EF_names, pk_get_iri, as="uberon"))
+parts$IRI <- sapply(parts[,1], strip_IRI)
+levelEF <- setNames(parts$IRI, EF_names) 
+
+BR<-lapply(levelBR, function(x)
+  get_descendants_chars(ONT, annotations="manual", terms=x)  )
+
+EF<-lapply(levelEF, function(x)
+  get_descendants_chars(ONT, annotations="manual", terms=x)  )
+
+cat("\nAggregations by Body Region:\n")
+BR
+cat("\nAll anatomical entities aggregated:\n")
+EF
+```
+
 ```{r eval=FALSE}
-tree.tmp.final<-read.nexus("../revbayes/data/fishtree.tre")
-# let's make character list
-
-c= char_info$ID
-c<-gsub(" ", "_", c)
-
-# dir to write and read files
-dirW= ("../revbayes/Discr_maps/")
-dirR= ("../revbayes/output/")
-
 #####################################
-# Read a sample of 100 maps from .stm files and save them in the poper format .stmR
+# Read a sample of 2 maps from .stm files and save them in the proper format .stmR
 #####################################
 
 for (i in 1:length(c))
 {
   tree<-read_Simmap_Rev(paste0(dirR, c[i], ".stm"),
-                        start=11, end=20,
+                        start=1, end=2,
                         save = NULL) %>% read.simmap(text=., format="phylip")
   
   
@@ -263,18 +356,18 @@ for (i in 1:length(c))
   for (j in 1:length(sim)){
     tryCatch({
       
-      print(paste0("Descritizing tree ", j))
+      print(paste0("Descretizing tree ", j))
       
       ## errors with na
       
       ##
       
       ##### make trees equal with template
-      sim.d<-make_tree_eq(tree.tmp.final, sim[[j]], round=5)
+      sim.d<-make_tree_eq(td.comb$phy, sim[[j]], round=5)
       ###
       
       #sim.d<-discr_Simmap_all(sim[[j]], 1000)
-      sim.d<-discr_Simmap_all(sim.d, 1000)
+      sim.d<-discr_Simmap_all(sim.d, 100)
       
       saveRDS(sim.d, file =  paste0(dirW,c[i], "_", j, ".rds") )
       
@@ -318,7 +411,7 @@ names(BR.maps)<-names(BR)
 # the number of amalgamations per term can be specified using `ntrees=`
 for (i in 1:length(BR.maps))
 {
-  map<-paramo(cc[[i]], ntrees=1, dirW=dirW)
+  map<-paramo(cc[[i]], ntrees=2, dirW=dirW)
   BR.maps[[i]]<-map
 }
 
@@ -336,26 +429,41 @@ EF.maps<-vector("list", length(EF))
 names(EF.maps)<-names(EF)
 
 # run amalgamation using the renamed outputs from RAC query
-# this code will return 10 amalgamated stochastic maps of the EF character
+# this code will return 1 amalgamated stochastic map of the EF character
 for (i in 1:length(EF.maps))
 {
-  map<-paramo(cc3[[i]], ntrees=10, dirW=dirW)
+  map<-paramo(cc3[[i]], ntrees=2, dirW=dirW)
   EF.maps[[i]]<-map
 }
+
+saveRDS(BR.maps, "../data/BRmaps.rds")
+saveRDS(EF.maps, "../data/EFmaps.rds")
 ```
 
-Plots. 
+If you skipped the steps above, no problem, we can simply load the pre-cooked data. 
+
+```{r}
+EF.maps <- readRDS("../data/EFmaps.rds")
+BR.maps <- readRDS("../data/BRmaps.rds")
+```
+
+Let's plot and view the results!
 
 ```{r}
 #########
 # Individual Traits Level
 ########
-ymax <- 1.1*length(tdf$phy$tip.label)
-for(i in (1:ncol(tdf$dat))[-c(8,17,19)]){#Not sure why traits 8, 17, and 19 don't work
-  trait <- colnames(tdf$dat)[i]
+
+hm.palette <- colorRampPalette(brewer.pal(9, 'Set1'), space='Lab')
+
+
+ymax <- 1.1*length(td.comb$phy$tip.label)
+for(i in (1:length(c))){
+  trait <- c[i]
   trait <- gsub(" ", "_", trait)
   map <- paramo(trait, ntrees=1, dirW=dirW)
-  plotSimmap(map[[1]], pts=F,ftype="off", colors=setNames(viridis::viridis(2), c("0", "1")), ylim=c(0, ymax))
+  nstates <- as.numeric(max(colnames(map[[1]]$mapped.edge)))
+  plotSimmap(map[[1]], pts=F,ftype="off", colors=setNames(hm.palette(nstates+1), 0:nstates), ylim=c(0, ymax))
   title(paste0("\n ", trait))
 }
 
@@ -367,19 +475,20 @@ for(i in (1:ncol(tdf$dat))[-c(8,17,19)]){#Not sure why traits 8, 17, and 19 don'
 # BR level
 ########
 par(mfrow=c(1,3))
+
 # plot one stochastic maps for the head character
 states <- unique(names(unlist(BR.maps$dermatocranium[[1]]$maps)))
-plotSimmap(BR.maps$dermatocranium[[1]], pts=F,ftype="off",  colors=setNames(viridis::viridis(length(states)), states))
+plotSimmap(BR.maps$dermatocranium[[1]], pts=F,ftype="off",  colors=setNames(hm.palette(length(states)), states))
 title("\n Dermatocranium characters")
 
 # plot one stochastic maps for the wings character
 states <- unique(names(unlist(BR.maps$'paired fin'[[1]]$maps)))
-plotSimmap(BR.maps$`paired fin`[[1]], pts=F,ftype="off", colors=setNames(viridis::viridis(length(states)), states) )
+plotSimmap(BR.maps$`paired fin`[[1]], pts=F,ftype="off", colors=setNames(hm.palette(length(states)), states) )
 title("\n Paired Fin characters")
 
 # plot one stochastic maps for the legs character
 states <- unique(names(unlist(BR.maps$`external integument structure`[[1]]$maps)))
-plotSimmap(BR.maps$`external integument structure`[[1]], pts=F,ftype="off", colors=setNames(viridis::viridis(length(states)), states))
+plotSimmap(BR.maps$`external integument structure`[[1]], pts=F,ftype="off", colors=setNames(hm.palette(length(states)), states))
 title("\n Barbel characters")
 ```
 
@@ -390,16 +499,13 @@ title("\n Barbel characters")
 par(mfrow=c(1,3))
 # plot one stochastic maps for the entire phenotype character
 # first, let's define color pallette for the characters since it contains many states
-tmm<-EF.maps$`anatomical entity`[[1]]
+tmm<-EF.maps[[1]][[1]]
 lapply(tmm$maps, names) %>% unlist %>% unique->states
 # number of states in the character
 #length(states)
 
-hm.palette <- colorRampPalette(brewer.pal(9, 'Set1'), space='Lab')
 color<-hm.palette(length(states))
 
 plotSimmap(tmm, setNames(color, states),  lwd=3, pts=F,ftype="off")
 title("\n Entire Phenotype character")
 ```
-
-
