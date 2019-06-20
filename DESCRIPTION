@@ -1,9 +1,9 @@
 Package: SCATE.shortcourse
 Title: Short Course on Phylogenetic Comparative Analysis of Integrated Anatomical Traits
-Version: 0.0.0.9000
+Version: 0.0.1
 Authors@R: 
     c(person("Hilmar", "Lapp",
-             email = "first.last@example.com",
+             email = "hilmar.lapp@duke.edu",
              role = c("aut", "cre"),
              comment = c(ORCID="0000-0001-9107-0714")
            ))
@@ -14,7 +14,7 @@ LazyData: true
 Depends:
     R (>= 3.4.0),
     RNeXML,
-    rphenoscape (>= 0.1.1),
+    rphenoscape (>= 0.2.8),
     treeplyr,
     RCurl,
     rjson,
