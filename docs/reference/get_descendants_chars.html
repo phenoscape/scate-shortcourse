@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Articles • SCATE.shortcourse</title>
+<title>Get characters that descendants of selected ontology term — get_descendants_chars • SCATE.shortcourse</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,7 +30,10 @@
 
 
 
-<meta property="og:title" content="Articles" />
+<meta property="og:title" content="Get characters that descendants of selected ontology term — get_descendants_chars" />
+
+<meta property="og:description" content="Returns all characters located (associated) with a given ontology terms" />
+<meta name="twitter:card" content="summary" />
 
 
 
@@ -47,7 +50,7 @@
   </head>
 
   <body>
-    <div class="container template-article-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -109,19 +112,59 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Articles</h1>
+    <h1>Get characters that descendants of selected ontology term</h1>
+    
+    <div class="hidden name"><code>get_descendants_chars.Rd</code></div>
     </div>
 
-    <div class="section ">
-      <h3>All vignettes</h3>
-      <p class="section-desc"></p>
-
-      <ul>
-        <li><a href="PARAMO.nb.html">PARAMO Tutorial</a></li>
-        <li><a href="glossary.html">Glossary</a></li>
-        <li><a href="scate-shortcourse.html">RPhenoscape Tutorial</a></li>
-      </ul>
+    <div class="ref-description">
+    
+    <p>Returns all characters located (associated) with a given ontology terms</p>
+    
     </div>
+
+    <pre class="usage"><span class='fu'>get_descendants_chars</span>(<span class='no'>ontology</span>, <span class='kw'>annotations</span> <span class='kw'>=</span> <span class='st'>"auto"</span>, <span class='no'>terms</span>, <span class='no'>...</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>ontology</th>
+      <td><p>ontology_index object.</p></td>
+    </tr>
+    <tr>
+      <th>annotations</th>
+      <td><p>which annotations to use: "auto" means automatic annotations, "manual" means manual ones.
+Alternatively, any othe list element containing annotations can be specified.</p></td>
+    </tr>
+    <tr>
+      <th>terms</th>
+      <td><p>IDs of ontology terms for which descendants are queried.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>other parameters for ontologyIndex::get_descendants() function</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>The vector of character IDs.</p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>ontology</span><span class='kw'>&lt;-</span><span class='no'>HAO</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'HAO' not found</span></div><div class='input'><span class='no'>ontology</span>$<span class='no'>terms_selected_id</span><span class='kw'>&lt;-</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>`CHAR:1`</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"HAO:0000653"</span>), <span class='kw'>`CHAR:2`</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"HAO:0000653"</span>))</div><div class='output co'>#&gt; <span class='error'>Error in ontology$terms_selected_id &lt;- list(`CHAR:1` = c("HAO:0000653"),     `CHAR:2` = c("HAO:0000653")): object 'ontology' not found</span></div><div class='input'><span class='fu'>get_descendants_chars</span>(<span class='no'>ontology</span>, <span class='kw'>annotations</span><span class='kw'>=</span><span class='st'>"manual"</span>, <span class='st'>"HAO:0000653"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in get_descendants_chars(ontology, annotations = "manual", "HAO:0000653"): object 'ontology' not found</span></div></pre>
+  </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
+
   </div>
 </div>
 

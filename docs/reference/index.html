@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title> • SCATE.shortcourse</title>
+<title>Function reference • SCATE.shortcourse</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,7 +30,7 @@
 
 
 
-<meta property="og:title" content="" />
+<meta property="og:title" content="Function reference" />
 
 
 
@@ -83,7 +83,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/scate-shortcourse.html">Vignette Title</a>
+      <a href="../articles/PARAMO.nb.html">PARAMO Tutorial</a>
+    </li>
+    <li>
+      <a href="../articles/glossary.html">Glossary</a>
+    </li>
+    <li>
+      <a href="../articles/scate-shortcourse.html">RPhenoscape Tutorial</a>
     </li>
   </ul>
 </li>
@@ -114,13 +120,148 @@
       <col class="title" />
     </colgroup>
 
-    
+    <tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="Mk_Rev.html">Mk_Rev()</a></code> </p>
+        </td>
+        <td><p>Make rate matrix for RevBayes</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="RAC_query.html">RAC_query()</a></code> </p>
+        </td>
+        <td><p>Function for aggregating characters under a specified set of terms (for example, body regions)</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="comb2matrices.html">comb2matrices()</a></code> <code><a href="comb2matrices.html">comb2matrices()</a></code> </p>
+        </td>
+        <td><p>Combining two matrices</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="combNmatrices.html">combNmatrices()</a></code> </p>
+        </td>
+        <td><p>Combining multiple matrices</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="dropDependentTraits.html">dropDependentTraits()</a></code> </p>
+        </td>
+        <td><p>Utility function for cleaning up character data table after amalgamating characters</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="filter_coverage.html">filter_coverage()</a></code> </p>
+        </td>
+        <td><p>Utility function for filtering based on missing traits and taxa</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_descendants_chars.html">get_descendants_chars()</a></code> </p>
+        </td>
+        <td><p>Get characters that descendants of selected ontology term</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_graph_matrix.html">get_graph_matrix()</a></code> </p>
+        </td>
+        <td><p>Get all dependency matrices given a dependecy graph</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_onto_id.html">get_onto_id()</a></code> </p>
+        </td>
+        <td><p>Get IDs for ontology names</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="init_binary_matrix.html">init_binary_matrix()</a></code> </p>
+        </td>
+        <td><p>Initialize binary matrices given graph</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="init_char_matrix.html">init_char_matrix()</a></code> </p>
+        </td>
+        <td><p>Initialize binary matrices</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="list2edges.html">list2edges()</a></code> </p>
+        </td>
+        <td><p>Convert list to edge matrix</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="makeTraitTree.html">makeTraitTree()</a></code> </p>
+        </td>
+        <td><p>Makes a trait tree using semantic similarity</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="ontologyHeatMap.html">ontologyHeatMap()</a></code> </p>
+        </td>
+        <td><p>Plots a heatmap along with a phylogeny and trait tree</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="prepareMaps.html">prepareMaps()</a></code> </p>
+        </td>
+        <td><p>Function for processing revbayes stochastic maps</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="print_coverage.html">print_coverage()</a></code> </p>
+        </td>
+        <td><p>Function to display the number of matching species and average value across them from an Ontotrace matrix</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="ratemat1.html">ratemat1()</a></code> </p>
+        </td>
+        <td><p>Data object for Rev scripts</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="recode_td.html">recode_td()</a></code> </p>
+        </td>
+        <td><p>recodes a treedata object based on amalgamated characters</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="strip_IRI.html">strip_IRI()</a></code> </p>
+        </td>
+        <td><p>Utility function for stripping off url from IRI</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="table2list.html">table2list()</a></code> </p>
+        </td>
+        <td><p>Convert table to list</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="writeRevOntologyModels.html">writeRevOntologyModels()</a></code> </p>
+        </td>
+        <td><p>Function to write Ontology CTMC models as a .Rev file for execution in Revbayes</p></td>
+      </tr>
+    </tbody>
     </table>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#section-all-functions">All functions</a></li>
     </ul>
   </div>
 </div>

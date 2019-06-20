@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Articles • SCATE.shortcourse</title>
+<title>Get all dependency matrices given a dependecy graph — get_graph_matrix • SCATE.shortcourse</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,7 +30,10 @@
 
 
 
-<meta property="og:title" content="Articles" />
+<meta property="og:title" content="Get all dependency matrices given a dependecy graph — get_graph_matrix" />
+
+<meta property="og:description" content="Construct dependency matrices and their correponding attributes" />
+<meta name="twitter:card" content="summary" />
 
 
 
@@ -47,7 +50,7 @@
   </head>
 
   <body>
-    <div class="container template-article-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -109,19 +112,58 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Articles</h1>
+    <h1>Get all dependency matrices given a dependecy graph</h1>
+    
+    <div class="hidden name"><code>get_graph_matrix.Rd</code></div>
     </div>
 
-    <div class="section ">
-      <h3>All vignettes</h3>
-      <p class="section-desc"></p>
-
-      <ul>
-        <li><a href="PARAMO.nb.html">PARAMO Tutorial</a></li>
-        <li><a href="glossary.html">Glossary</a></li>
-        <li><a href="scate-shortcourse.html">RPhenoscape Tutorial</a></li>
-      </ul>
+    <div class="ref-description">
+    
+    <p>Construct dependency matrices and their correponding attributes</p>
+    
     </div>
+
+    <pre class="usage"><span class='fu'>get_graph_matrix</span>(<span class='no'>graph</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>graph</th>
+      <td><p>igraph object of ontology terms</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>List of matrices and their attributes</p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>get_graph_matrix(g)
+$binary.matrices # intial binary matrices assigned to each node of graph
+$comb.matrices$matrix # combined matrix for each node
+$comb.matrices$state.string # vector of states [1] "00" "01" "10" "11"
+$comb.matrices$state.ident # specifies the order of ontology terms in each state [1] "UBERON:0007829" "UBERON:2000663"
+$comb.matrices$state.observable # ids and names of "observable" states. In red-blue tail notation refers to blue and red states
+$comb.matrices$state.hidden # ids and names of "hidden" states. In red-blue tail notation refers to "blue absent"
+$nodes.sorted # topologically sorted nodes
+$vertex.hier # hierrachy of the nodes
+</div><div class='output co'>#&gt; <span class='error'>Error: &lt;text&gt;:2:1: unexpected '$'</span>
+#&gt; <span class='error'>1: get_graph_matrix(g)</span>
+#&gt; <span class='error'>2: $</span>
+#&gt; <span class='error'>   ^</span></div></pre>
+  </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
+
   </div>
 </div>
 
