@@ -81,7 +81,9 @@ ontologyHeatMap <- function(td, njt, start=3, margs=c(0.2, 0.25), ...){
     X <- X[,njt$edge[njt$edge[,2] <= length(njt$tip.label),2]]
     tree2 <- chronopl(njt, 1)
     tree2$edge.length <- tree2$edge.length/(max(branching.times(tree2)))*margs[2]*dimx[1]
+    png(tempfile())
     invisible(h2 <- plot(tree2, plot = FALSE, direction = "downwards", show.tip.label=FALSE))
+    dev.off()
   } else{
     h2 <- list(x.lim=c(1,dimx[2]+1), y.lim=c(0,0.2*dimx[1]))
   }
@@ -90,7 +92,9 @@ ontologyHeatMap <- function(td, njt, start=3, margs=c(0.2, 0.25), ...){
   tree1$edge.length <- tree1$edge.length/(max(branching.times(tree1)))*margs[1]*dimx[2]
   
   #Changes the direction of the top plot
+  png(tempfile())
   invisible(h1 <- plot(tree1, plot = FALSE, cex=0.5))
+  dev.off()
   
   # adjustible color palette for the plot and legend
   colors <- c("#ffeaa7","#fab1a0", "#e17055")
