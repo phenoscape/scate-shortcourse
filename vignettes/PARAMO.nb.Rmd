@@ -11,8 +11,8 @@ output:
 ```{r echo=FALSE, message=FALSE}
 #include_graphics("../icon-paramo.png")
 devtools::install_github("phenoscape/scate-shortcourse")
-library(scate-shortcourse)
-knitr::include_graphics("../icon-paramo.png", dpi=100)
+library("SCATE.shortcourse")
+knitr::include_graphics("https://github.com/sergeitarasov/PARAMO/raw/master/icon-paramo.png", dpi=100)
 ```
 
 ***P**hylogenetic **A**ncestral **R**econstruction of **A**natomy by **M**apping **O**ntologies*
@@ -39,22 +39,21 @@ names(nex) <- terms
 m <- reduce(.m, full_join, by="taxa", suffix=c("", ".y"))  
 m <- select_at(m, dplyr::vars(-contains("otu"))) # Removes otu data
 siluriformes <- select_at(m, vars(-contains(".y"))) # Removes duplicated columns
-
 print_coverage(siluriformes)
-
 ```
 
 To save time, simply run the line below rather than the chunk above.
 
 ```{r}
 data(siluriformes)
+print_coverage(siluriformes)
 ```
 
 
 The table that prints out shows the number of taxa for which there is data in the KB ( _coverage_ ) and the proportion of taxa ( _average_ ) that have this trait (all of these are binary, presence/absence characters). This dataset is too big for our demonstration purposes. So lets filter down to a smaller set of traits that will illustrate our process. 
 
 ```{r}
-dat <- dplyr::select(m,"taxa", 
+dat <- dplyr::select(siluriformes,"taxa", 
               "vomer", "accessory vomerine tooth plate",
               "mental barbel", "inner mental barbel", "outer mental barbel", "anterior nasal barbel", "posterior nasal barbel", "maxillary barbel",
               "urohyal", "urohyal lateral process", "urohyal median process", 
@@ -224,6 +223,10 @@ If the above code didn't work for you, you can catch up by loading this dataset 
 
 ```{r}
 data(td.comb)
+dir <- "../revbayes/" #Location to store revbayes scripts
+dirD <- "../revbayes/data/" #Location to store data
+dirW <- "../revbayes/Discr_maps/" #Location to store maps
+dirR <- "../revbayes/output/" #Location to store output
 ```
 
 We are going to reconstruct our stochastic character maps in RevBayes. In the workshop, we will do a Julia Child-style switch-a-roo and analyze completed analyses, rather than actually running these, because they will take too long. The following code makes a set of customized `.Rev` scripts and datasets that we can use to batch run our analyses. 
@@ -233,10 +236,6 @@ We are going to reconstruct our stochastic character maps in RevBayes. In the wo
 write.nexus(td.comb$phy, file="../revbayes/data/fishtree.tre") #This will be provided to you, but if you run your own analysis, you will want to put a tree in place that you can use in RevBayes
 
 data(ParamoRevTemplate) # This reads in our template Rev file that we will modify
-dir <- "../revbayes/" #Location to store revbayes scripts
-dirD <- "../revbayes/data/" #Location to store data
-dirW <- "../revbayes/Discr_maps/" #Location to store maps
-dirR <- "../revbayes/output/" #Location to store output
 
 writeRevOntologyModels(td, M, dir, dirW, dirR, dirD)
 ```
