@@ -3,7 +3,7 @@ make_tree_eq<-function(tree.tmp, target.tr, round=3){
   target.tr$edge.length<-tree.tmp$edge.length
   
   target.tr$maps<-lapply(target.tr$maps, function(x) round(x,3) )
-  Maps.targ<-lapply(target.tr$maps, function(x) sum(x)) %>%unlist()
+  Maps.targ<- unlist(lapply(target.tr$maps, function(x) sum(x)))
   
   #k<-tree.tmp$edge.length-Maps.targ
   k<-tree.tmp$edge.length/Maps.targ

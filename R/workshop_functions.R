@@ -15,7 +15,14 @@ strip_IRI <- function(x){
 }
 
 
-
+dropDependentTraits <- function(char_info, dep.mat, td){
+  char_info_comb <- char_info[which(apply(dep.mat, 1, sum, na.rm=TRUE)==0), c(1,5)]
+  new.traits <- colnames(td$dat)
+  old.traits <- sapply(new.traits, function(x) strsplit(x, "+", fixed=TRUE)[[1]][1])
+  trait.trans <- setNames(new.traits, old.traits)
+  char_info_comb$ID <- unname(trait.trans[as.character(char_info_comb$ID)])
+  return(char_info_comb)
+}
 
 
 filter_coverage <- function(td, traits=0, taxa=0){
@@ -234,7 +241,8 @@ get_graph_matrix<-function(graph){
   complex.char$comb.matrices<-list()
   
   # traverse graph
-  topo=topo_sort(g, mode = c("out")) %>% names()
+  .topo <- topo_sort(g, mode = c("out"))
+  topo= names(.topo)
   complex.char$nodes.sorted=topo
   vertex.hier=ego(g, order=1, nodes = topo, mode = c("in"), mindist = 1)
   names(vertex.hier)<-topo
@@ -246,7 +254,7 @@ get_graph_matrix<-function(graph){
     
     if (length(focal.v)==0){
       complex.char$comb.matrices[[topo[i]]]$matrix=complex.char$binary.matrices[[topo[i]]]
-      complex.char$comb.matrices[[topo[i]]]$state.string=complex.char$binary.matrices[[topo[i]]] %>% row.names()
+      complex.char$comb.matrices[[topo[i]]]$state.string=row.names(complex.char$binary.matrices[[topo[i]]])
       complex.char$comb.matrices[[topo[i]]]$state.ident=topo[i]
       #complex.char$comb.matrices[[topo[i]]]$dependency.true=2
       complex.char$comb.matrices[[topo[i]]]$state.observable=integer(0)
@@ -279,9 +287,10 @@ get_graph_matrix<-function(graph){
       
       # adding attributes
       complex.char$comb.matrices[[topo[i]]]$matrix=cmb
-      complex.char$comb.matrices[[topo[i]]]$state.string<-r.name<-cmb %>% row.names()
+      r.name <- row.names(cmb)
+      complex.char$comb.matrices[[topo[i]]]$state.string<-r.name #<-cmb %>% row.names()
       
-      st.iden=lapply(names(focal.v), function(x) complex.char$comb.matrices[[x]]$state.ident) %>% unlist()
+      st.iden=unlist(lapply(names(focal.v), function(x) complex.char$comb.matrices[[x]]$state.ident))
       complex.char$comb.matrices[[topo[i]]]$state.ident<-st.iden<-c(st.iden, topo[i])
       
       # get observable and "hidden" states of the focal node

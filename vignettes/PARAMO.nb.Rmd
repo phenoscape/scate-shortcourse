@@ -23,7 +23,7 @@ The $PARAMO$ pipeline requires three initial pieces of data: a character matrix,
 
 We are going to retrieve our dataset from the Phenoscape Knowledgebase for demonstration purposes as our starting point. We are then going to reconstruct the history of these traits accounting for dependencies among them and amalgamating them according to trait type using the UBERON Anatomy Ontology. 
 
-```{r}
+```{r eval=FALSE}
 # Define our traits
 terms <- c("dermatocranium", "paired fin", "barbel") 
 # Define our taxon
@@ -59,7 +59,7 @@ dat <- dplyr::select(m,"taxa",
               "mental barbel", "inner mental barbel", "outer mental barbel", "anterior nasal barbel", "posterior nasal barbel", "maxillary barbel",
               "urohyal", "urohyal lateral process", "urohyal median process", 
               "pectoral fin spine", "anterior dentation of pectoral fin spine", "posterior dentation of pectoral fin spine", 
-              "pectoral fin lepidotrichium", "pectoral fin",
+              "pectoral fin",
               "pelvic fin", "pelvic splint", "pelvic fin ray"
               )
 
@@ -151,7 +151,9 @@ td.comb <-recode_td(tdf, gtraits, states, hidden0=2:3) ## hidden0 indicates whic
 
 ```{r}
 ## Now let's repeat it for all the other traits; 
-## Urohyal
+############
+## Urohyal##
+############
 g <- induced_subgraph(G1, which(con.comp$membership==7))
 bin_mats <- init_binary_matrix(g)
 gtraits <- names(bin_mats)
@@ -164,8 +166,9 @@ states <- colnames(M[[newTraitName]])
 names(states) <- 1:length(states)
 
 td.comb <-recode_td(td.comb, gtraits, states, hidden0=2:3) ## hidden0 indicates which traits have hidden states when they are absent. These are dependent states.
-
-## Pectoral fin
+#################
+## Pectoral fin##
+#################
 g <- induced_subgraph(G1, which(con.comp$membership==8))
 mats <- get_graph_matrix(g)
 bin_mats <- mats$binary.matrices[mats$nodes.sorted]
@@ -175,15 +178,16 @@ newTraitName <- paste(gtraits, collapse="+")
 ## More complicated structure than the previous two, with more states (16)
 M1 <- comb2matrices(bin_mats[[1]], bin_mats[[2]], dependent.state = 2) 
 M2 <- comb2matrices(M1, bin_mats[[3]], dependent.state = 4) 
-M3 <- comb2matrices(M2, bin_mats[[4]], dependent.state = 8) 
-M[[newTraitName]] <- comb2matrices(M3, bin_mats[[5]], dependent.state = c(15,16)) 
-
+M[[newTraitName]] <- comb2matrices(M2, bin_mats[[4]], dependent.state = c(7,8)) 
+ 
 states <- colnames(M[[newTraitName]])
 names(states) <- 1:length(states)
 
 td.comb <-recode_td(td.comb, gtraits, states, hidden0=2:length(gtraits)) ## hidden0 indicates which traits have hidden states when they are absent. These are dependent states.
 
-## Pelvic Fin
+###############
+## Pelvic Fin##
+###############
 g <- induced_subgraph(G1, which(con.comp$membership==9))
 mats <- get_graph_matrix(g)
 bin_mats <- mats$binary.matrices[mats$nodes.sorted]
@@ -211,8 +215,8 @@ td.comb <- recode_td(td.comb, "maxillary barbel", states)
 We are going to reconstruct our stochastic character maps in RevBayes. In the workshop, we will do a Julia Child-style switch-a-roo and analyze completed analyses, rather than actually running these, because they will take too long. The following code makes a set of customized `.Rev` scripts and datasets that we can use to batch run our analyses. 
 
 
-```{r}
-#write.nexus(td.comb$phy, file="../revbayes/data/fishtree.tre") #This will be provided to you, but if you run your own analysis, you will want to put a tree in place that you can use in RevBayes
+```{r eval=FALSE}
+write.nexus(td.comb$phy, file="../revbayes/data/fishtree.tre") #This will be provided to you, but if you run your own analysis, you will want to put a tree in place that you can use in RevBayes
 
 MT <- as.data.frame(td.comb$dat)
 colnames(MT) <- gsub(" ", "_", colnames(MT))
@@ -277,7 +281,7 @@ setwd("../revbayes/")
 # Load these packages if you have access to multiple cores and want to run in parallel
 library(foreach)
 library(doParallel)
-registerDoParallel(cores=2)
+registerDoParallel(cores=10)
 res <- foreach(i=1:ncol(MT)) %dopar% {
   cmd <- paste("./rb07 ", colnames(MT)[i], ".Rev &", sep="")
   system(cmd) #Don't actually run!!
@@ -331,9 +335,10 @@ EF
 
 for (i in 1:length(c))
 {
-  tree<-read_Simmap_Rev(paste0(dirR, c[i], ".stm"),
+  .tree<-read_Simmap_Rev(paste0(dirR, c[i], ".stm"),
                         start=1, end=2,
-                        save = NULL) %>% read.simmap(text=., format="phylip")
+                        save = NULL) 
+  tree  <- read.simmap(text=.tree, format="phylip")
   
   
   write.simmap(tree, file=paste0(dirW, c[i], ".stmR"))
@@ -351,12 +356,12 @@ for (i in 1:length(c))
   print(paste0("Reading ", c[i]))
   sim=read.simmap(file=paste0(dirW, c[i], ".stmR"), format="phylip")
   
-  # descritize trees by looping over sample and saving as rds
+  # discretize trees by looping over sample and saving as rds
   
   for (j in 1:length(sim)){
     tryCatch({
       
-      print(paste0("Descretizing tree ", j))
+      print(paste0("Discretizing tree ", j))
       
       ## errors with na
       
@@ -388,9 +393,6 @@ for (i in 1:length(c))
 # close connections
 showConnections (all=T)
 closeAllConnections()
-
-dirW= ("../revbayes/Discr_maps/")
-dirR= ("../revbayes/output/")
 
 #############
 # Amalgamation at the BR level
@@ -463,7 +465,7 @@ for(i in (1:length(c))){
   trait <- gsub(" ", "_", trait)
   map <- paramo(trait, ntrees=1, dirW=dirW)
   nstates <- as.numeric(max(colnames(map[[1]]$mapped.edge)))
-  plotSimmap(map[[1]], pts=F,ftype="off", colors=setNames(hm.palette(nstates+1), 0:nstates), ylim=c(0, ymax))
+  try(plotSimmap(map[[1]], pts=F,ftype="off", colors=setNames(hm.palette(nstates+1), 0:nstates), ylim=c(0, ymax)))
   title(paste0("\n ", trait))
 }
 
@@ -500,7 +502,7 @@ par(mfrow=c(1,3))
 # plot one stochastic maps for the entire phenotype character
 # first, let's define color pallette for the characters since it contains many states
 tmm<-EF.maps[[1]][[1]]
-lapply(tmm$maps, names) %>% unlist %>% unique->states
+states <- unique(unlist(lapply(tmm$maps, names)))
 # number of states in the character
 #length(states)
 
