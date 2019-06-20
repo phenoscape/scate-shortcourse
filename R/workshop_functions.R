@@ -1,4 +1,5 @@
-
+#' Function to display the number of matching species and average value across them from an Ontotrace matrix
+#' @export
 print_coverage <- function(x){
   coverage <- apply(x, 2, function(x) sum(!is.na(x)))
   average <- sapply(x, function(x) mean(as.numeric(na.omit(x[x %in% c("0", "1")])), na.rm=TRUE))
@@ -7,14 +8,16 @@ print_coverage <- function(x){
   print(tmp)
 }
 
-
+#' Utility function for stripping off url from IRI
+#' @export
 strip_IRI <- function(x){
   x <- gsub("http://purl.obolibrary.org/obo/", "", x)
   x <- gsub("_", ":", x)
   return(x)
 }
 
-
+#' Utility function for cleaning up character data table after amalgamating characters
+#' @export
 dropDependentTraits <- function(char_info, dep.mat, td){
   char_info_comb <- char_info[which(apply(dep.mat, 1, sum, na.rm=TRUE)==0), c(1,5)]
   new.traits <- colnames(td$dat)
@@ -24,7 +27,8 @@ dropDependentTraits <- function(char_info, dep.mat, td){
   return(char_info_comb)
 }
 
-
+#' Utility function for filtering based on missing traits and taxa
+#' @export
 filter_coverage <- function(td, traits=0, taxa=0){
   taxa_coverage <- apply(td$dat, 1, function(x) mean(as.numeric(!is.na(x))))
   trait_coverage <- apply(td$dat, 2, function(x) mean(as.numeric(!is.na(x))))
@@ -33,10 +37,16 @@ filter_coverage <- function(td, traits=0, taxa=0){
   return(td)
 }
 
-ratemat1 <- '\nfor (i in 1:NUM_STATES) {\nfor (j in 1:NUM_STATES) {\nrates[i][j] <-0.0\n}\n}\n#rate prior\nr1 ~ dnExp(20)\nr2 ~ dnExp(20)\n\nmoves[++mvi] = mvScale(r1, lambda=1, tune=true, weight=2)\nmoves[++mvi] = mvScale(r2, lambda=1, tune=true, weight=2)
+#' Data object for Rev scripts
+#' @export
+ratemat1 <- function() {
+  '\nfor (i in 1:NUM_STATES) {\nfor (j in 1:NUM_STATES) {\nrates[i][j] <-0.0\n}\n}\n#rate prior\nr1 ~ dnExp(20)\nr2 ~ dnExp(20)\n\nmoves[++mvi] = mvScale(r1, lambda=1, tune=true, weight=2)\nmoves[++mvi] = mvScale(r2, lambda=1, tune=true, weight=2)
 \n\n# place rate categories into matrix\nrates[2][1]:=r1\nrates[1][2]:=r2\n\n\nrate_matrix := fnFreeK(transition_rates=rates, rescaled=false, matrixExponentialMethod="eigen")\n\nroot_freq <- simplex(1, 1)\n\n'
+  
+}
 
-
+#' recodes a treedata object based on amalgamated characters
+#' @export
 recode_td <- function(td, traits, states, hidden0=numeric(0)){
   tmp <- select(td, traits)
   obs_char <- which(!(1:length(traits) %in% hidden0))
@@ -54,7 +64,8 @@ recode_td <- function(td, traits, states, hidden0=numeric(0)){
   return(new.td)
 }
 
-
+#' Plots a heatmap along with a phylogeny and trait tree
+#' @export
 ontologyHeatMap <- function(td, njt, start=3, margs=c(0.2, 0.25), ...){
   #vals <- na.omit(unique(do.call(c, lapply(3:ncol(td$dat), function(x) unique(as.character(td$dat[[x]]))))))
   
@@ -70,7 +81,7 @@ ontologyHeatMap <- function(td, njt, start=3, margs=c(0.2, 0.25), ...){
     X <- X[,njt$edge[njt$edge[,2] <= length(njt$tip.label),2]]
     tree2 <- chronopl(njt, 1)
     tree2$edge.length <- tree2$edge.length/(max(branching.times(tree2)))*margs[2]*dimx[1]
-    h2 <- plot(tree2, plot = FALSE, direction = "downwards", show.tip.label=FALSE)
+    invisible(h2 <- plot(tree2, plot = FALSE, direction = "downwards", show.tip.label=FALSE))
   } else{
     h2 <- list(x.lim=c(1,dimx[2]+1), y.lim=c(0,0.2*dimx[1]))
   }
@@ -79,7 +90,7 @@ ontologyHeatMap <- function(td, njt, start=3, margs=c(0.2, 0.25), ...){
   tree1$edge.length <- tree1$edge.length/(max(branching.times(tree1)))*margs[1]*dimx[2]
   
   #Changes the direction of the top plot
-  h1 <- plot(tree1, plot = FALSE, cex=0.5)
+  invisible(h1 <- plot(tree1, plot = FALSE, cex=0.5))
   
   # adjustible color palette for the plot and legend
   colors <- c("#ffeaa7","#fab1a0", "#e17055")
@@ -105,6 +116,8 @@ ontologyHeatMap <- function(td, njt, start=3, margs=c(0.2, 0.25), ...){
   return ()
 }
 
+#' Makes a trait tree using semantic similarity
+#' @export
 makeTraitTree <- function (td, skip=1:2){
   traits <- colnames(td$dat)
   traits <- traits[-(1:2)] #delete otu data
@@ -120,6 +133,153 @@ makeTraitTree <- function (td, skip=1:2){
   return (njt)
 }
 
+#' Function for processing revbayes stochastic maps
+#' @export
+prepareMaps <- function(td, dirR, dirW, discretization_level=100, start_tree=1, end_tree=2) {
+  characters <- colnames(td$dat)
+  characters <- gsub(" ", "_", characters)
+  #####################################
+  # Read a sample of 2 maps from .stm files and save them in the proper format .stmR
+  #####################################
+  
+  for (i in 1:length(characters))
+  {
+    .tree<-read_Simmap_Rev(paste0(dirR, characters[i], ".stm"),
+                           start=start_tree, end=end_tree,
+                           save = NULL) 
+    tree  <- read.simmap(text=.tree, format="phylip")
+    
+    
+    write.simmap(tree, file=paste0(dirW, characters[i], ".stmR"))
+  }
+  ##########
+  
+  #####################################
+  # Read stmR, discretize maps, and save each map as a separate rds file; 
+  #all rds filea for a chracter are stored in a zip archive
+  #####################################
+  
+  for (i in 1:length(c))
+  { 
+    # read in undesritezed trees
+    #print(paste0("Reading ", characters[i]))
+    sim=read.simmap(file=paste0(dirW, characters[i], ".stmR"), format="phylip")
+    
+    # discretize trees by looping over sample and saving as rds
+    
+    for (j in 1:length(sim)){
+      tryCatch({
+        
+        #print(paste0("Discretizing tree ", j))
+        
+        ## errors with na
+        
+        ##
+        
+        ##### make trees equal with template
+        sim.d<-make_tree_eq(td$phy, sim[[j]], round=5)
+        ###
+        
+        #sim.d<-discr_Simmap_all(sim[[j]], 1000)
+        sim.d<-discr_Simmap_all(sim.d, discretization_level)
+        
+        saveRDS(sim.d, file =  paste0(dirW,characters[i], "_", j, ".rds") )
+        
+      }, error=function(e){
+        cat("ERROR :",conditionMessage(e), "\n")
+        #errors<-rbind(errors, c(ii,jj))
+      }  )
+      
+    } 
+    
+    # putting rds files into archive
+    files<-paste0(dirW, characters[i], "_", c(1:length(sim)), ".rds")
+    zip(paste0(dirW, characters[i], ".zip"), files=files)
+    file.remove(files)
+    
+  }
+  
+  # close connections
+  showConnections (all=T)
+  closeAllConnections()
+  
+}
+
+#' Function for aggregating characters under a specified set of terms (for example, body regions)
+#' @export
+RAC_query <- function(char_info, ONT, names){
+  c <-  char_info$ID
+  c <- gsub(" ", "_", c)
+  
+  annot <- as.list(as.character(char_info$IRI))
+  names(annot) <- as.character(char_info$ID)
+  ONT$terms_selected_id <- annot
+  
+  
+  parts <- do.call(rbind,lapply(names,  pk_get_iri, as="uberon"))
+  parts$IRI <- sapply(parts[,1], strip_IRI)
+  levelA <- setNames(parts$IRI, names)     
+  
+  res <- lapply(levelA, function(x)
+    get_descendants_chars(ONT, annotations="manual", terms=x)  )
+  
+  cat("\nAggregations by :\n")
+  print(res)
+  return(res)
+}
+
+#' Function to write Ontology CTMC models as a .Rev file for execution in Revbayes
+#' @export
+writeRevOntologyModels <- function(td, M, dir, dirW, dirR, dirD) {
+  MT <- as.data.frame(td$dat)
+  colnames(MT) <- gsub(" ", "_", colnames(MT))
+  rownames(MT) <- td$phy$tip.label
+  for (i in 1:ncol(MT)){
+    C.rev<-MT[,i]
+    C.rev<-gsub("&", " ", C.rev)
+    o <- order(nchar(C.rev))
+    
+    out<-cbind(rownames(MT), C.rev)
+    out <- out[o,]
+    write.table(file=paste0(dirD, colnames(MT[i]), ".char"), out, quote=F, sep=" ", 
+                row.names=F, col.names=F)
+  }
+  
+  data(ParamoRevTemplate)
+  
+  
+  for (i in 1:ncol(MT)){
+    fl.in  <- ParamoRevTemplate
+    fl.in  <- gsub(pattern = "Hymenoptera_br_resolved", replace = "fishtree",
+                   x = fl.in)
+    fl.in  <- gsub(pattern = "@analysis_name@", replace = paste0(colnames(MT[i])),
+                   x = fl.in)
+    
+    fl.in <- gsub(pattern = "@chrs_2_read@", 
+                  replace = paste0("data/", colnames(MT[i]), ".char"), x = fl.in)
+    
+    if(colnames(MT)[i] %in% gsub(" ", "_", names(M))){
+      in.rev<-Mk_Rev(M[[gsub("_", " ", colnames(MT)[i])]])
+      
+      fl.in <- gsub(pattern = "@numstates@", 
+                    replace = as.character(max(dim(M[[gsub("_", " ", colnames(MT)[i])]]))), x = fl.in)
+      
+      fl.in <- gsub(pattern = "@ratematrix@", 
+                    replace = in.rev, x = fl.in)
+    } else {
+      
+      fl.in <- gsub(pattern = "@numstates@", 
+                    replace = "2", x = fl.in)
+      
+      fl.in <- gsub(pattern = "@ratematrix@", 
+                    replace = ratemat1(), x = fl.in)
+    }
+    
+    cat(file=paste0(dir, colnames(MT[i]), ".Rev"), sep="\n", fl.in)
+  }
+  
+  
+}
 
 
 
