@@ -53,7 +53,7 @@ To the extent possible under law, the [SCATE] Project Team has waived all copyri
 
 If you reuse or make derivatives of this work, we request that you cite or otherwise give proper credit to this work.
 
-[Phenoscape Knowledgebase] http://beta.phenoscape.org/#/home
+[Phenoscape Knowledgebase]: http://beta.phenoscape.org/#/home
 [Call for Participation]: https://scate.phenoscape.org/2019-workshop-cfp.html
 [SCATE]: http://scate.phenoscape.org
 [CC Zero]: https://creativecommons.org/publicdomain/zero/1.0/
