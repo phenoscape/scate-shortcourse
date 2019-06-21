@@ -35,9 +35,13 @@ The material itself is in the form of vignettes written in RMarkdown. Users are 
 - [Josef Uyeda](https://www.uyedalab.com/), Virginia Tech
 - [Todd Vision](https://orcid.org/0000-0002-6133-2581), UNC Chapel Hill
 
-### References
-- Dececchi et al. Toward Synthesizing Our Knowledge of Morphology: Using Ontologies and Machine Reasoning to Extract Presence/Absence Evolutionary Phenotypes across Studies. Systematic Biology 64, 936. 2015. [https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4604830/](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4604830/)
-- Tarasov et al. PARAMO pipeline: reconstructing ancestral anatomies using ontologies and stochastic mapping. bioRxiv 2019 [https://doi.org/10.1101/553370](https://doi.org/10.1101/553370)
+### Recommended papers and resources
+- Dececchi et al. Toward synthesizing our knowledge of morphology: using ontologies and machine reasoning to extract presence/absence evolutionary phenotypes across studies. Systematic Biology 64, 936. 2015. [https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4604830/](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4604830/)
+- Jackson et al. (2018) Automated integration of trees and traits: a case study using paired fin loss across teleost fishes. Systematic Biology, 67(4):559–575, [https://doi.org/10.1093/sysbio/syx098](https://doi.org/10.1093/sysbio/syx098)
+- Tarasov et al. (accepted). PARAMO pipeline: reconstructing ancestral anatomies using ontologies and stochastic mapping. Insect Systematics and Diversity. Preprint in bioRxiv [https://doi.org/10.1101/553370](https://doi.org/10.1101/553370)
+- Guide to Character Annotation [https://wiki.phenoscape.org/wiki/Guide_to_Character_Annotation](https://wiki.phenoscape.org/wiki/Guide_to_Character_Annotation)
+- Dahdul et al. (2018) Phenoscape guide to character annotation. figshare. Fileset. [https://doi.org/10.6084/m9.figshare.1210738.v2](https://doi.org/10.6084/m9.figshare.1210738.v2)
+
 
 ### Funding
 [SCATE] is funded by the US National Science Foundation (NSF) as collaborative awards [1661456] (Duke University), [1661529] (Virginia Tech), [1661516] (University of South Dakota), and [1661356] (UNC Chapel Hill and RENCI) within the Advances in Biological Informatics (ABI) program.
