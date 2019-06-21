@@ -2,7 +2,7 @@ pandoc: 1.19.2.1
 pkgdown: 1.3.0
 pkgdown_sha: ~
 articles:
+  01_scate-shortcourse: 01_scate-shortcourse.html
   PARAMO.nb: PARAMO.nb.html
   glossary: glossary.html
-  scate-shortcourse: scate-shortcourse.html
 
