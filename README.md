@@ -16,7 +16,7 @@ The material itself is in the form of vignettes written in RMarkdown. Users are 
 * 9:00	Welcome and intros, goals
 * 9:15	Background concepts: anatomy ontologies, phenotype annotations and character dependencies
     - In parallel: tech check troubleshooting
-* 9:30	Using Phenoscape Knowledgebase and RPhenoscape
+* 9:30	Using [Phenoscape Knowledgebase] and [RPhenoscape]
 * 10:30	_Break_
 * 10:45	Constructing stochastic character maps on a phylogeny
     - Using the PARAMO pipeline with RevBayes
@@ -40,16 +40,8 @@ The material itself is in the form of vignettes written in RMarkdown. Users are 
 - Tarasov et al. PARAMO pipeline: reconstructing ancestral anatomies using ontologies and stochastic mapping. bioRxiv 2019 [https://doi.org/10.1101/553370](https://doi.org/10.1101/553370)
 
 ### Funding
-SCATE is funded by the US National Science Foundation (NSF) as collaborative awards [1661456] (Duke University), [1661529] (Virginia Tech), [1661516] (University of South Dakota), and [1661356] (UNC Chapel Hill and RENCI) within the Advances in Biological Informatics (ABI) program.
+[SCATE] is funded by the US National Science Foundation (NSF) as collaborative awards [1661456] (Duke University), [1661529] (Virginia Tech), [1661516] (University of South Dakota), and [1661356] (UNC Chapel Hill and RENCI) within the Advances in Biological Informatics (ABI) program.
 
-[SCATE]: {{ site.baseurl }}/
-[iEvoBio]: https://ievobio2019.github.io/2019-iEvoBio/
-[Evolution Meetings]: https://www.evolutionmeetings.org/evolution-2019---providence.html
-[Rphenoscape]: https://github.com/phenoscape/rphenoscape
-[1661456]: https://nsf.gov/awardsearch/showAward?AWD_ID=1661456
-[1661529]: https://nsf.gov/awardsearch/showAward?AWD_ID=1661529
-[1661356]: https://nsf.gov/awardsearch/showAward?AWD_ID=1661356
-[1661516]: https://nsf.gov/awardsearch/showAward?AWD_ID=1661516
     
 ## Links
 
@@ -64,3 +56,10 @@ If you reuse or make derivatives of this work, we request that you cite or other
 [Call for Participation]: https://scate.phenoscape.org/2019-workshop-cfp.html
 [SCATE]: http://scate.phenoscape.org
 [CC Zero]: https://creativecommons.org/publicdomain/zero/1.0/
+[RPhenoscape]: http://rphenoscape.phenoscape.org/
+[Evolution Meetings]: https://www.evolutionmeetings.org/evolution-2019---providence.html
+[1661456]: https://nsf.gov/awardsearch/showAward?AWD_ID=1661456
+[1661529]: https://nsf.gov/awardsearch/showAward?AWD_ID=1661529
+[1661356]: https://nsf.gov/awardsearch/showAward?AWD_ID=1661356
+[1661516]: https://nsf.gov/awardsearch/showAward?AWD_ID=1661516
+
