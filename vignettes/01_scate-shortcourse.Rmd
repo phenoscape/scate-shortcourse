@@ -26,11 +26,11 @@ You would like to understand the evolution of morphological traits in a group, a
 You begin by querying ‘Siluriformes’ in the Phenoscape KB faceted browsing page (http://beta.phenoscape.org/#/facet).  You immediately see the scope of the data:
 
 From left to right across the top tabs, for ‘Siluriformes’:
-- There are 4,537 unique phenotypes
-- There are 292,356 taxon annotations 
-- There are 1,452 siluriform taxa with data in the KB 
-- There are 25 publications in the KB that include catfish phenotypes
-- There are 17,883 candidate genes linked to the phenotypes
+* There are 4,537 unique phenotypes
+* There are 292,356 taxon annotations 
+* There are 1,452 siluriform taxa with data in the KB 
+* There are 25 publications in the KB that include catfish phenotypes
+* There are 17,883 candidate genes linked to the phenotypes
 
 Taxon annotations are the ontology terms tagged to free text descriptions of phenotypes for each siluriform taxon.  Click on the ‘Sources’ box on the right hand side of each row to see the publication source(s) and free text description of the phenotype to which each ontology annotation was tagged.  
 
@@ -132,9 +132,9 @@ The above returns 29 species of ictalurid catfishes and 123 anatomical entities 
 You will need to go the [Phenoscape KB] to view the supporting states, i.e., the source data upon which inferences were made or those that were directly asserted.  
 
 For example, in the returned OntoTrace matrix (see ‘m’ in Global Environment (row 10)) the pelvic fin is scored as present for *Ictalurus australis*. Enter these data into the faceted browsing interface:
-- Anatomical entity = ‘pelvic fin’
-- Quality = ‘present’
-- Taxon = ‘Ictalurus australis’
+* Anatomical entity = ‘pelvic fin’
+* Quality = ‘present’
+* Taxon = ‘Ictalurus australis’
 
 Looking at ‘Taxon annotations’, you will find that there are zero phenotypes, i.e., no asserted character states to ‘pelvic fin present’.  Now click the ‘inferred presence’ radio button under Phenotypic quality.  You will now see three phenotypes for three taxa in the KB.  
 
