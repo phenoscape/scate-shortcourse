@@ -42,7 +42,12 @@ Go to the publications tab, which shows nine publications that contain fin data.
 
 ## 3. Retrieve term info using RPhenoscape
 
-Now we will repeat some of the above steps in R, beginning with a query for ‘Ictaluridae’ and ‘fin’ (including parts) to retrieve the list of studies that contain fin characters for this taxon.  
+Now we will repeat some of the above steps in R, beginning with a query for ‘Ictaluridae’ and ‘fin’ (including parts) to retrieve the list of studies that contain fin characters for this taxon.
+
+The [RPhenoscape] package provides convenient access to the Phenoscape Knowledgebase in the form of R functions returning R-native data structures. So we don't have to prefix every call of the package's functions with the package name, we will first attach the package:
+```{R}
+library(rphenoscape)
+```
 
 First let’s look up information about the query terms. You can use the term detail functions ```pk_anatomical_detail()```, ```pk_taxon_detail()```, ```pk_phenotype_detail()```, and ```pk_gene_detail()``` to retrieve an ontology term’s ID, label, and definition. 
 
@@ -169,5 +174,6 @@ pecfin_m <- m[, to_keep]
 View this matrix of pectoral fin characters for Ictaluridae by clicking on ‘pecfin_m’ in the Global Environment.
 
 
-[OntoTrace] (http://beta.phenoscape.org/#/ontotrace)
-[Phenoscape KB] (http://beta.phenoscape.org/#/facet)
+[OntoTrace]: http://beta.phenoscape.org/#/ontotrace
+[Phenoscape KB]: http://beta.phenoscape.org/#/facet
+[RPhenoscape]: http://rphenoscape.phenoscape.org/
