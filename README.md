@@ -6,6 +6,20 @@ The purpose of doing so is to leverage the R package installation mechanism for 
 
 The material itself is in the form of vignettes written in RMarkdown. Users are encouraged to modify the code chunks and re-execute the vignettes as a means of exploring the material.
 
+### Installation
+
+The short course package is available on [Github](http://github.com/phenoscape/scate-shortcourse). To install it, use the `install_github()` function in the `remotes` package (which can be installed from CRAN using `install.packages()`):
+
+``` r
+remotes::install_github("phenoscape/scate-shortcourse")
+```
+
+Once installed, the package can be loaded ("attached") as any other R package:
+
+``` r
+library("SCATE.shortcourse")
+```
+
 ### When and Where
 
 - June 26, 2019 (Wednesday) 
