@@ -8,17 +8,20 @@ The material itself is in the form of vignettes written in RMarkdown. Users are 
 
 ### Installation
 
-The short course package is available on [Github](http://github.com/phenoscape/scate-shortcourse). To install it, use the `install_github()` function in the `remotes` package (which can be installed from CRAN using `install.packages()`):
+You can download the course material to your computer directly from [Github](http://github.com/phenoscape/scate-shortcourse) as a Zip archive. Click the _Download Zip_ link that appears under the _Clone or Download_, move the Zip archive to a directory of your choice, then unpack it. 
+![](https://i.imgur.com/qL9NZ7L.png)
 
-``` r
+You can then open the folder containing the material as a project in RStudio, and render ("knit") and modify the vignette(s) (see `vignette/` subdirectory).
+
+The RPhenoscape vignette depends only on the [RPhenoscape package](http://rphenoscape.phenoscape.org), which can be installed directly from Github as per its documentation. (RPhenoscape has itself a number of recursive dependencies; installing the package will install those, too.)
+
+The PARAMO vignette has a number of dependencies. These can be installed automatically by installing the workshop package, either from the command line (use `R CMD build`, followed by `R CMD INSTALL`), or from within RStudio using the `install_github()` function in the `remotes` package (which can be installed from CRAN using `install.packages()`):
+
+```r
 remotes::install_github("phenoscape/scate-shortcourse")
 ```
 
-Once installed, the package can be loaded ("attached") as any other R package:
-
-``` r
-library("SCATE.shortcourse")
-```
+Note that this will use the default options for build arguments, which will leave out building and installing the vignettes. Since the best use of the vignettes is to go through (and potentially modify) them within RStudio, this shouldn't be an issue.
 
 ### When and Where
 
