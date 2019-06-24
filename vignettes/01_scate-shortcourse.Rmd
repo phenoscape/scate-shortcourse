@@ -75,8 +75,6 @@ pk_anatomical_class("fin")
 
 Now we will query for ‘Ictaluridae’ and ‘fin’ (including parts) to retrieve the list of studies that contain fin characters for this taxon.  
 
-The list is returned as a ```data.frame``` containing the study IDs and citations. Navigate to Global Environment and click on ‘slist’ to view the study ID and citation (author, year) for each study in the upper left hand pane.  Note that taxon, entity, and quality are optional arguments in this query, and we have also included fin parts.  Here we found nine studies.
-
 ```{r}
 slist <- pk_get_study_list(taxon = "Ictaluridae", entity = "fin", relation = "part of")
 ```
@@ -143,7 +141,7 @@ Looking at ‘Taxon annotations’, you will find that there are zero phenotypes
 ## 6. Subset the matrix taxonomically 
 In the above step you retrieved a synthetic matrix for the Ictaluridae.  Now you would like to pare it down in taxonomic and anatomical scope.  Let’s begin by trimming the matrix down to  the presence and absence characters pertaining only to the genus Ictalurus. We will reduce the matrix to include only descendents of Ictalurus. 
 
-First, we need to parse the list to determine which taxa in the matrix (‘m’) is a descendant of Ictalurus. This returns a list of TRUE or FALSE assignments for each taxon in the matrix:
+First, we need to parse the list to determine which taxa in the matrix (‘m’) are descendants of *Ictalurus*. This returns a list of TRUE or FALSE assignments for each taxon in the matrix:
 
 ```{r}
 is_desc <- pk_is_descendant('Ictalurus', m$taxa)
