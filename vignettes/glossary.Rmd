@@ -38,5 +38,5 @@ knitr::opts_chunk$set(
 
 [Phenoscape Knowledgebase]: https://kb.phenoscape.org/
 [Uberon anatomy ontology]: http://www.ontobee.org/ontology/UBERON
-[PATO ontology]: (http://www.ontobee.org/ontology/PATO)
+[PATO ontology]: http://www.ontobee.org/ontology/PATO
 [Vertebrate Taxonomy Ontology]: (http://www.ontobee.org/ontology/VTO)
