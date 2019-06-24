@@ -10,7 +10,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Short Course on Phylogenetic Comparative Analysis of Integrated Anatomical Traits">
-<meta property="og:description" content="Encapsulates the material for the short course on _Phylogenetic comparative analysis of integrated anatomical traits_ in the form of an R package. This ensures that by installing the course package, all R dependencies are installed and available in the necessary versions.">
+<meta property="og:description" content="Encapsulates the material for the short course on _Phylogenetic
+  comparative analysis of integrated anatomical traits_ in the form of an R package.
+  This ensures that by installing the course package, all R dependencies are
+  installed and available in the necessary versions.">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -30,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">SCATE.shortcourse</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
       </span>
     </div>
 
@@ -56,15 +59,22 @@
       <a href="articles/01_scate-shortcourse.html">RPhenoscape Tutorial</a>
     </li>
     <li>
-      <a href="articles/PARAMO.nb.html">PARAMO Tutorial</a>
+      <a href="articles/glossary.html">Glossary</a>
     </li>
     <li>
-      <a href="articles/glossary.html">Glossary</a>
+      <a href="articles/zPARAMO.nb.html">PARAMO Tutorial</a>
     </li>
   </ul>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/phenoscape/scate-shortcourse">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -81,6 +91,16 @@
 <p>This R package encapsulates the material for the short course on <em>Phylogenetic Comparative Analysis of Integrated Anatomical Traits</em>.</p>
 <p>The purpose of doing so is to leverage the R package installation mechanism for ensuring that all R dependencies needed for the course are installed and available, simply as a result of installing this package.</p>
 <p>The material itself is in the form of vignettes written in RMarkdown. Users are encouraged to modify the code chunks and re-execute the vignettes as a means of exploring the material.</p>
+<div id="installation" class="section level3">
+<h3 class="hasAnchor">
+<a href="#installation" class="anchor"></a>Installation</h3>
+<p>You can download the course material to your computer directly from <a href="http://github.com/phenoscape/scate-shortcourse">Github</a> as a Zip archive. Click the <em>Download Zip</em> link that appears under the <em>Clone or Download</em>, move the Zip archive to a directory of your choice, then unpack it. <img src="https://i.imgur.com/qL9NZ7L.png"></p>
+<p>You can then open the folder containing the material as a project in RStudio, and render (“knit”) and modify the vignette(s) (see <code>vignette/</code> subdirectory).</p>
+<p>The RPhenoscape vignette depends only on the <a href="http://rphenoscape.phenoscape.org">RPhenoscape package</a>, which can be installed directly from Github as per its documentation. (RPhenoscape has itself a number of recursive dependencies; installing the package will install those, too.)</p>
+<p>The PARAMO vignette has a number of dependencies. These can be installed automatically by installing the workshop package, either from the command line (use <code>R CMD build</code>, followed by <code>R CMD INSTALL</code>), or from within RStudio using the <code>install_github()</code> function in the <code>remotes</code> package (which can be installed from CRAN using <code><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages()</a></code>):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"phenoscape/scate-shortcourse"</span>)</code></pre></div>
+<p>Note that this will use the default options for build arguments, which will leave out building and installing the vignettes. Since the best use of the vignettes is to go through (and potentially modify) them within RStudio, this shouldn’t be an issue.</p>
+</div>
 <div id="when-and-where" class="section level3">
 <h3 class="hasAnchor">
 <a href="#when-and-where" class="anchor"></a>When and Where</h3>
@@ -179,17 +199,28 @@
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div class="license">
+    <div class="links">
+<h2>Links</h2>
+<ul class="list-unstyled">
+<li>Browse source code at <br><a href="https://github.com/phenoscape/scate-shortcourse">https://​github.com/​phenoscape/​scate-shortcourse</a>
+</li>
+<li>Report a bug at <br><a href="https://github.com/phenoscape/scate-shortcourse/issues">https://​github.com/​phenoscape/​scate-shortcourse/​issues</a>
+</li>
+</ul>
+</div>
+<div class="license">
 <h2>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
-<li><small>CC0</small></li>
+<li><small>CC0 + file <a href="LICENSE-text.html">LICENSE</a>.md</small></li>
 </ul>
 </div>
 <div class="developers">
 <h2>Developers</h2>
 <ul class="list-unstyled">
 <li>Hilmar Lapp <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-9107-0714" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID" height="16"></a> </li>
+<li>Wasila Dahdul <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-3162-7490" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID" height="16"></a> </li>
+<li>Josef Uyeda <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-4624-9680" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID" height="16"></a> </li>
 </ul>
 </div>
 
@@ -197,7 +228,7 @@
 </div>
 
       <footer><div class="copyright">
-  <p>Developed by Hilmar Lapp.</p>
+  <p>Developed by Hilmar Lapp, Wasila Dahdul, Josef Uyeda.</p>
 </div>
 
 <div class="pkgdown">

@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">SCATE.shortcourse</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
       </span>
     </div>
 
@@ -56,15 +56,22 @@
       <a href="../articles/01_scate-shortcourse.html">RPhenoscape Tutorial</a>
     </li>
     <li>
-      <a href="../articles/PARAMO.nb.html">PARAMO Tutorial</a>
+      <a href="../articles/glossary.html">Glossary</a>
     </li>
     <li>
-      <a href="../articles/glossary.html">Glossary</a>
+      <a href="../articles/zPARAMO.nb.html">PARAMO Tutorial</a>
     </li>
   </ul>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/phenoscape/scate-shortcourse">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -79,7 +86,7 @@
       <h1>RPhenoscape Tutorial</h1>
             
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/phenoscape/scate-shortcourse/blob/master/vignettes/01_scate-shortcourse.Rmd"><code>vignettes/01_scate-shortcourse.Rmd</code></a></small>
       <div class="hidden name"><code>01_scate-shortcourse.Rmd</code></div>
 
     </div>
@@ -116,9 +123,9 @@
 <p>Now we will repeat some of the above steps in R, beginning with a query for ‘Ictaluridae’ and ‘fin’ (including parts) to retrieve the list of studies that contain fin characters for this taxon.</p>
 <p>The <a href="http://rphenoscape.phenoscape.org/">RPhenoscape</a> package provides convenient access to the Phenoscape Knowledgebase in the form of R functions returning R-native data structures. So we don’t have to prefix every call of the package’s functions with the package name, we will first attach the package:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(rphenoscape)</code></pre></div>
-<p>First let’s look up information about the query terms. You can use the term detail functions <code><a href="https://www.rdocumentation.org/packages/rphenoscape/topics/pk_terms">pk_anatomical_detail()</a></code>, <code><a href="https://www.rdocumentation.org/packages/rphenoscape/topics/pk_terms">pk_taxon_detail()</a></code>, <code><a href="https://www.rdocumentation.org/packages/rphenoscape/topics/pk_terms">pk_phenotype_detail()</a></code>, and <code><a href="https://www.rdocumentation.org/packages/rphenoscape/topics/pk_terms">pk_gene_detail()</a></code> to retrieve an ontology term’s ID, label, and definition.</p>
+<p>First let’s look up information about the query terms. You can use the term detail functions <code><a href="http://rphenoscape.phenoscape.org/reference/pk_terms.html">pk_anatomical_detail()</a></code>, <code><a href="http://rphenoscape.phenoscape.org/reference/pk_terms.html">pk_taxon_detail()</a></code>, <code><a href="http://rphenoscape.phenoscape.org/reference/pk_terms.html">pk_phenotype_detail()</a></code>, and <code><a href="http://rphenoscape.phenoscape.org/reference/pk_terms.html">pk_gene_detail()</a></code> to retrieve an ontology term’s ID, label, and definition.</p>
 <p>For example, view the details for the anatomy term “fin”:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/rphenoscape/topics/pk_terms">pk_anatomical_detail</a></span>(<span class="st">"fin"</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://rphenoscape.phenoscape.org/reference/pk_terms.html">pk_anatomical_detail</a></span>(<span class="st">"fin"</span>)
 <span class="co">#&gt;   label</span>
 <span class="co">#&gt; 1   fin</span>
 <span class="co">#&gt;                                                                                           definition</span>
@@ -126,14 +133,14 @@
 <span class="co">#&gt;                                              id</span>
 <span class="co">#&gt; 1 http://purl.obolibrary.org/obo/UBERON_0008897</span></code></pre></div>
 <p>For a specific taxon, such as Siluriformes, you can view the taxon rank, term label, whether or not the taxon is extinct, its common name, and ID:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/rphenoscape/topics/pk_terms">pk_taxon_detail</a></span>(<span class="st">"Siluriformes"</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://rphenoscape.phenoscape.org/reference/pk_terms.html">pk_taxon_detail</a></span>(<span class="st">"Siluriformes"</span>)
 <span class="co">#&gt;                                          rank.id rank.label        label</span>
 <span class="co">#&gt; 1 http://purl.obolibrary.org/obo/TAXRANK_0000003      order Siluriformes</span>
 <span class="co">#&gt;   extinct common_name                                         id</span>
 <span class="co">#&gt; 1   FALSE     catfish http://purl.obolibrary.org/obo/VTO_0034991</span></code></pre></div>
-<p>Ontology terms are related to each other by superclass (parent) and subclass (child) relationships, among other relationships such as part_of. You can use the term classification functions <code><a href="https://www.rdocumentation.org/packages/rphenoscape/topics/pk_class">pk_anatomical_class()</a></code>, <code><a href="https://www.rdocumentation.org/packages/rphenoscape/topics/pk_class">pk_taxon_class()</a></code>,and <code><a href="https://www.rdocumentation.org/packages/rphenoscape/topics/pk_class">pk_phenotype_class()</a></code>to view the superclass and subclass relationships for anatomy, taxonomy, or phenotypic quality terms.</p>
+<p>Ontology terms are related to each other by superclass (parent) and subclass (child) relationships, among other relationships such as part_of. You can use the term classification functions <code><a href="http://rphenoscape.phenoscape.org/reference/pk_class.html">pk_anatomical_class()</a></code>, <code><a href="http://rphenoscape.phenoscape.org/reference/pk_class.html">pk_taxon_class()</a></code>,and <code><a href="http://rphenoscape.phenoscape.org/reference/pk_class.html">pk_phenotype_class()</a></code>to view the superclass and subclass relationships for anatomy, taxonomy, or phenotypic quality terms.</p>
 <p>For example, view the relationships for “fin”:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/rphenoscape/topics/pk_class">pk_anatomical_class</a></span>(<span class="st">"fin"</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://rphenoscape.phenoscape.org/reference/pk_class.html">pk_anatomical_class</a></span>(<span class="st">"fin"</span>)
 <span class="co">#&gt; Querying the IRI for fin</span>
 <span class="co">#&gt; Retrieving classification information</span>
 <span class="co">#&gt; $label</span>
@@ -181,16 +188,15 @@
 <h2 class="hasAnchor">
 <a href="#retrieve-study-matrices-in-rphenoscape" class="anchor"></a>4. Retrieve study matrices in RPhenoscape</h2>
 <p>Now we will query for ‘Ictaluridae’ and ‘fin’ (including parts) to retrieve the list of studies that contain fin characters for this taxon.</p>
-<p>The list is returned as a <code>data.frame</code> containing the study IDs and citations. Navigate to Global Environment and click on ‘slist’ to view the study ID and citation (author, year) for each study in the upper left hand pane. Note that taxon, entity, and quality are optional arguments in this query, and we have also included fin parts. Here we found nine studies.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">slist &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/rphenoscape/topics/pk_get_study_list">pk_get_study_list</a></span>(<span class="dt">taxon =</span> <span class="st">"Ictaluridae"</span>, <span class="dt">entity =</span> <span class="st">"fin"</span>, <span class="dt">relation =</span> <span class="st">"part of"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">slist &lt;-<span class="st"> </span><span class="kw"><a href="http://rphenoscape.phenoscape.org/reference/pk_get_study_list.html">pk_get_study_list</a></span>(<span class="dt">taxon =</span> <span class="st">"Ictaluridae"</span>, <span class="dt">entity =</span> <span class="st">"fin"</span>, <span class="dt">relation =</span> <span class="st">"part of"</span>)</code></pre></div>
 <p>The list is returned as a data.frame containing the study IDs and citations. Navigate to Global Environment and click on ‘slist’ to view the ID and citation (author, year) for each study in the KB that contains any ictalurid species associated with fin data. Note that taxon, entity, and quality are optional arguments in this query, and we have also included fin parts. Here we found nine studies.</p>
 <p>Next we want to obtain the character matrix for one of these studies. Using the study IDs from the previous step, we can get a list of the character matrices as NeXML objects. We will choose the Lundberg (1992) publication, the fifth item on the list above.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lundberg_nexml &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/rphenoscape/topics/pk_get_study_xml">pk_get_study_xml</a></span>(slist<span class="op">$</span>id[<span class="dv">5</span>])
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lundberg_nexml &lt;-<span class="st"> </span><span class="kw"><a href="http://rphenoscape.phenoscape.org/reference/pk_get_study_xml.html">pk_get_study_xml</a></span>(slist<span class="op">$</span>id[<span class="dv">5</span>])
 <span class="co">#&gt; ....This might take a while....</span>
 <span class="co">#&gt; https://scholar.google.com/scholar?q=The+Phylogeny+of+Ictalurid+Catfishes%3A+A+Synthesis+of+Recent+Work&amp;btnG=&amp;hl=en&amp;as_sdt=0%2C42</span></code></pre></div>
 <p>Now go to Global Environment pane and click on ‘lundberg_nexml’ to view the study ID and associated NeXML object.</p>
 <p>To view the full Lundberg (1992) matrix within RStudio, we need to first retrieve the matrix as a data.frame from the NeXML object:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lundberg_matrix &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/rphenoscape/topics/pk_get_study">pk_get_study</a></span>(lundberg_nexml)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lundberg_matrix &lt;-<span class="st"> </span><span class="kw"><a href="http://rphenoscape.phenoscape.org/reference/pk_get_study.html">pk_get_study</a></span>(lundberg_nexml)
 <span class="co">#&gt; Map symbols to labels...</span></code></pre></div>
 <p>You can take a look at a small part of the Lundberg (1992) matrix (e.g., the first five taxa and first five characters):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lundberg_matrix[[<span class="dv">1</span>]][<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">7</span>]
@@ -233,11 +239,11 @@
 <p>In the previous step, we queried the KB for individual studies that contain characters pertaining to the fins in ictalurid catfish, and we obtained character matrices for source publications that included those characters. Now we want to get a matrix that synthesizes these characters into a single matrix.</p>
 <p><a href="http://beta.phenoscape.org/#/ontotrace">OntoTrace</a> from the KB combines characters from multiple publications into a single synthetic matrix. It allows a user to specify any number or combination of anatomical entities and taxa. It returns a matrix as a nexml object that includes only presence or absence of anatomical entities. It uses asserted data of presence or absence, i.e., originally described by an author, or inferred data. Data are inferred from asserted characters, e.g., if an author describes a part of a fin such as ‘fin ray’, the fin is inferred present and scored as such in the matrix.</p>
 <p>The OntoTrace default settings are to include parts of the anatomical entity and to include variable-only characters, but here we will include those that are invariant as well.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nex &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/rphenoscape/topics/pk_get_ontotrace_xml">pk_get_ontotrace_xml</a></span>(<span class="dt">taxon =</span> <span class="st">"Ictaluridae"</span>, <span class="dt">entity =</span> <span class="st">"fin"</span>, <span class="dt">variable_only =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nex &lt;-<span class="st"> </span><span class="kw"><a href="http://rphenoscape.phenoscape.org/reference/pk_get_ontotrace_xml.html">pk_get_ontotrace_xml</a></span>(<span class="dt">taxon =</span> <span class="st">"Ictaluridae"</span>, <span class="dt">entity =</span> <span class="st">"fin"</span>, <span class="dt">variable_only =</span> <span class="ot">FALSE</span>)</code></pre></div>
 <p>To view the matrix within RStudio, get the matrix (m) as a <code>data.frame</code> from the NeXML object. Opening this (‘m’) in the Global Environment shows the taxa, character names, and state assignments (0, absent; 1, present) (note: the otu and otus are NeXML-internal IDs):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/rphenoscape/topics/pk_ontotrace">pk_get_ontotrace</a></span>(nex)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m &lt;-<span class="st"> </span><span class="kw"><a href="http://rphenoscape.phenoscape.org/reference/pk_ontotrace.html">pk_get_ontotrace</a></span>(nex)</code></pre></div>
 <p>The character and taxon lists for the matrix can also be returned. Click on ‘meta’ in the Global Environment pane to view the data.frames for taxa and entities:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">meta &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/rphenoscape/topics/pk_ontotrace">pk_get_ontotrace_meta</a></span>(nex)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">meta &lt;-<span class="st"> </span><span class="kw"><a href="http://rphenoscape.phenoscape.org/reference/pk_ontotrace.html">pk_get_ontotrace_meta</a></span>(nex)</code></pre></div>
 <p>The above returns 29 species of ictalurid catfishes and 123 anatomical entities for fins and their parts.</p>
 <p>You will need to go the <a href="http://beta.phenoscape.org/#/facet">Phenoscape KB</a> to view the supporting states, i.e., the source data upon which inferences were made or those that were directly asserted.</p>
 <p>For example, in the returned OntoTrace matrix (see ‘m’ in Global Environment (row 10)) the pelvic fin is scored as present for <em>Ictalurus australis</em>. Enter these data into the faceted browsing interface:</p>
@@ -252,13 +258,13 @@
 <h2 class="hasAnchor">
 <a href="#subset-the-matrix-taxonomically" class="anchor"></a>6. Subset the matrix taxonomically</h2>
 <p>In the above step you retrieved a synthetic matrix for the Ictaluridae. Now you would like to pare it down in taxonomic and anatomical scope. Let’s begin by trimming the matrix down to the presence and absence characters pertaining only to the genus Ictalurus. We will reduce the matrix to include only descendents of Ictalurus.</p>
-<p>First, we need to parse the list to determine which taxa in the matrix (‘m’) is a descendant of Ictalurus. This returns a list of TRUE or FALSE assignments for each taxon in the matrix:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">is_desc &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/rphenoscape/topics/pk_is_descendant">pk_is_descendant</a></span>(<span class="st">'Ictalurus'</span>, m<span class="op">$</span>taxa)</code></pre></div>
+<p>First, we need to parse the list to determine which taxa in the matrix (‘m’) are descendants of <em>Ictalurus</em>. This returns a list of TRUE or FALSE assignments for each taxon in the matrix:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">is_desc &lt;-<span class="st"> </span><span class="kw"><a href="http://rphenoscape.phenoscape.org/reference/pk_is_descendant.html">pk_is_descendant</a></span>(<span class="st">'Ictalurus'</span>, m<span class="op">$</span>taxa)</code></pre></div>
 <p>We then subset the matrix m to the descendants of <em>Ictalurus</em>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ictalurus_m &lt;-<span class="st"> </span>m[is_desc, ]</code></pre></div>
 <p>View the new matrix by clicking on ‘ictalurus_m’ in the Global Environment to view the <code>data.frame</code> of the matrix.</p>
-<p>We can also subset the matrix by anatomy. In this case, let’s select characters for the pectoral fin and its parts. We will use <code><a href="https://www.rdocumentation.org/packages/rphenoscape/topics/pk_is_descendant">pk_is_descendant()</a></code> to first parse the characters (column names) to determine which are descendents of the term ‘pectoral fin’. Because this function only looks for descendent terms, we also need to specify that any characters with ‘pectoral fin’ are included, and we exclude the first three taxon-related columns:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">is_desc_pecfin &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/rphenoscape/topics/pk_is_descendant">pk_is_descendant</a></span>(<span class="st">'pectoral fin'</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(m)[<span class="op">-</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>)], <span class="dt">includeRels =</span> <span class="st">"part_of"</span>) <span class="op">|</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(m)[<span class="op">-</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>)] <span class="op">==</span><span class="st"> 'pectoral fin'</span> 
+<p>We can also subset the matrix by anatomy. In this case, let’s select characters for the pectoral fin and its parts. We will use <code><a href="http://rphenoscape.phenoscape.org/reference/pk_is_descendant.html">pk_is_descendant()</a></code> to first parse the characters (column names) to determine which are descendents of the term ‘pectoral fin’. Because this function only looks for descendent terms, we also need to specify that any characters with ‘pectoral fin’ are included, and we exclude the first three taxon-related columns:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">is_desc_pecfin &lt;-<span class="st"> </span><span class="kw"><a href="http://rphenoscape.phenoscape.org/reference/pk_is_descendant.html">pk_is_descendant</a></span>(<span class="st">'pectoral fin'</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(m)[<span class="op">-</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>)], <span class="dt">includeRels =</span> <span class="st">"part_of"</span>) <span class="op">|</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(m)[<span class="op">-</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>)] <span class="op">==</span><span class="st"> 'pectoral fin'</span> 
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/table">table</a></span>(is_desc_pecfin)
 <span class="co">#&gt; is_desc_pecfin</span>
 <span class="co">#&gt; FALSE  TRUE </span>
@@ -305,7 +311,7 @@ pecfin_m &lt;-<span class="st"> </span>m[, to_keep]</code></pre></div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Hilmar Lapp.</p>
+  <p>Developed by Hilmar Lapp, Wasila Dahdul, Josef Uyeda.</p>
 </div>
 
 <div class="pkgdown">
