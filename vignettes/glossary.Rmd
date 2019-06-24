@@ -36,7 +36,7 @@ knitr::opts_chunk$set(
 **Trait** - An observable feature of an organism.
 
 
-[Phenoscape Knowledgebase] (https://kb.phenoscape.org/)
-[Uberon anatomy ontology] (http://www.ontobee.org/ontology/UBERON)
-[PATO ontology] (http://www.ontobee.org/ontology/PATO)
-[Vertebrate Taxonomy Ontology] (http://www.ontobee.org/ontology/VTO)
+[Phenoscape Knowledgebase]: https://kb.phenoscape.org/
+[Uberon anatomy ontology]: http://www.ontobee.org/ontology/UBERON
+[PATO ontology]: http://www.ontobee.org/ontology/PATO
+[Vertebrate Taxonomy Ontology]: http://www.ontobee.org/ontology/VTO
