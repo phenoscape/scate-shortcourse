@@ -17,7 +17,7 @@ knitr::include_graphics("https://github.com/sergeitarasov/PARAMO/raw/master/icon
 
 ***P**hylogenetic **A**ncestral **R**econstruction of **A**natomy by **M**apping **O**ntologies*
 
-The $PARAMO$ pipeline requires three initial pieces of data: a character matrix, a dated phylogeny, and an anatomy ontology. Herein, we use a set of 19 characters from Ontotrace and a large-scale phylogeny of fishes from  [@rabosky2018]. In this demonstration, we are interested in constructing the amalgamated characters for the three levels of amalgamation (=anatomical hierarchy): anatomical dependencies (ADs), body regions (BRs) and entire phenotype (EF). At the BR level, three main body types are considered -- "dermatocranium", "paired fins" and "external integument structures". 
+The $PARAMO$ pipeline requires three initial pieces of data: a character matrix, a dated phylogeny, and an anatomy ontology. Herein, we use a set of 19 characters from OntoTrace and a large-scale phylogeny of fishes from  [@rabosky2018]. In this demonstration, we are interested in constructing the amalgamated characters for the three levels of amalgamation (=anatomical hierarchy): anatomical dependencies (ADs), body regions (BRs) and entire phenotype (EF). At the BR level, three main body types are considered -- "dermatocranium", "paired fins" and "external integument structures". 
 
 # STEP 1. Initial character matrix
 
@@ -50,7 +50,7 @@ print_coverage(siluriformes)
 ```
 
 
-The table that prints out shows the number of taxa for which there is data in the KB ( _coverage_ ) and the proportion of taxa ( _average_ ) that have this trait (all of these are binary, presence/absence characters). This dataset is too big for our demonstration purposes. So lets filter down to a smaller set of traits that will illustrate our process. 
+The table that prints out shows the number of taxa for which there is data in the KB ( _coverage_ ) and the proportion of taxa ( _average_ ) for which the trait is present (all of these are binary, presence/absence characters). This dataset is too big for our demonstration purposes. So let's filter down to a smaller set of traits that will illustrate our process. 
 
 ```{r}
 dat <- dplyr::select(siluriformes,"taxa", 
