@@ -17,7 +17,7 @@ knitr::include_graphics("https://github.com/sergeitarasov/PARAMO/raw/master/icon
 
 ***P**hylogenetic **A**ncestral **R**econstruction of **A**natomy by **M**apping **O**ntologies*
 
-The $PARAMO$ pipeline requires three initial pieces of data: a character matrix, a dated phylogeny, and an anatomy ontology. Herein, we use a set of 19 characters from Ontotrace and a large-scale phylogeny of fishes from  [@rabosky2018]. In this demonstration, we are interested in constructing the amalgamated characters for the three levels of amalgamation (=anatomical hierarchy): anatomical dependencies (ADs), body regions (BRs) and entire phenotype (EF). At the BR level, three main body types are considered -- "dermatocranium", "paired fins" and "external integument structures". 
+The $PARAMO$ pipeline requires three initial pieces of data: a character matrix, a dated phylogeny, and an anatomy ontology. Herein, we use a set of 19 characters from OntoTrace and a large-scale phylogeny of fishes from  [@rabosky2018]. In this demonstration, we are interested in constructing the amalgamated characters for the three levels of amalgamation (=anatomical hierarchy): anatomical dependencies (ADs), body regions (BRs) and entire phenotype (EF). At the BR level, three main body types are considered -- "dermatocranium", "paired fins" and "external integument structures". 
 
 # STEP 1. Initial character matrix
 
