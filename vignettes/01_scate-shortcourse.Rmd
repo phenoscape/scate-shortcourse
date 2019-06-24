@@ -167,7 +167,7 @@ colnames(m)[-c(1,2,3)][is_desc_pecfin]
 We now subset the matrix m using ‘is_desc_pecfin’ and retaining the first taxon-related columns:
 
 ```{r}
-to_keep <- c(TRUE, TRUE, TRUE, is_desc) 
+to_keep <- c(TRUE, TRUE, TRUE, is_desc_pecfin) 
 pecfin_m <- m[, to_keep]
 ```
 
