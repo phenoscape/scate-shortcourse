@@ -50,7 +50,9 @@ print_coverage(siluriformes)
 ```
 
 
-The table that prints out shows the number of taxa for which there is data in the KB ( _coverage_ ) and the proportion of taxa ( _average_ ) that have this trait (all of these are binary, presence/absence characters). This dataset is too big for our demonstration purposes. So lets filter down to a smaller set of traits that will illustrate our process. 
+The table that prints out shows the number of taxa for which there is data in the KB ( _coverage_ ) and the proportion of taxa ( _average_ ) that have this trait (all of these are binary, presence/absence characters). 
+
+This dataset is too big for our demonstration purposes. So let's filter down to a smaller set of traits that will illustrate our process. 
 
 ```{r}
 dat <- dplyr::select(siluriformes,"taxa", 
@@ -76,7 +78,7 @@ td <- make.treedata(fishtree, dat)
 td
 ```
 
-We we want to learn about these traits, so we're going to build a nice data table to see what these traits are and their unique identifiers using the KB API and `rphenoscape` function `pk_anatomical_detail`. 
+We want to learn about these traits, so we're going to build a nice data table to see what these traits are and their unique identifiers using the KB API and `rphenoscape` function `pk_anatomical_detail`. 
 
 ```{r}
 traits <- colnames(td$dat)
@@ -113,7 +115,7 @@ ontologyHeatMap(tdf, njt, start=1, cex=0.25)
 
 Next, we want to identify the dependencies in our traits by using `rphenoscape::pa_dep_matrix`, which returns a presence-absence dependency matrix when provided a list of terms. In other words,
 it returns which traits depend on the presence of another trait. This will be key information for building our evolutionary models, as not considering it can result in impossible ancestral state
-reconstructions and can also help the pseudoreplication that occurs when considering non-independent characters in phylogenetic analyses.
+reconstructions and can also help the pseudoreplication that occurs when considering non-independent characters in phylogenetic analyses. 
 
 ```{r}
 dep.mat <- pa_dep_matrix(gsub("N:", "N_", paste0("http://purl.obolibrary.org/obo/", char_info$IRI, sep="")), .names="label", preserveOrder=TRUE)
@@ -127,7 +129,7 @@ plot(G1, vertex.size=5, edge.arrow.size=0.5, vertex.label.cex=0.75)
 
 plot(induced_subgraph(G1, which(con.comp$membership==8)), vertex.label.cex=0.75)
 ```
-
+In the dependency table above, for example, you can see that the presence of the pectoral fin spine is dependent on the presence of the pectoral fin.
 
 Now we can build in our dependencies into our evolutionary models. We are going to do this manually for this workshop. We have tools that extract these from graphs, but it's less obvious what's happening, and these are not robust yet. This is a major part of our project, to build tools that will construct these models in an automated fashion.
 
