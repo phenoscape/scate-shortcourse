@@ -1,6 +1,6 @@
 Package: SCATE.shortcourse
 Title: Short Course on Phylogenetic Comparative Analysis of Integrated Anatomical Traits
-Version: 0.0.1
+Version: 0.0.2
 Authors@R: 
     c(person("Hilmar", "Lapp",
              email = "hilmar.lapp@duke.edu",
