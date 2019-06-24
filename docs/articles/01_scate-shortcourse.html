@@ -286,7 +286,7 @@
 <span class="co">#&gt; [13] "pectoral fin spine"                             </span>
 <span class="co">#&gt; [14] "posterior dentation of pectoral fin spine"</span></code></pre></div>
 <p>We now subset the matrix m using ‘is_desc_pecfin’ and retaining the first taxon-related columns:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">to_keep &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="ot">TRUE</span>, <span class="ot">TRUE</span>, <span class="ot">TRUE</span>, is_desc) 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">to_keep &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="ot">TRUE</span>, <span class="ot">TRUE</span>, <span class="ot">TRUE</span>, is_desc_pecfin) 
 pecfin_m &lt;-<span class="st"> </span>m[, to_keep]</code></pre></div>
 <p>View this matrix of pectoral fin characters for Ictaluridae by clicking on ‘pecfin_m’ in the Global Environment.</p>
 </div>
