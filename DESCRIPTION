@@ -6,6 +6,16 @@ Authors@R:
              email = "hilmar.lapp@duke.edu",
              role = c("aut", "cre"),
              comment = c(ORCID="0000-0001-9107-0714")
+           ),
+      person("Wasila", "Dahdul",
+             email = "Wasila.Dahdul@usd.edu",
+             role = c("aut"),
+             comment = c(ORCID="0000-0003-3162-7490")
+           ),
+      person("Josef", "Uyeda",
+             email = "juyeda@vt.edu",
+             role = c("aut"),
+             comment = c(ORCID="0000-0003-4624-9680")
            ))
 Description: Encapsulates the material for the short course on _Phylogenetic comparative analysis of integrated anatomical traits_ in the form of an R package. This ensures that by installing the course package, all R dependencies are installed and available in the necessary versions.
 License: CC0
