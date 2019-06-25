@@ -1,16 +1,14 @@
 ---
 title: "PARAMO Tutorial"
-output:
-  html_document:
-    df_print: paged
-  pdf_document: default
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{PARAMO}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
 ---
-
-
 
 ```{r echo=FALSE, message=FALSE}
 #include_graphics("../icon-paramo.png")
-devtools::install_github("phenoscape/scate-shortcourse")
 library("SCATE.shortcourse")
 knitr::include_graphics("https://github.com/sergeitarasov/PARAMO/raw/master/icon-paramo.png", dpi=100)
 ```
@@ -97,6 +95,8 @@ char_info <- data.frame(char_info)
 as_tibble(char_info)
 
 ```
+
+We can construct a heat map that is organized by the semantic similarity of the traits to visualize our dataset. The phylogeny is displayed on the left side, and a tree of traits is on the top.
 
 ```{r}
 njt <- makeTraitTree(td, skip=NULL)

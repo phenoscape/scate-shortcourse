@@ -21,10 +21,11 @@ stack2<-function(x,y){
   x=x, y=y )
 }
 
-# Final stack of maps
-# cc chars id to stack
-# ntrees number of trees to stack
-# dirW directory for zip file
+#' Final stack of maps
+#' cc chars id to stack
+#' ntrees number of trees to stack
+#' dirW directory for zip file
+#' @export
 
 paramo<-function(cc, ntrees=10, dirW=c("") )
 {

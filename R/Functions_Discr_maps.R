@@ -1,4 +1,5 @@
-# make branch length and maps equal, use tree.tmp with rounded (3) edge.length
+#' make branch length and maps equal, use tree.tmp with rounded (3) edge.length
+#' @export
 make_tree_eq<-function(tree.tmp, target.tr, round=3){
   target.tr$edge.length<-tree.tmp$edge.length
   
@@ -18,32 +19,13 @@ make_tree_eq<-function(tree.tmp, target.tr, round=3){
 }
 ########
 
-###########################
-############################################
-# Reading unsummarized Stoch Map files from ReVBayes
 
+#' Reading unsummarized Stoch Map files from ReVBayes
 #' @param file file
 #' @param start start from tree
 #' @param end end with tree
 #' @param save save to file. if NULL reads in R
-#' 
-#file="CHAR-1.stm"
-#start=1
-#end=2
-#save="/home/tarasov/my-papers-2017/Onto-Phylo/onto_phylo/data/working/RevBayes/Run1_all/stm_R/CHAR-1.stmR"
-
-#text <- scan(file=file, sep = "\n", what = "character")
-
-#read_Simmap_Rev(file, start=1400, end=1500)
-
-#sim1 = read.simmap(file=save, format="phylip")
-#sim1 = read.simmap(text=trees, format="phylip")
-#plot(sim1)
-
-# sm2<-read_Simmap_Rev(paste0("CHAR-363", ".stm"), 
-#                      start=1001, end=1500, 
-#                      save = NULL) %>% read.simmap(text=., format="phylip")
-
+#' @export
 read_Simmap_Rev<-function(file, start=1, end=1, save=NULL){
   
   skip=start+2
@@ -71,7 +53,8 @@ read_Simmap_Rev<-function(file, start=1, end=1, save=NULL){
 #########
 
 
-# for one tree
+#' Reading unsummarized Stoch Map files from ReVBayes for one tree
+#' @export
 discr_Simmap<-function(tree, res){
   
   steps <- 0:res/res * max(phytools:::nodeHeights(tree))
@@ -108,6 +91,9 @@ discr_Simmap<-function(tree, res){
   return(tree)        
 }
 
+
+#' Reading unsummarized Stoch Map files from ReVBayes
+#' @export
 discr_Simmap_all<-function(tree, res){
   
   if (class(tree)[1]=="simmap") {
