@@ -250,8 +250,8 @@ setwd(dir)
 library(foreach) # Optional
 library(doParallel) # Optional
 registerDoParallel(cores=1) # Optional, if you are running on a server and have many cores!
-res <- foreach(i=1:ncol(MT)) %dopar% {
-  cmd <- paste("./rb07 ", colnames(MT)[i], ".Rev &", sep="") #./rb07 is Revbayes 1.07, which works well with this script. 
+res <- foreach(i=1:ncol(td.comb$dat)) %dopar% {
+  cmd <- paste("./rb07 ", colnames(td.comb$dat)[i], ".Rev &", sep="") #./rb07 is Revbayes 1.07, which works well with this script. 
   #system(cmd) #Don't actually run!!
 }
 ```
@@ -273,6 +273,21 @@ EF <- RAC_query(char_info_comb, UBERON, EF_names)
 ```{r eval=FALSE}
 # This is a function to processes the maps produced by revbayes in a memory efficient manner and discretizes the maps to ease amalgamation
 prepareMaps(td.comb, dirR, dirW)
+
+#############
+# Individual characters
+#############
+cc <- lapply(colnames(td.comb$dat), function(x) gsub(" ", "_", x))
+names(cc) <- colnames(td.comb$dat)
+IND.maps<-vector("list", length(colnames(td.comb$dat)))
+
+for (i in 1:length(colnames(td.comb$dat)))
+{
+  map<-paramo(cc[[i]], ntrees=2, dirW=dirW)
+  IND.maps[[i]]<-map
+}
+
+names(IND.maps) <- gsub(" ", "_", colnames(td.comb$dat))
 
 #############
 # Amalgamation at the BR level
@@ -322,6 +337,7 @@ for (i in 1:length(EF.maps))
 If you skipped the steps above, no problem, we can simply load the pre-cooked data. 
 
 ```{r}
+data(IND.maps)
 data(EF.maps)
 data(BR.maps)
 ```
@@ -340,7 +356,8 @@ ymax <- 1.1*length(td.comb$phy$tip.label) #set our boundaries for our plot area
 for(i in (1:length(char_info_comb$ID))){
   trait <- char_info_comb$ID[i]
   trait <- gsub(" ", "_", trait)
-  map <- paramo(trait, ntrees=1, dirW=dirW)
+  #map <- paramo(trait, ntrees=1, dirW=dirW)
+  map <- IND.maps[[trait]]
   states <- unique(names(unlist(map[[1]]$maps)))
   print(states)
   try(plotSimmap(map[[1]], pts=F,ftype="off", colors=setNames(hm.palette(length(states)), states), ylim=c(0, ymax)))
