@@ -33,8 +33,6 @@
 <meta property="og:title" content="Combining two matrices — comb2matrices" />
 
 <meta property="og:description" content="Combining two matrices. The parametric schem of matrice is defined by nattural
-numbers; different numbers = different rate parameters
-Combining two matrices. The parametric schem of matrice is defined by nattural
 numbers; different numbers = different rate parameters" />
 <meta name="twitter:card" content="summary" />
 
@@ -89,7 +87,7 @@ numbers; different numbers = different rate parameters" />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/01_scate-shortcourse.html">RPhenoscape Tutorial</a>
+      <a href="../articles/01_rphenoscape.html">RPhenoscape Tutorial</a>
     </li>
     <li>
       <a href="../articles/PARAMO.nb.html">PARAMO Tutorial</a>
@@ -121,7 +119,7 @@ numbers; different numbers = different rate parameters" />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Combining two matrices</h1>
-    <small class="dont-index">Source: <a href='https://github.com/phenoscape/scate-shortcourse/blob/master/R/SMM_functions.R'><code>R/SMM_functions.R</code></a>, <a href='https://github.com/phenoscape/scate-shortcourse/blob/master/R/workshop_functions.R'><code>R/workshop_functions.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/phenoscape/scate-shortcourse/blob/master/R/SMM_functions.R'><code>R/SMM_functions.R</code></a></small>
     <div class="hidden name"><code>comb2matrices.Rd</code></div>
     </div>
 
@@ -129,15 +127,10 @@ numbers; different numbers = different rate parameters" />
     
     <p>Combining two matrices. The parametric schem of matrice is defined by nattural
 numbers; different numbers = different rate parameters</p>
-<p>Combining two matrices. The parametric schem of matrice is defined by nattural
-numbers; different numbers = different rate parameters</p>
     
     </div>
 
     <pre class="usage"><span class='fu'>comb2matrices</span>(<span class='no'>M1</span>, <span class='no'>M2</span>, <span class='kw'>dependent.state</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>name.sep</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>diag.as</span> <span class='kw'>=</span> <span class='st'>""</span>)
-
-<span class='fu'>comb2matrices</span>(<span class='no'>M1</span>, <span class='no'>M2</span>, <span class='kw'>dependent.state</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>name.sep</span> <span class='kw'>=</span> <span class='st'>""</span>,
   <span class='kw'>diag.as</span> <span class='kw'>=</span> <span class='st'>""</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -149,31 +142,11 @@ numbers; different numbers = different rate parameters</p>
     </tr>
     <tr>
       <th>M2</th>
-      <td><p>matrix; if dependency true then: M2 depends on those states of M1 specified in controlling.state</p></td>
+      <td><p>matrix; if dependency true then: M2 depends on those states of M1 specified in dependent.state</p></td>
     </tr>
     <tr>
       <th>dependent.state</th>
       <td><p>state(s) of M1 that switches on matrix M2</p></td>
-    </tr>
-    <tr>
-      <th>name.sep</th>
-      <td><p>separator for state names</p></td>
-    </tr>
-    <tr>
-      <th>diag.as</th>
-      <td><p>hpopulate main diagonal with</p></td>
-    </tr>
-    <tr>
-      <th>controlling.state</th>
-      <td><p>state(s) of M1 that switches on/off matrix M2</p></td>
-    </tr>
-    <tr>
-      <th>M1</th>
-      <td><p>matrix; if dependency true thenM1 controls M2</p></td>
-    </tr>
-    <tr>
-      <th>M2</th>
-      <td><p>matrix; if dependency true then: M2 depends on those states of M1 specified in dependent.state</p></td>
     </tr>
     <tr>
       <th>name.sep</th>
@@ -188,7 +161,6 @@ numbers; different numbers = different rate parameters</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Matrix</p>
-<p>Matrix</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -196,11 +168,15 @@ numbers; different numbers = different rate parameters</p>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/colnames'>rownames</a></span>(<span class='no'>M1</span>)<span class='kw'>&lt;-</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/colnames'>colnames</a></span>(<span class='no'>M1</span>)<span class='kw'>&lt;-</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"0"</span>,<span class='st'>"1"</span>)
 <span class='no'>M2</span><span class='kw'>&lt;-</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(-<span class='fl'>3</span>,<span class='fl'>3</span>,  <span class='fl'>4</span>,-<span class='fl'>4</span>),<span class='fl'>2</span>,<span class='fl'>2</span>,<span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/colnames'>rownames</a></span>(<span class='no'>M2</span>)<span class='kw'>&lt;-</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/colnames'>colnames</a></span>(<span class='no'>M2</span>)<span class='kw'>&lt;-</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"0"</span>,<span class='st'>"1"</span>)
-<span class='fu'>comb2matrices</span>(<span class='no'>M1</span>, <span class='no'>M2</span>, <span class='kw'>controlling.state</span><span class='kw'>=</span><span class='kw'>NULL</span>)</div><div class='output co'>#&gt; <span class='error'>Error in comb2matrices(M1, M2, controlling.state = NULL): could not find function "comb2matrices"</span></div><div class='input'><span class='fu'>comb2matrices</span>(<span class='no'>M1</span>, <span class='no'>M2</span>, <span class='kw'>controlling.state</span><span class='kw'>=</span><span class='fl'>2</span>)</div><div class='output co'>#&gt; <span class='error'>Error in comb2matrices(M1, M2, controlling.state = 2): could not find function "comb2matrices"</span></div><div class='input'><span class='no'>M1</span><span class='kw'>&lt;-</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(-<span class='fl'>1</span>,<span class='fl'>1</span>,  <span class='fl'>2</span>,-<span class='fl'>2</span>),<span class='fl'>2</span>,<span class='fl'>2</span>,<span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/colnames'>rownames</a></span>(<span class='no'>M1</span>)<span class='kw'>&lt;-</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/colnames'>colnames</a></span>(<span class='no'>M1</span>)<span class='kw'>&lt;-</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"0"</span>,<span class='st'>"1"</span>)
-<span class='no'>M2</span><span class='kw'>&lt;-</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(-<span class='fl'>3</span>,<span class='fl'>3</span>,  <span class='fl'>4</span>,-<span class='fl'>4</span>),<span class='fl'>2</span>,<span class='fl'>2</span>,<span class='kw'>byrow</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/colnames'>rownames</a></span>(<span class='no'>M2</span>)<span class='kw'>&lt;-</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/colnames'>colnames</a></span>(<span class='no'>M2</span>)<span class='kw'>&lt;-</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"0"</span>,<span class='st'>"1"</span>)
-<span class='fu'>comb2matrices</span>(<span class='no'>M1</span>, <span class='no'>M2</span>, <span class='kw'>dependent.state</span><span class='kw'>=</span><span class='kw'>NULL</span>)</div><div class='output co'>#&gt; <span class='error'>Error in comb2matrices(M1, M2, dependent.state = NULL): could not find function "comb2matrices"</span></div><div class='input'><span class='fu'>comb2matrices</span>(<span class='no'>M1</span>, <span class='no'>M2</span>, <span class='kw'>dependent.state</span><span class='kw'>=</span><span class='fl'>2</span>)</div><div class='output co'>#&gt; <span class='error'>Error in comb2matrices(M1, M2, dependent.state = 2): could not find function "comb2matrices"</span></div></pre>
+<span class='fu'>comb2matrices</span>(<span class='no'>M1</span>, <span class='no'>M2</span>, <span class='kw'>dependent.state</span><span class='kw'>=</span><span class='kw'>NULL</span>)</div><div class='output co'>#&gt;    00 01 10 11
+#&gt; 00 -4  3  1  0
+#&gt; 01  4 -5  0  1
+#&gt; 10  2  0 -5  3
+#&gt; 11  0  2  4 -6</div><div class='input'><span class='fu'>comb2matrices</span>(<span class='no'>M1</span>, <span class='no'>M2</span>, <span class='kw'>dependent.state</span><span class='kw'>=</span><span class='fl'>2</span>)</div><div class='output co'>#&gt;    00 01 10 11
+#&gt; 00 -1  0  1  0
+#&gt; 01  0 -1  0  1
+#&gt; 10  2  0 -5  3
+#&gt; 11  0  2  4 -6</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

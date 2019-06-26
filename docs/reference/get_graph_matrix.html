@@ -86,7 +86,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/01_scate-shortcourse.html">RPhenoscape Tutorial</a>
+      <a href="../articles/01_rphenoscape.html">RPhenoscape Tutorial</a>
     </li>
     <li>
       <a href="../articles/PARAMO.nb.html">PARAMO Tutorial</a>
@@ -118,7 +118,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get all dependency matrices given a dependecy graph</h1>
-    <small class="dont-index">Source: <a href='https://github.com/phenoscape/scate-shortcourse/blob/master/R/workshop_functions.R'><code>R/workshop_functions.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/phenoscape/scate-shortcourse/blob/master/R/SMM_functions.R'><code>R/SMM_functions.R</code></a></small>
     <div class="hidden name"><code>get_graph_matrix.Rd</code></div>
     </div>
 
@@ -143,21 +143,21 @@
 
     <p>List of matrices and their attributes</p>
     
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>get_graph_matrix(g)
-$binary.matrices # intial binary matrices assigned to each node of graph
+    <p>$binary.matrices # intial binary matrices assigned to each node of graph
 $comb.matrices$matrix # combined matrix for each node
 $comb.matrices$state.string # vector of states [1] "00" "01" "10" "11"
 $comb.matrices$state.ident # specifies the order of ontology terms in each state [1] "UBERON:0007829" "UBERON:2000663"
 $comb.matrices$state.observable # ids and names of "observable" states. In red-blue tail notation refers to blue and red states
 $comb.matrices$state.hidden # ids and names of "hidden" states. In red-blue tail notation refers to "blue absent"
+and "red absent"
 $nodes.sorted # topologically sorted nodes
-$vertex.hier # hierrachy of the nodes
-</div><div class='output co'>#&gt; <span class='error'>Error: &lt;text&gt;:2:1: unexpected '$'</span>
-#&gt; <span class='error'>1: get_graph_matrix(g)</span>
-#&gt; <span class='error'>2: $</span>
-#&gt; <span class='error'>   ^</span></div></pre>
+$vertex.hier # hierrachy of the nodes</p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'>get_graph_matrix</span>(<span class='no'>g</span>)</div><div class='output co'>#&gt; <span class='error'>Error in get_graph_matrix(g): object 'g' not found</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -165,6 +165,8 @@ $vertex.hier # hierrachy of the nodes
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
