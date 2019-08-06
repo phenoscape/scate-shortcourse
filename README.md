@@ -25,7 +25,7 @@ Note that this will use the default options for build arguments, which will leav
 
 ### When and Where
 
-- June 26, 2019 (Wednesday) 
+- June 26, 2019 (Wednesday), in conjunction with Evolution 2019 in Providence, Rhode Island
 - Venue: South County Room, Omni Providence Hotel (adjacent to RICC)
 
 ### Schedule
