@@ -1,5 +1,6 @@
 # automatically recode amalgamated traits 
 # using the matrices returned by amalgamate_deps, recode this data into td and return td
+#' @export
 recode_traits <- function(td, M){
   # iterate through each new amalgamated trait and recode the matrix for that trait into td
   for(i in seq_along(M$new_traits)){
@@ -25,6 +26,7 @@ recode_traits <- function(td, M){
 
 # given a a dependency matrix, generate a graph for the traits and combined matrices for each set of dependencies on that graph
 # return the matrices, our graph, the graph with organized subgraphs, and lists of the old and new trait names
+#' @export
 amalgamate_deps <- function(dep_mat) {
   M <- list() # store all of our combined matrices
   traits <- list() 
@@ -54,6 +56,7 @@ amalgamate_deps <- function(dep_mat) {
 
 # combine binary matrices for a subgraph on a dependency graph
 # return the final combined matrix of all traits
+#' @export
 combine_subgraph <- function(subgraph){
   # sort graph so that the "root" comes first
   sorted_g <- topo_sort(subgraph, mode = "out")
@@ -63,7 +66,8 @@ combine_subgraph <- function(subgraph){
   # setting up:
   M <- list() 
   node_list <- names(sorted_g) 
-  # trait_order <- list()  # keeps track of our traits in order of their dependencies
+  gtraits <- names(bin_mats) # Pull out the names of the traits we're working with
+  newTraitName <- paste(gtraits, collapse="+")
   ancestor_v <- node_list[[1]] # set to root
   M[[1]] <- bin_mats[[ancestor_v]]
   # trait_order[[1]] <- ancestor_v
@@ -97,6 +101,7 @@ combine_subgraph <- function(subgraph){
 # given a graph and a vertex v on that graph, the trait matrix for the ancestor node of v,
 # and a list containing the traits in order of their combination into the matrix, 
 # return the columns in the ancestor trait matrix which v depends on
+#' @export
 get_dep_state <- function(subgraph, v, ancestor_mat, trait_order) {
   # get colnames of ancestor matrix
   mat_cols <- colnames(ancestor_mat)
@@ -125,6 +130,7 @@ get_dep_state <- function(subgraph, v, ancestor_mat, trait_order) {
 
 
 # function for removing redundant dependency edges from our graph
+#' @export
 remove_indirect <- function(dependency_matrix){
   z <- dependency_matrix
   diag(z) <- NA

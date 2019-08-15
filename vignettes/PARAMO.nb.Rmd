@@ -134,94 +134,17 @@ In the dependency table above, for example, you can see that the presence of the
 Now we can build in our dependencies into our evolutionary models. We are going to do this manually for this workshop. We have tools that extract these from graphs, but it's less obvious what's happening, and these are not robust yet. This is a major part of our project, to build tools that will construct these models in an automated fashion.
 
 ```{r}
-## Right now this is done manually, we are working on making it work for the graphs we created above, but lets do it one by one for each module. 
-M <- list() # Stores our matrices
+## Using automated functions:
 
-## Now let's consider mental barbels. We can see from the graph that outer and inner mental barbels depend on a mental barbel being present. We need to amalgamate
-## these into a single, multistate character. 
+## amalgamate dependencies
+output <- amalgamate_deps(dep.mat)
 
-G.mental.barbel <- induced_subgraph(G1, which(con.comp$membership==3))
-bin_mats <- init_binary_matrix(G.mental.barbel) # Start with independent models for each trait
-gtraits <- names(bin_mats) # Pull out the names of the traits we're working with
-newTraitName <- paste(gtraits, collapse="+") # Define the trait name of our new, amalgamated trait
-
-## Now we iteratively combine the matrices according to the dependencies above
-M1 <- comb2matrices(bin_mats$`mental barbel`, bin_mats$`inner mental barbel`, dependent.state = 2) ## 'inner mental barbel' is dependent on column 2 of the first matrix ('mental barbel' matrix).
-M[[newTraitName]] <- comb2matrices(M1, bin_mats$`outer mental barbel`, dependent.state = c(3,4)) ## `outer mental barbel` is dependent on columns 3 and 4 {10, 11} of M1 (i.e. a `mental barbel` is present, 'inner mental barbel' may or may not be present)
-states <- colnames(M[[newTraitName]]) # Our new multistate characters in terms of the original three characters
-names(states) <- 1:length(states) # With their numeric names
-
-## Now we have to recode the data in our dataset to reflect our structured data and hidden state coding and new character states
-td.comb <-recode_td(tdf, gtraits, states, hidden0=2:3) ## hidden0 indicates which traits have hidden states when they are absent. These are dependent states.
-```
-
-
-```{r}
-## Now let's repeat it for all the other traits; 
-############
-## Urohyal##
-############
-g <- induced_subgraph(G1, which(con.comp$membership==7))
-bin_mats <- init_binary_matrix(g)
-gtraits <- names(bin_mats)
-newTraitName <- paste(gtraits, collapse="+")
-
-## Same structure as mental barbels
-M1 <- comb2matrices(bin_mats[[1]], bin_mats[[2]], dependent.state = 2) 
-M[[newTraitName]] <- comb2matrices(M1, bin_mats[[3]], dependent.state = c(3,4)) 
-states <- colnames(M[[newTraitName]])
-names(states) <- 1:length(states)
-
-td.comb <-recode_td(td.comb, gtraits, states, hidden0=2:3) ## hidden0 indicates which traits have hidden states when they are absent. These are dependent states.
-#################
-## Pectoral fin##
-#################
-g <- induced_subgraph(G1, which(con.comp$membership==8))
-mats <- get_graph_matrix(g)
-bin_mats <- mats$binary.matrices[mats$nodes.sorted]
-gtraits <- names(bin_mats)
-newTraitName <- paste(gtraits, collapse="+")
-
-## More complicated structure than the previous two, with more states (16)
-M1 <- comb2matrices(bin_mats[[1]], bin_mats[[2]], dependent.state = 2) 
-M2 <- comb2matrices(M1, bin_mats[[3]], dependent.state = 4) 
-M[[newTraitName]] <- comb2matrices(M2, bin_mats[[4]], dependent.state = c(7,8)) 
- 
-states <- colnames(M[[newTraitName]])
-names(states) <- 1:length(states)
-
-td.comb <-recode_td(td.comb, gtraits, states, hidden0=2:length(gtraits)) ## hidden0 indicates which traits have hidden states when they are absent. These are dependent states.
-
-###############
-## Pelvic Fin##
-###############
-g <- induced_subgraph(G1, which(con.comp$membership==9))
-mats <- get_graph_matrix(g)
-bin_mats <- mats$binary.matrices[mats$nodes.sorted]
-gtraits <- names(bin_mats)
-newTraitName <- paste(gtraits, collapse="+")
-
-## Same as first two
-M1 <- comb2matrices(bin_mats[[1]], bin_mats[[2]], dependent.state = 2) 
-M[[newTraitName]] <- comb2matrices(M1, bin_mats[[3]], dependent.state = c(3,4)) 
-states <- colnames(M[[newTraitName]])
-names(states) <- 1:length(states)
-
-td.comb <-recode_td(td.comb, gtraits, states, hidden0=2:length(gtraits)) ## hidden0 indicates which traits have hidden states when they are absent. These are dependent states.
-
-
-## Now we can move on to our non-connected traits. These are recoded only to deal with polymorphism and missing data. 
-states <- setNames(c("0", "1"), 1:2)
-td.comb <- recode_td(td.comb,"vomer", states)
-td.comb <- recode_td(td.comb, "accessory vomerine tooth plate", states)
-td.comb <- recode_td(td.comb, "anterior nasal barbel", states)
-td.comb <- recode_td(td.comb, "posterior nasal barbel", states)
-td.comb <- recode_td(td.comb, "maxillary barbel", states)
+## recode new matrices into the tree
+recoded_td <- recode_traits(tdf, output)
 
 
 ```
 
-If the above code didn't work for you, you can catch up by loading this dataset from the `scate-shortcourse` package
 
 ```{r}
 data(td.comb)
