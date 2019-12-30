@@ -10,8 +10,5 @@ remove_indirect(dependency_matrix)
 \item{dependency_matrix}{A dependency matrix}
 }
 \description{
-Remove indirect links in a dependency graph
-}
-\details{
-function for removing redundant dependency edges from our graph
+Function for removing redundant dependency edges from our graph
 }

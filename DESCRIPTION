@@ -37,21 +37,14 @@ Imports:
     ontologyIndex,
     knitr,
     rmarkdown,
-    RCurl,
-    rjson,
-    readr,
-    urltools,
     pracma, 
-    tidyverse,
-    kableExtra, 
-    hashmap, 
-    sets,
     phytools,
     RColorBrewer,
     magrittr
 Suggests: 
     doParallel,
-    foreach
+    foreach,
+    tidyverse
 VignetteBuilder: knitr
 Remotes: phenoscape/rphenoscape
 RoxygenNote: 6.1.1
