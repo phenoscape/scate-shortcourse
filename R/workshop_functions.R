@@ -4,7 +4,7 @@ print_coverage <- function(x){
   coverage <- apply(x, 2, function(x) sum(!is.na(x)))
   average <- sapply(x, function(x) mean(as.numeric(na.omit(x[x %in% c("0", "1")])), na.rm=TRUE))
   cover <- cbind(coverage, average)
-  tmp <- filter(data.frame(traits=rownames(cover), cover), coverage > 0, average < 1, average > 0) %>% arrange(., desc(coverage))
+  tmp <- dplyr::filter(data.frame(traits=rownames(cover), cover), coverage > 0, average < 1, average > 0) %>% arrange(., desc(coverage))
   print(tmp)
 }
 
@@ -47,15 +47,25 @@ ratemat1 <- function() {
 
 #' recodes a treedata object based on amalgamated characters
 #' @export
-recode_td <- function(td, traits, states, hidden0=numeric(0)){
+recode_td <- function(td, traits, states, depstates=numeric(0)){
   tmp <- select(td, traits)
+  hidden0 <- names(depstates)
   obs_char <- which(!(1:length(traits) %in% hidden0))
   for(i in 1:ncol(tmp$dat)){
-    recode0 <- ifelse(i %in% hidden0, "*", "0")
-    missingObs <- ifelse(i %in% obs_char, "X", "*")
-    tmp$dat[[i]] <- recode(as.character(tmp$dat[[i]]), "1"="1", "0"=recode0, "1 and 0"=missingObs, "0 and 1"=missingObs, .missing=missingObs)
+      parent <- tmp$dat[[depstates[traits[i]]]]
+      if(is.null(parent)){
+        missingObs <- "*"
+        tmp$dat[[i]] <- recode(as.character(tmp$dat[[i]]), "1"="1", "0"="0", "1 and 0"=missingObs, "0 and 1"=missingObs, .missing=missingObs)
+      } else {
+        tmp2 <- as.character(tmp$dat[[i]])
+        tmp2[parent=="0"] <- "*"
+        tmp$dat[[i]] <- recode(tmp2, "1"="1", "0"="0", "1 and 0"="*", "0 and 1"="*", .missing="*")
+      }
+      #recode0 <- ifelse(i %in% hidden0, "*", "0")
+      
+      #tmp$dat[[i]] <- recode(as.character(tmp$dat[[i]]), "1"="1", "0"=recode0, "1 and 0"=missingObs, "0 and 1"=missingObs, .missing=missingObs)
   }
-  new.char <- unite(tmp$dat, "new", sep="")
+  new.char <- tidyr::unite(tmp$dat, "new", sep="")
   new.char <- unname(sapply(new.char[[1]], function(x) paste(which(grepl(glob2rx(x), states))-1, collapse="&")))
   new.char[which(new.char=="")] <- "?"
   
@@ -75,11 +85,13 @@ ontologyHeatMap <- function(td, njt, start=3, margs=c(0.2, 0.25), ...){
   .vals <- sort(na.omit(unique(as.vector(X))))
   dimx <- dim(X)
   
-  tree1 <- force.ultrametric(td$phy,method = "extend")
+  tree1 <- phytools::force.ultrametric(td$phy,method = "extend")
+  tree_ord <- attr(tree1, "order")
   
   if(!is.null(njt)){
-    X <- X[,njt$edge[njt$edge[,2] <= length(njt$tip.label),2]]
-    tree2 <- chronopl(njt, 1)
+    X <- X[,njt$tip.label[njt$edge[njt$edge[,2] <= length(njt$tip.label),2]]]
+    tree2 <- njt
+    tree2 <- ape::chronopl(njt, 1)
     tree2$edge.length <- tree2$edge.length/(max(branching.times(tree2)))*margs[2]*dimx[1]
     png(tempfile())
     invisible(h2 <- plot(tree2, plot = FALSE, direction = "downwards", show.tip.label=FALSE))
@@ -104,7 +116,7 @@ ontologyHeatMap <- function(td, njt, start=3, margs=c(0.2, 0.25), ...){
   par(mar = c(0,0,0,0))
   plot(0,0, type = 'n', xlim = c(0,h1$x.lim[2]+h2$x.lim[2]), ylim=c(0,h1$y.lim[2]+h2$y.lim[2]))
   
-  image(seq(h1$x.lim[2]+1,h1$x.lim[2]+h2$x.lim[2], length.out=ncol(X)), seq(1, h1$y.lim[2], length.out=nrow(X)), t(X),xlim=c(1+h1$x.lim[2],h1$x.lim[2]+h2$x.lim[2]+1) ,ylim=c(0, h1$y.lim[2]-1), add=TRUE, col=colors)
+  image(seq(h1$x.lim[2]+1,h1$x.lim[2]+h2$x.lim[2], length.out=ncol(X)), seq(1, h1$y.lim[2], length.out=nrow(X)), t(X), xlim=c(1+h1$x.lim[2],h1$x.lim[2]+h2$x.lim[2]+1) ,ylim=c(0, h1$y.lim[2]-1), add=TRUE, col=colors)
   
   legend(0, (h1$y.lim[2]+h2$y.lim[2])*.99, legend=.vals ,pch=22, pt.bg=colors)
   
@@ -139,7 +151,7 @@ makeTraitTree <- function (td, skip=1:2){
 
 #' Function for processing revbayes stochastic maps
 #' @export
-prepareMaps <- function(td, dirR, dirW, discretization_level=100, start_tree=1, end_tree=2) {
+prepareMapsRev <- function(td, discretization_level=100, start_tree=1, end_tree=2) {
   characters <- colnames(td$dat)
   characters <- gsub(" ", "_", characters)
   #####################################
@@ -151,10 +163,10 @@ prepareMaps <- function(td, dirR, dirW, discretization_level=100, start_tree=1, 
     .tree<-read_Simmap_Rev(paste0(dirR, characters[i], ".stm"),
                            start=start_tree, end=end_tree,
                            save = NULL) 
-    tree  <- read.simmap(text=.tree, format="phylip")
+    tree  <- phytools::read.simmap(text=.tree, format="phylip")
     
     
-    write.simmap(tree, file=paste0(dirW, characters[i], ".stmR"))
+    phytools::write.simmap(tree, file=paste0(dirW, characters[i], ".stmR"))
   }
   ##########
   
@@ -165,9 +177,9 @@ prepareMaps <- function(td, dirR, dirW, discretization_level=100, start_tree=1, 
   
   for (i in 1:length(c))
   { 
-    # read in undesritezed trees
+    # read in undescritezed trees
     #print(paste0("Reading ", characters[i]))
-    sim=read.simmap(file=paste0(dirW, characters[i], ".stmR"), format="phylip")
+    sim=phytools::read.simmap(file=paste0(dirW, characters[i], ".stmR"), format="phylip")
     
     # discretize trees by looping over sample and saving as rds
     
@@ -208,6 +220,93 @@ prepareMaps <- function(td, dirR, dirW, discretization_level=100, start_tree=1, 
   closeAllConnections()
   
 }
+
+#' Function for processing revbayes stochastic maps
+#' @export
+prepareMapsRayDISC <- function(td, simmaps, discretization_level=100) {
+  characters <- colnames(td$dat)
+  characters <- gsub(" ", "_", characters)
+  names(simmaps) <- gsub(" ", "_", names(simmaps))
+  #####################################
+  # Read a sample of 2 maps from .stm files and save them in the proper format .stmR
+  #####################################
+  #trees <- list()
+  #for (i in 1:length(characters))
+  #{
+  #  tree[[i]]  <- simmaps$trees[i]
+  #  write.simmap(tree, file=paste0(dirW, characters[i], ".stmR"))
+  #}
+  ##########
+  
+  #####################################
+  # Read stmR, discretize maps, and save each map as a separate rds file; 
+  #all rds filea for a chracter are stored in a zip archive
+  #####################################
+  
+  if(!"multiSimmap" %in% class(simmaps[[1]])){
+    DISC_trees <- list()
+    for (i in 1:length(characters)){ 
+      tryCatch({
+        
+        #print(paste0("Discretizing tree ", j))
+        
+        ## errors with na
+        ##
+        
+        ##### make trees equal with template
+        sim.d<-make_tree_eq(td$phy, simmaps[[characters[i]]], round=5)
+        ###
+        
+        #sim.d<-discr_Simmap_all(sim[[j]], 1000)
+        sim.d<-discr_Simmap_all(sim.d, discretization_level)
+        DISC_trees[[i]] <- list(sim.d)
+        #saveRDS(sim.d, file =  paste0(dirW,characters[i], "_", j, ".rds") )
+        
+      }, error=function(e){
+        cat("ERROR :",conditionMessage(e), "\n")
+        #errors<-rbind(errors, c(ii,jj))
+      }  )
+    }
+} else {
+  DISC_trees <- lapply(1:length(characters), function(x) list())
+  { 
+    for (i in 1:length(characters)){ 
+    tryCatch({
+      
+      #print(paste0("Discretizing tree ", j))
+      
+      ## errors with na
+      ##
+      for(j in 1:length(simmaps[[i]])){
+        sim.d<-make_tree_eq(td$phy, simmaps[[i]][[j]], round=5)
+        ###
+        
+        #sim.d<-discr_Simmap_all(sim[[j]], 1000)
+        sim.d<-discr_Simmap_all(sim.d, discretization_level)
+        DISC_trees[[i]][[j]] <- sim.d
+      }
+      ##### make trees equal with template
+      #saveRDS(sim.d, file =  paste0(dirW,characters[i], "_", j, ".rds") )
+    }, error=function(e){
+      cat("ERROR :",conditionMessage(e), "\n")
+      #errors<-rbind(errors, c(ii,jj))
+    }  )
+}
+  }
+  }
+  names(DISC_trees) <- characters
+
+    # putting rds files into archive
+    #files<-paste0(dirW, characters[i], "_", c(1:length(sim)), ".rds")
+    #zip(paste0(dirW, characters[i], ".zip"), files=files)
+    #file.remove(files)
+    
+  # close connections
+  #showConnections (all=T)
+  #closeAllConnections()
+  return(DISC_trees)
+}
+
 
 #' Function for aggregating characters under a specified set of terms (for example, body regions)
 #' @export

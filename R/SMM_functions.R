@@ -60,8 +60,8 @@ comb2matrices<-function(M1,M2, dependent.state=NULL, name.sep="", diag.as=""){
 #' @export
 init_binary_matrix<-function(graph){
   matrix.list=list()
-  n.matrix=vcount(graph)
-  vertices=V(graph)$name
+  n.matrix=igraph::vcount(graph)
+  vertices=igraph::V(graph)$name
   
   param.scheme<-matrix(seq(1:(2* n.matrix )), ncol = 2, byrow=TRUE)
   for (i in 1:n.matrix){
@@ -101,7 +101,7 @@ get_graph_matrix<-function(graph){
   complex.char$comb.matrices<-list()
   
   # traverse graph
-  .topo <- topo_sort(g, mode = c("out"))
+  .topo <- igraph::topo_sort(g, mode = c("out"))
   topo= names(.topo)
   complex.char$nodes.sorted=topo
   vertex.hier=ego(g, order=1, nodes = topo, mode = c("in"), mindist = 1)

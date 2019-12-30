@@ -21,12 +21,12 @@ stack2<-function(x,y){
   x=x, y=y )
 }
 
-#' Final stack of maps
+#' Final stack of maps for a set of stochastic maps stored in a directory
 #' cc chars id to stack
 #' ntrees number of trees to stack
 #' dirW directory for zip file
+#' @return A list of stacked stochastic character maps
 #' @export
-
 paramo<-function(cc, ntrees=10, dirW=c("") )
 {
   tr<-vector("list", ntrees)
@@ -45,6 +45,29 @@ paramo<-function(cc, ntrees=10, dirW=c("") )
       close(con)
     }
     
+    tr[[i]]<- stack_stm(stack.L)
+  }
+  return(tr)
+}
+
+
+#' Final stack of maps for a set of stochastic maps stored in a list
+#' @param cc chars id to stack
+#' @param tree.list Named list with stochastic character maps
+#' @param ntrees number of trees to stack
+#' @return A list of stacked stochastic character maps
+#' @export
+paramo.list<-function(cc, tree.list, ntrees=1)
+{
+  tr<-vector("list", ntrees)
+  ncharacters <- length(cc)
+  cc <- gsub(" ", "_", cc)
+  for (i in 1:ntrees){
+    stack.L<-vector("list", length(cc))
+    for (j in 1:ncharacters){
+      stack.L[[j]] <- tree.list[[cc[j]]][[i]]
+      #names(stack.L[[j]]) <- cc[j]
+    }
     tr[[i]]<- stack_stm(stack.L)
   }
   return(tr)

@@ -2,15 +2,18 @@
 % Please edit documentation in R/Functions_Stack_maps.R
 \name{paramo}
 \alias{paramo}
-\title{Final stack of maps
+\title{Final stack of maps for a set of stochastic maps stored in a directory
 cc chars id to stack
 ntrees number of trees to stack
 dirW directory for zip file}
 \usage{
 paramo(cc, ntrees = 10, dirW = c(""))
 }
+\value{
+A list of stacked stochastic character maps
+}
 \description{
-Final stack of maps
+Final stack of maps for a set of stochastic maps stored in a directory
 cc chars id to stack
 ntrees number of trees to stack
 dirW directory for zip file

@@ -1,3 +1,7 @@
 ^LICENSE\.md$
 ^SCATE\.Rproj$
 ^\.Rproj\.user$
+^vignettes/PARAMO_v2\.nb\.Rmd$
+^vignettes/PARAMO\.nb\.Rmd$
+^vignettes/PARAMO_Rev\.nb\.Rmd$
+^revbayes/*$

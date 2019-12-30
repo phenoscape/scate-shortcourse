@@ -4,7 +4,7 @@
 \alias{recode_td}
 \title{recodes a treedata object based on amalgamated characters}
 \usage{
-recode_td(td, traits, states, hidden0 = numeric(0))
+recode_td(td, traits, states, depstates = numeric(0))
 }
 \description{
 recodes a treedata object based on amalgamated characters
