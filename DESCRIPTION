@@ -33,6 +33,7 @@ Depends:
     treeplyr
 Imports:
     igraph,
+    corHMM,
     ontologyIndex,
     knitr,
     rmarkdown,
