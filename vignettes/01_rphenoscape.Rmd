@@ -18,11 +18,11 @@ knitr::opts_chunk$set(
 
 The desired input of many comparative studies is a matrix that includes all the data available for a set of traits and a focal taxon.  Bringing similar types of trait data together across studies is notoriously difficult, but is straightforward with ontology annotations.  Trait data that are tagged using similar ontology terms can be automatically called using R functions. 
 
-This workshop uses trait data for vertebrates that has been annotated (tagged) with ontology terms.  These data are accessed from the Phenoscape Knowledgebase (KB).  In this lesson we use R functions to obtain and view character matrices from the KB, obtain synthetic matrices of inferred presence/absence characters, and understand the meaning and relations of ontology terms. The lesson assumes basic knowledge of R and RStudio.
+This workshop uses trait data for vertebrates that has been annotated (tagged) with ontology terms.  These data are accessed from the [Phenoscape KB].  In this lesson we use R functions to obtain and view character matrices from the KB, obtain synthetic matrices of inferred presence/absence characters, and understand the meaning and relations of ontology terms. The lesson assumes basic knowledge of R and RStudio.
 
 ## 2. Browse and filter data in the KB to understand the scope of available data.
 
-You would like to understand the evolution of morphological traits in a group, and you need a matrix to map to your (typically molecular) phylogenetic tree.  You come to the Phenoscape KB to see what types of data are available across the members of your clade.  In this exercise, you are an ichthyologist, interested in catfishes (Siluriformes), specifically the bullhead catfishes in the family Ictaluridae.
+You would like to understand the evolution of morphological traits in a taxonomic group, and you need a matrix to map to your (typically molecular) phylogenetic tree.  You come to the Phenoscape KB to see what types of data are available across the members of your clade.  In this exercise, you are an ichthyologist, interested in catfishes (Siluriformes), specifically the bullhead catfishes in the family Ictaluridae.
 
 You begin by querying ‘Siluriformes’ in the Phenoscape KB faceted browsing page (http://kb.phenoscape.org/#/facet).  You immediately see the scope of the data:
 
@@ -34,13 +34,13 @@ From left to right across the top tabs, for ‘Siluriformes’:
 - There are 25 publications in the KB that include catfish phenotypes
 - There are 18,346 candidate genes linked to the phenotypes
 
-Taxon annotations are the ontology terms tagged to free text descriptions of phenotypes for each siluriform taxon.  Click on the ‘Sources’ box on the right hand side of each row to see the publication source(s) and free text description of the phenotype to which each ontology annotation was tagged.  
+Taxon annotations are the ontology terms tagged to original free text descriptions of phenotypes for each siluriform taxon. Click on the ‘Taxon annotations’ tab, and then the ‘Sources’ box on the right hand side of each row to see the publication source(s) and free text description of the phenotype to which each ontology annotation was tagged.
 
-You are specifically interested in Ictaluridae (bullhead catfishes), and you click on that family in the faceted browsing interface.  Now filter using ‘fin’ as the anatomical entity and click ‘parts’.  
+You are specifically interested in Ictaluridae (bullhead catfishes), and you click on that family in the faceted browsing interface.  Now filter using ‘fin’ as the anatomical entity under ‘Query’ and include parts (check the ‘parts’ box.)  
 
 Download these taxa and their morphological trait data using the link provided.  
 
-Go to the publications tab, which shows nine publications that contain fin data.  Note that any of these studies, e.g. Lundberg (1992), can be entered under ‘publications’ in faceted browsing, but the original matrix cannot be downloaded.  
+Go to the publications tab, which shows nine publications that contain fin data.  Note that any of these studies, e.g., Lundberg (1992), can be entered under ‘publications’ in faceted browsing, but the original matrix cannot be downloaded.  
 
 ## 3. Retrieve term info using RPhenoscape
 
@@ -87,7 +87,7 @@ Now we will query for ‘Ictaluridae’ and ‘fin’ (including parts) to retri
 ```{r}
 slist <- pk_get_study_list(taxon = "Ictaluridae", entity = "fin", relation = "part of")
 ```
-The list is returned as a data.frame containing the study IDs and citations. Navigate to Global Environment and click on ‘slist’ to view the ID and citation (author, year) for each study in the KB that contains any ictalurid species associated with fin data.  Note that taxon, entity, and quality are optional arguments in this query, and we have also included fin parts.  Here we found nine studies.
+The list is returned as a data.frame containing the study IDs and citations. Navigate to Global Environment and click on ‘slist’ to view the ID and citation (author, year) for each study in the KB that contains any ictalurid species associated with fin data.  Note that taxon, entity, and quality are optional arguments in this query, and we have also included fin parts.  Here we found nine studies. Click on ‘slist’ in the Global Environment to view these studies and their IDs.
 
 Next we want to obtain the character matrix for one of these studies. Using the study IDs from the previous step, we can get a list of the character matrices as NeXML objects.  We will choose the Lundberg (1992) publication, the fifth item on the list above.   
 
@@ -139,13 +139,13 @@ The above returns 29 species of ictalurid catfishes and 115 anatomical entities 
 
 You will need to go to the [Phenoscape KB] to view the supporting states, i.e., the source data upon which inferences were made or those that were directly asserted.  
 
-For example, in the returned OntoTrace matrix (see ‘m’ in Global Environment (row 10)) the pelvic fin is scored as present for *Ictalurus australis*. Enter these data into the faceted browsing interface:
+For example, in the returned OntoTrace matrix (see ‘m’ in Global Environment (row 10)) the pelvic fin is scored as present ('1') for *Ictalurus australis*. Enter these data into the faceted browsing interface: https://kb.phenoscape.org/#/facet
 
 - Anatomical entity = ‘pelvic fin’
 - Quality = ‘present’
 - Taxon = ‘Ictalurus australis’
 
-Looking at ‘Taxon annotations’, you will find that there are zero phenotypes, i.e., no asserted character states to ‘pelvic fin present’.  Now click the ‘inferred presence’ radio button under Phenotypic quality.  You will now see two phenotypes for this taxon in the KB.  
+Looking at ‘Taxon annotations’, you will find that there are zero phenotypes, i.e., no asserted character states to ‘pelvic fin present’.  Now click the ‘inferred presence’ radio button under Phenotypic quality.  You will now see two phenotypes for this taxon in the KB. These phenotypes ‘pelvic fin lepidotrichium amount’ and ‘pelvic splint present’ logically imply the presence of a pelvic fin. Thus, though an author did not directly assert the presence of a pelvic fin in *Ictalurus australis*, it is inferred and thus reported as present (‘1’) in the OntoTrace matrix.
 
 ## 6. Subset the matrix taxonomically 
 In the above step you retrieved a synthetic matrix for the Ictaluridae.  Now you would like to pare it down in taxonomic and anatomical scope.  Let’s begin by trimming the matrix down to  the presence and absence characters pertaining only to the genus *Ictalurus*. We will reduce the matrix to include only descendents of *Ictalurus*. 
@@ -162,29 +162,29 @@ ictalurus_m <- m[is_desc, ]
 ```
 View the new matrix by clicking on the ‘ictalurus_m’ ```data.frame``` in the Global Environment.
 
-We can also subset the matrix by anatomy. In this case, let’s select characters for the pectoral fin and its parts. We will use `pk_is_descendant()` to first parse the characters (column names) to determine which are descendents of the term ‘pectoral fin’. Because this function only looks for descendent terms, we also need to specify that any characters with 'pectoral fin' are included, and we exclude the first three taxon-related columns: 
+We can also subset the matrix by anatomy. In this case, let’s select characters for the pectoral fin and its parts. We will use `pk_is_descendant()` to first parse the characters (column names; note the first three taxon-related columns are excluded) to determine which are descendents (types or parts) of the term ‘pectoral fin’. Because this function only looks for descendent terms, we also need to specify that any characters pertaining to 'pectoral fin' itself are included. 
 
 ```{r}
-is_desc_pecfin <- pk_is_descendant('pectoral fin', colnames(m)[-c(1,2,3)], includeRels = "part_of") | colnames(m)[-c(1,2,3)] == 'pectoral fin' 
+is_desc_pecfin <- pk_is_descendant('pectoral fin', colnames(ictalurus_m)[-c(1,2,3)], includeRels = "part_of") | colnames(ictalurus_m)[-c(1,2,3)] == 'pectoral fin' 
 table(is_desc_pecfin)
 ```
-View the character names to verify that pectoral fin related characters will be selected:
+Using the ‘colnames’ command below, view the character names to verify that pectoral fin related characters will be selected:
 
 ```{r}
-colnames(m)[-c(1,2,3)][is_desc_pecfin]
+colnames(ictalurus_m)[-c(1,2,3)][is_desc_pecfin]
 ```
-We now subset the matrix m using ‘is_desc_pecfin’ and retaining the first taxon-related columns:
+We now subset the matrix m using ‘is_desc_pecfin’ and retain the first three taxon-related columns:
 
 ```{r}
 to_keep <- c(TRUE, TRUE, TRUE, is_desc_pecfin) 
-pecfin_m <- m[, to_keep]
+pecfin_m <- ictalurus_m[, to_keep]
 ```
 
-View this matrix of pectoral fin characters for Ictaluridae by clicking on ‘pecfin_m’ in the Global Environment.
+View this matrix of pectoral fin characters for *Ictalurus* by clicking on ‘pecfin_m’ in the Global Environment.
 
 ## 6. Retrieve matrix of anatomical dependencies
 
-We can query the KB for a presence-absence dependency matrix for a specified set of anatomical structures. The dependency matrix is derived from knowledge of structural relationships among entities encoded in the ontology. In the example below, the presence of 'pelvic splint' implies the presence of 'pelvic fin' (because 'pelvic splint' is part_of 'pelvic fin'). 
+Knowing how the information about an anatomical structure may rely on other layers of anatomical information is critical, if the goal is to isolate and analyze independent features.  We can query the KB for a presence-absence dependency matrix for a specified set of anatomical structures. The dependency matrix is derived from the formalized knowledge of relationships among entities encoded in the ontology. In the example below, the presence of ‘pelvic splint’ is dependent on the presence of ‘pelvic fin’.  In other words, the pelvic fin is implied present when the pelvic splint is present because ‘pelvic splint’ is part_of ‘pelvic fin'.
 
 ```{r}
 tl <- c("pectoral fin", "pelvic fin", "pelvic splint", "antorbital", "preopercle")
@@ -196,7 +196,7 @@ In the PARAMO tutorial, we will learn how to use these dependency matrices to re
 
 ## 7. Retrieve semantic similarity matrix
 
-We can also obtain similarity metrics for phenotypes based on ontological distance. Three similarity metrics - Jaccard, Tanimoto, and Cosine - are computed by the KB to measure similarity between terms (see RPhenoscape documentation for how these are measured). For example, here we compute and visualize Jaccard similarity for premaxillary tooth phenotypes in Ictaluridae:
+We can also obtain similarity metrics for phenotypes based on ontological distance. Three similarity metrics - Jaccard, Tanimoto, and Cosine - are computed by the KB to measure similarity between terms (see RPhenoscape documentation in the Help panel for how these are measured). For example, here we compute and visualize Jaccard similarity for premaxillary tooth phenotypes in Ictaluridae:
 
 ```{r}
 phens <- get_phenotypes(entity = "premaxillary tooth", taxon = "Ictaluridae",
