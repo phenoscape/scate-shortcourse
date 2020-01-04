@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Utility function for cleaning up character data table after amalgamating characters — dropDependentTraits • SCATE.shortcourse</title>
+<title>Final stack of maps for a set of stochastic maps stored in a list — paramo.list • SCATE.shortcourse</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Utility function for cleaning up character data table after amalgamating characters — dropDependentTraits" />
+<meta property="og:title" content="Final stack of maps for a set of stochastic maps stored in a list — paramo.list" />
 
-<meta property="og:description" content="Utility function for cleaning up character data table after amalgamating characters" />
+<meta property="og:description" content="Final stack of maps for a set of stochastic maps stored in a list" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -117,25 +117,49 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Utility function for cleaning up character data table after amalgamating characters</h1>
-    <small class="dont-index">Source: <a href='https://github.com/phenoscape/scate-shortcourse/blob/master/R/workshop_functions.R'><code>R/workshop_functions.R</code></a></small>
-    <div class="hidden name"><code>dropDependentTraits.Rd</code></div>
+    <h1>Final stack of maps for a set of stochastic maps stored in a list</h1>
+    <small class="dont-index">Source: <a href='https://github.com/phenoscape/scate-shortcourse/blob/master/R/Functions_Stack_maps.R'><code>R/Functions_Stack_maps.R</code></a></small>
+    <div class="hidden name"><code>paramo.list.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Utility function for cleaning up character data table after amalgamating characters</p>
+    <p>Final stack of maps for a set of stochastic maps stored in a list</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>dropDependentTraits</span>(<span class='no'>char_info</span>, <span class='no'>dep.mat</span>, <span class='no'>td</span>)</pre>
-        
+    <pre class="usage"><span class='fu'>paramo.list</span>(<span class='no'>cc</span>, <span class='no'>tree.list</span>, <span class='kw'>ntrees</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>cc</th>
+      <td><p>chars id to stack</p></td>
+    </tr>
+    <tr>
+      <th>tree.list</th>
+      <td><p>Named list with stochastic character maps</p></td>
+    </tr>
+    <tr>
+      <th>ntrees</th>
+      <td><p>number of trees to stack</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A list of stacked stochastic character maps</p>
+    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-                </ul>
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+          </ul>
 
   </div>
 </div>

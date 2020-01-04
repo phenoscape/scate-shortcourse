@@ -6,7 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Utility function for cleaning up character data table after amalgamating characters — dropDependentTraits • SCATE.shortcourse</title>
+<title>Automatically recode amalgamated traits in PARAMO 
+Amalgamates traits using the matrices returned by amalgamate_deps — recode_traits • SCATE.shortcourse</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +31,11 @@
 
 
 
-<meta property="og:title" content="Utility function for cleaning up character data table after amalgamating characters — dropDependentTraits" />
+<meta property="og:title" content="Automatically recode amalgamated traits in PARAMO 
+Amalgamates traits using the matrices returned by amalgamate_deps — recode_traits" />
 
-<meta property="og:description" content="Utility function for cleaning up character data table after amalgamating characters" />
+<meta property="og:description" content="Automatically recode amalgamated traits in PARAMO 
+Amalgamates traits using the matrices returned by amalgamate_deps" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -117,24 +120,40 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Utility function for cleaning up character data table after amalgamating characters</h1>
-    <small class="dont-index">Source: <a href='https://github.com/phenoscape/scate-shortcourse/blob/master/R/workshop_functions.R'><code>R/workshop_functions.R</code></a></small>
-    <div class="hidden name"><code>dropDependentTraits.Rd</code></div>
+    <h1>Automatically recode amalgamated traits in PARAMO 
+Amalgamates traits using the matrices returned by amalgamate_deps</h1>
+    <small class="dont-index">Source: <a href='https://github.com/phenoscape/scate-shortcourse/blob/master/R/auto_functions.R'><code>R/auto_functions.R</code></a></small>
+    <div class="hidden name"><code>recode_traits.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Utility function for cleaning up character data table after amalgamating characters</p>
+    <p>Automatically recode amalgamated traits in PARAMO 
+Amalgamates traits using the matrices returned by amalgamate_deps</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>dropDependentTraits</span>(<span class='no'>char_info</span>, <span class='no'>dep.mat</span>, <span class='no'>td</span>)</pre>
-        
+    <pre class="usage"><span class='fu'>recode_traits</span>(<span class='no'>td</span>, <span class='no'>M</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>td</th>
+      <td><p>A treeplyr treedata object with characters to recode</p></td>
+    </tr>
+    <tr>
+      <th>M</th>
+      <td><p>A list produced by the function `amalgamate_deps`</p></td>
+    </tr>
+    </table>
+    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
                 </ul>
 
   </div>

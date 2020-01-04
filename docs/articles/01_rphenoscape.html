@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">SCATE.shortcourse</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -56,7 +56,7 @@
       <a href="../articles/01_rphenoscape.html">RPhenoscape Tutorial</a>
     </li>
     <li>
-      <a href="../articles/PARAMO.nb.html">PARAMO Tutorial</a>
+      <a href="../articles/PARAMO.html">PARAMO Tutorial</a>
     </li>
     <li>
       <a href="../articles/glossary.html">Glossary</a>
@@ -97,31 +97,31 @@
 <h2 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>1. Introduction</h2>
 <p>The desired input of many comparative studies is a matrix that includes all the data available for a set of traits and a focal taxon. Bringing similar types of trait data together across studies is notoriously difficult, but is straightforward with ontology annotations. Trait data that are tagged using similar ontology terms can be automatically called using R functions.</p>
-<p>This workshop uses trait data for vertebrates that has been annotated (tagged) with ontology terms. These data are accessed from the Phenoscape Knowledgebase (KB). In this lesson we use R functions to obtain and view character matrices from the KB, obtain synthetic matrices of inferred presence/absence characters, and understand the meaning and relations of ontology terms. The lesson assumes basic knowledge of R and RStudio.</p>
+<p>This workshop uses trait data for vertebrates that has been annotated (tagged) with ontology terms. These data are accessed from the <a href="http://kb.phenoscape.org/#/facet">Phenoscape KB</a>. In this lesson we use R functions to obtain and view character matrices from the KB, obtain synthetic matrices of inferred presence/absence characters, and understand the meaning and relations of ontology terms. The lesson assumes basic knowledge of R and RStudio.</p>
 </div>
 <div id="browse-and-filter-data-in-the-kb-to-understand-the-scope-of-available-data-" class="section level2">
 <h2 class="hasAnchor">
 <a href="#browse-and-filter-data-in-the-kb-to-understand-the-scope-of-available-data-" class="anchor"></a>2. Browse and filter data in the KB to understand the scope of available data.</h2>
-<p>You would like to understand the evolution of morphological traits in a group, and you need a matrix to map to your (typically molecular) phylogenetic tree. You come to the Phenoscape KB to see what types of data are available across the members of your clade. In this exercise, you are an ichthyologist, interested in catfishes (Siluriformes), specifically the bullhead catfishes (Ictaluridae).</p>
-<p>You begin by querying ‘Siluriformes’ in the Phenoscape KB faceted browsing page (<a href="http://beta.phenoscape.org/#/facet" class="uri">http://beta.phenoscape.org/#/facet</a>). You immediately see the scope of the data:</p>
+<p>You would like to understand the evolution of morphological traits in a taxonomic group, and you need a matrix to map to your (typically molecular) phylogenetic tree. You come to the Phenoscape KB to see what types of data are available across the members of your clade. In this exercise, you are an ichthyologist, interested in catfishes (Siluriformes), specifically the bullhead catfishes in the family Ictaluridae.</p>
+<p>You begin by querying ‘Siluriformes’ in the Phenoscape KB faceted browsing page (<a href="http://kb.phenoscape.org/#/facet" class="uri">http://kb.phenoscape.org/#/facet</a>). You immediately see the scope of the data:</p>
 <p>From left to right across the top tabs, for ‘Siluriformes’:</p>
 <ul>
 <li>There are 4,537 unique phenotypes</li>
-<li>There are 292,356 taxon annotations</li>
+<li>There are 292,340 taxon annotations</li>
 <li>There are 1,452 siluriform taxa with data in the KB</li>
 <li>There are 25 publications in the KB that include catfish phenotypes</li>
-<li>There are 17,883 candidate genes linked to the phenotypes</li>
+<li>There are 18,430 candidate genes linked to the phenotypes</li>
 </ul>
-<p>Taxon annotations are the ontology terms tagged to free text descriptions of phenotypes for each siluriform taxon. Click on the ‘Sources’ box on the right hand side of each row to see the publication source(s) and free text description of the phenotype to which each ontology annotation was tagged.</p>
-<p>You are specifically interested in Ictaluridae (bullhead catfishes), and you click on that family in the faceted browsing interface. Now filter using ‘fin’ as the anatomical entity and click ‘parts’.</p>
+<p>Taxon annotations are the ontology terms tagged to original free text descriptions of phenotypes for each siluriform taxon. Click on the ‘Taxon annotations’ tab, and then the ‘Sources’ box on the right hand side of each row to see the publication source(s) and free text description of the phenotype to which each ontology annotation was tagged.</p>
+<p>You are specifically interested in Ictaluridae (bullhead catfishes), and you click on that family in the faceted browsing interface. Now filter using ‘fin’ as the anatomical entity under ‘Query’ and include parts (check the ‘parts’ box.)</p>
 <p>Download these taxa and their morphological trait data using the link provided.</p>
-<p>Go to the publications tab, which shows nine publications that contain fin data. Note that any of these studies, e.g. Lundberg (1992), can be entered under ‘publications’ in faceted browsing, but the original matrix cannot be downloaded.</p>
+<p>Go to the publications tab, which shows nine publications that contain fin data. Note that any of these studies, e.g., Lundberg (1992), can be entered under ‘publications’ in faceted browsing, but the original matrix cannot be downloaded.</p>
 </div>
 <div id="retrieve-term-info-using-rphenoscape" class="section level2">
 <h2 class="hasAnchor">
 <a href="#retrieve-term-info-using-rphenoscape" class="anchor"></a>3. Retrieve term info using RPhenoscape</h2>
 <p>Now we will repeat some of the above steps in R, beginning with a query for ‘Ictaluridae’ and ‘fin’ (including parts) to retrieve the list of studies that contain fin characters for this taxon.</p>
-<p>The <a href="http://rphenoscape.phenoscape.org/">RPhenoscape</a> package provides convenient access to the Phenoscape Knowledgebase in the form of R functions returning R-native data structures. So we don’t have to prefix every call of the package’s functions with the package name, we will first attach the package:</p>
+<p>The <a href="http://rphenoscape.phenoscape.org/">RPhenoscape</a> package provides convenient access to the Phenoscape Knowledgebase in the form of R functions returning R-native data structures. So that we don’t have to prefix every call of the package’s functions with the package name, we will first attach the package:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(rphenoscape)</code></pre></div>
 <p>First let’s look up information about the query terms. You can use the term detail functions <code><a href="http://rphenoscape.phenoscape.org/reference/pk_terms.html">pk_anatomical_detail()</a></code>, <code><a href="http://rphenoscape.phenoscape.org/reference/pk_terms.html">pk_taxon_detail()</a></code>, <code><a href="http://rphenoscape.phenoscape.org/reference/pk_terms.html">pk_phenotype_detail()</a></code>, and <code><a href="http://rphenoscape.phenoscape.org/reference/pk_terms.html">pk_gene_detail()</a></code> to retrieve an ontology term’s ID, label, and definition.</p>
 <p>For example, view the details for the anatomy term “fin”:</p>
@@ -132,64 +132,221 @@
 <span class="co">#&gt; 1 An external projection of an aquatic animal as a fish used in propelling or guiding the body[BTO].</span>
 <span class="co">#&gt;                                              id</span>
 <span class="co">#&gt; 1 http://purl.obolibrary.org/obo/UBERON_0008897</span></code></pre></div>
+<p>You can also use <code><a href="http://rphenoscape.phenoscape.org/reference/find_term.html">find_term()</a></code> to search the ontologies in the KB for partial name matches. For example, search for terms containing the string “pectoral fin” in the label or synonym:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://rphenoscape.phenoscape.org/reference/find_term.html">find_term</a></span>(<span class="st">"pectoral fin"</span>)
+<span class="co">#&gt;                                               id</span>
+<span class="co">#&gt; 1  http://purl.obolibrary.org/obo/UBERON_0000151</span>
+<span class="co">#&gt; 2     http://purl.obolibrary.org/obo/ZFA_0001161</span>
+<span class="co">#&gt; 3  http://purl.obolibrary.org/obo/UBERON_2005316</span>
+<span class="co">#&gt; 4  http://purl.obolibrary.org/obo/UBERON_0003934</span>
+<span class="co">#&gt; 5     http://purl.obolibrary.org/obo/ZFA_0001000</span>
+<span class="co">#&gt; 6  http://purl.obolibrary.org/obo/UBERON_0003413</span>
+<span class="co">#&gt; 7  http://purl.obolibrary.org/obo/UBERON_0003372</span>
+<span class="co">#&gt; 8  http://purl.obolibrary.org/obo/UBERON_4300228</span>
+<span class="co">#&gt; 9  http://purl.obolibrary.org/obo/UBERON_0002534</span>
+<span class="co">#&gt; 10    http://purl.obolibrary.org/obo/ZFA_0000085</span>
+<span class="co">#&gt; 11 http://purl.obolibrary.org/obo/UBERON_0004710</span>
+<span class="co">#&gt; 12 http://purl.obolibrary.org/obo/UBERON_0005419</span>
+<span class="co">#&gt; 13 http://purl.obolibrary.org/obo/UBERON_4300172</span>
+<span class="co">#&gt; 14    http://purl.obolibrary.org/obo/ZFA_0000141</span>
+<span class="co">#&gt; 15 http://purl.obolibrary.org/obo/UBERON_0005729</span>
+<span class="co">#&gt; 16 http://purl.obolibrary.org/obo/UBERON_0007300</span>
+<span class="co">#&gt; 17 http://purl.obolibrary.org/obo/UBERON_0007269</span>
+<span class="co">#&gt; 18 http://purl.obolibrary.org/obo/UBERON_0010710</span>
+<span class="co">#&gt; 19 http://purl.obolibrary.org/obo/UBERON_0007302</span>
+<span class="co">#&gt; 20 http://purl.obolibrary.org/obo/UBERON_4500007</span>
+<span class="co">#&gt; 21 http://purl.obolibrary.org/obo/UBERON_4500010</span>
+<span class="co">#&gt; 22 http://purl.obolibrary.org/obo/UBERON_2001993</span>
+<span class="co">#&gt; 23 http://purl.obolibrary.org/obo/UBERON_2000544</span>
+<span class="co">#&gt; 24 http://purl.obolibrary.org/obo/UBERON_4300147</span>
+<span class="co">#&gt; 25 http://purl.obolibrary.org/obo/UBERON_2001456</span>
+<span class="co">#&gt; 26 http://purl.obolibrary.org/obo/UBERON_2005317</span>
+<span class="co">#&gt; 27 http://purl.obolibrary.org/obo/UBERON_4300261</span>
+<span class="co">#&gt; 28 http://purl.obolibrary.org/obo/UBERON_4000175</span>
+<span class="co">#&gt; 29    http://purl.obolibrary.org/obo/ZFA_0001551</span>
+<span class="co">#&gt; 30 http://purl.obolibrary.org/obo/UBERON_2001761</span>
+<span class="co">#&gt; 31 http://purl.obolibrary.org/obo/UBERON_2001762</span>
+<span class="co">#&gt; 32 http://purl.obolibrary.org/obo/UBERON_2001763</span>
+<span class="co">#&gt; 33 http://purl.obolibrary.org/obo/UBERON_2001764</span>
+<span class="co">#&gt; 34 http://purl.obolibrary.org/obo/UBERON_2001765</span>
+<span class="co">#&gt; 35 http://purl.obolibrary.org/obo/UBERON_2001766</span>
+<span class="co">#&gt; 36 http://purl.obolibrary.org/obo/UBERON_2001767</span>
+<span class="co">#&gt; 37 http://purl.obolibrary.org/obo/UBERON_2001586</span>
+<span class="co">#&gt; 38 http://purl.obolibrary.org/obo/UBERON_2201586</span>
+<span class="co">#&gt; 39 http://purl.obolibrary.org/obo/UBERON_2101586</span>
+<span class="co">#&gt; 40 http://purl.obolibrary.org/obo/UBERON_4440009</span>
+<span class="co">#&gt; 41 http://purl.obolibrary.org/obo/UBERON_2001787</span>
+<span class="co">#&gt; 42 http://purl.obolibrary.org/obo/UBERON_4300103</span>
+<span class="co">#&gt; 43     http://purl.obolibrary.org/obo/GO_0035118</span>
+<span class="co">#&gt; 44     http://purl.obolibrary.org/obo/GO_0033339</span>
+<span class="co">#&gt; 45     http://purl.obolibrary.org/obo/GO_0035138</span>
+<span class="co">#&gt; 46    http://purl.obolibrary.org/obo/ZFA_0000257</span>
+<span class="co">#&gt; 47    http://purl.obolibrary.org/obo/ZFA_0000789</span>
+<span class="co">#&gt; 48    http://purl.obolibrary.org/obo/ZFA_0005545</span>
+<span class="co">#&gt; 49    http://purl.obolibrary.org/obo/ZFA_0001588</span>
+<span class="co">#&gt; 50    http://purl.obolibrary.org/obo/ZFA_0001453</span>
+<span class="co">#&gt; 51    http://purl.obolibrary.org/obo/ZFA_0005317</span>
+<span class="co">#&gt; 52    http://purl.obolibrary.org/obo/ZFA_0005766</span>
+<span class="co">#&gt; 53    http://purl.obolibrary.org/obo/ZFA_0001586</span>
+<span class="co">#&gt; 54    http://purl.obolibrary.org/obo/ZFA_0000943</span>
+<span class="co">#&gt;                                                   label</span>
+<span class="co">#&gt; 1                                          pectoral fin</span>
+<span class="co">#&gt; 2                              pectoral fin (zebrafish)</span>
+<span class="co">#&gt; 3                             fin fold pectoral fin bud</span>
+<span class="co">#&gt; 4                               mesenchyme pectoral fin</span>
+<span class="co">#&gt; 5                   mesenchyme pectoral fin (zebrafish)</span>
+<span class="co">#&gt; 6                     pectoral appendage bud mesenchyme</span>
+<span class="co">#&gt; 7                       pectoral appendage bud ectoderm</span>
+<span class="co">#&gt; 8                           pectoral fin bud mesenchyme</span>
+<span class="co">#&gt; 9                                            paired fin</span>
+<span class="co">#&gt; 10 apical ectodermal ridge pectoral fin bud (zebrafish)</span>
+<span class="co">#&gt; 11                                   pectoral appendage</span>
+<span class="co">#&gt; 12                               pectoral appendage bud</span>
+<span class="co">#&gt; 13                                     pectoral fin bud</span>
+<span class="co">#&gt; 14                         pectoral fin bud (zebrafish)</span>
+<span class="co">#&gt; 15                             pectoral appendage field</span>
+<span class="co">#&gt; 16                      pectoral appendage blood vessel</span>
+<span class="co">#&gt; 17                       pectoral appendage musculature</span>
+<span class="co">#&gt; 18                                pectoral fin skeleton</span>
+<span class="co">#&gt; 19                       pectoral appendage vasculature</span>
+<span class="co">#&gt; 20                                     pectoral fin ray</span>
+<span class="co">#&gt; 21                          unbranched pectoral fin ray</span>
+<span class="co">#&gt; 22                            branched pectoral fin ray</span>
+<span class="co">#&gt; 23                          pectoral fin actinotrichium</span>
+<span class="co">#&gt; 24                                    pectoral fin base</span>
+<span class="co">#&gt; 25                       pectoral fin endoskeletal disc</span>
+<span class="co">#&gt; 26                                    pectoral fin fold</span>
+<span class="co">#&gt; 27                                    pectoral fin hook</span>
+<span class="co">#&gt; 28                          pectoral fin lepidotrichium</span>
+<span class="co">#&gt; 29              pectoral fin lepidotrichium (zebrafish)</span>
+<span class="co">#&gt; 30                                   pectoral fin ray 1</span>
+<span class="co">#&gt; 31                                   pectoral fin ray 2</span>
+<span class="co">#&gt; 32                                   pectoral fin ray 3</span>
+<span class="co">#&gt; 33                                   pectoral fin ray 4</span>
+<span class="co">#&gt; 34                                   pectoral fin ray 5</span>
+<span class="co">#&gt; 35                                   pectoral fin ray 6</span>
+<span class="co">#&gt; 36                                   pectoral fin ray 7</span>
+<span class="co">#&gt; 37                             pectoral fin radial bone</span>
+<span class="co">#&gt; 38                        pectoral fin radial cartilage</span>
+<span class="co">#&gt; 39                          pectoral fin radial element</span>
+<span class="co">#&gt; 40                         pectoral fin radial skeleton</span>
+<span class="co">#&gt; 41                                   pectoral fin spine</span>
+<span class="co">#&gt; 42                         rudimentary pectoral fin ray</span>
+<span class="co">#&gt; 43                 embryonic pectoral fin morphogenesis</span>
+<span class="co">#&gt; 44                             pectoral fin development</span>
+<span class="co">#&gt; 45                           pectoral fin morphogenesis</span>
+<span class="co">#&gt; 46                   pectoral fin cartilage (zebrafish)</span>
+<span class="co">#&gt; 47                mesoderm pectoral fin bud (zebrafish)</span>
+<span class="co">#&gt; 48              pectoral fin actinotrichium (zebrafish)</span>
+<span class="co">#&gt; 49               pectoral fin distal radial (zebrafish)</span>
+<span class="co">#&gt; 50                       pectoral fin field (zebrafish)</span>
+<span class="co">#&gt; 51                        pectoral fin fold (zebrafish)</span>
+<span class="co">#&gt; 52                   pectoral fin plate fat (zebrafish)</span>
+<span class="co">#&gt; 53                      pectoral fin radial (zebrafish)</span>
+<span class="co">#&gt; 54                    pectoral fin skeleton (zebrafish)</span>
+<span class="co">#&gt;                                  isDefinedBy matchType</span>
+<span class="co">#&gt; 1  http://purl.obolibrary.org/obo/uberon.owl     exact</span>
+<span class="co">#&gt; 2     http://purl.obolibrary.org/obo/zfa.owl   partial</span>
+<span class="co">#&gt; 3  http://purl.obolibrary.org/obo/uberon.owl   partial</span>
+<span class="co">#&gt; 4  http://purl.obolibrary.org/obo/uberon.owl   partial</span>
+<span class="co">#&gt; 5     http://purl.obolibrary.org/obo/zfa.owl   partial</span>
+<span class="co">#&gt; 6  http://purl.obolibrary.org/obo/uberon.owl     broad</span>
+<span class="co">#&gt; 7  http://purl.obolibrary.org/obo/uberon.owl     broad</span>
+<span class="co">#&gt; 8  http://purl.obolibrary.org/obo/uberon.owl   partial</span>
+<span class="co">#&gt; 9  http://purl.obolibrary.org/obo/uberon.owl     broad</span>
+<span class="co">#&gt; 10    http://purl.obolibrary.org/obo/zfa.owl   partial</span>
+<span class="co">#&gt; 11 http://purl.obolibrary.org/obo/uberon.owl     broad</span>
+<span class="co">#&gt; 12 http://purl.obolibrary.org/obo/uberon.owl     broad</span>
+<span class="co">#&gt; 13 http://purl.obolibrary.org/obo/uberon.owl   partial</span>
+<span class="co">#&gt; 14    http://purl.obolibrary.org/obo/zfa.owl   partial</span>
+<span class="co">#&gt; 15 http://purl.obolibrary.org/obo/uberon.owl     broad</span>
+<span class="co">#&gt; 16 http://purl.obolibrary.org/obo/uberon.owl     broad</span>
+<span class="co">#&gt; 17 http://purl.obolibrary.org/obo/uberon.owl     broad</span>
+<span class="co">#&gt; 18 http://purl.obolibrary.org/obo/uberon.owl   partial</span>
+<span class="co">#&gt; 19 http://purl.obolibrary.org/obo/uberon.owl     broad</span>
+<span class="co">#&gt; 20 http://purl.obolibrary.org/obo/uberon.owl   partial</span>
+<span class="co">#&gt; 21 http://purl.obolibrary.org/obo/uberon.owl   partial</span>
+<span class="co">#&gt; 22 http://purl.obolibrary.org/obo/uberon.owl   partial</span>
+<span class="co">#&gt; 23 http://purl.obolibrary.org/obo/uberon.owl   partial</span>
+<span class="co">#&gt; 24 http://purl.obolibrary.org/obo/uberon.owl   partial</span>
+<span class="co">#&gt; 25 http://purl.obolibrary.org/obo/uberon.owl   partial</span>
+<span class="co">#&gt; 26 http://purl.obolibrary.org/obo/uberon.owl   partial</span>
+<span class="co">#&gt; 27 http://purl.obolibrary.org/obo/uberon.owl   partial</span>
+<span class="co">#&gt; 28 http://purl.obolibrary.org/obo/uberon.owl   partial</span>
+<span class="co">#&gt; 29    http://purl.obolibrary.org/obo/zfa.owl   partial</span>
+<span class="co">#&gt; 30 http://purl.obolibrary.org/obo/uberon.owl   partial</span>
+<span class="co">#&gt; 31 http://purl.obolibrary.org/obo/uberon.owl   partial</span>
+<span class="co">#&gt; 32 http://purl.obolibrary.org/obo/uberon.owl   partial</span>
+<span class="co">#&gt; 33 http://purl.obolibrary.org/obo/uberon.owl   partial</span>
+<span class="co">#&gt; 34 http://purl.obolibrary.org/obo/uberon.owl   partial</span>
+<span class="co">#&gt; 35 http://purl.obolibrary.org/obo/uberon.owl   partial</span>
+<span class="co">#&gt; 36 http://purl.obolibrary.org/obo/uberon.owl   partial</span>
+<span class="co">#&gt; 37 http://purl.obolibrary.org/obo/uberon.owl   partial</span>
+<span class="co">#&gt; 38 http://purl.obolibrary.org/obo/uberon.owl   partial</span>
+<span class="co">#&gt; 39 http://purl.obolibrary.org/obo/uberon.owl   partial</span>
+<span class="co">#&gt; 40 http://purl.obolibrary.org/obo/uberon.owl   partial</span>
+<span class="co">#&gt; 41 http://purl.obolibrary.org/obo/uberon.owl   partial</span>
+<span class="co">#&gt; 42 http://purl.obolibrary.org/obo/uberon.owl   partial</span>
+<span class="co">#&gt; 43     http://purl.obolibrary.org/obo/go.owl   partial</span>
+<span class="co">#&gt; 44     http://purl.obolibrary.org/obo/go.owl   partial</span>
+<span class="co">#&gt; 45     http://purl.obolibrary.org/obo/go.owl   partial</span>
+<span class="co">#&gt; 46    http://purl.obolibrary.org/obo/zfa.owl   partial</span>
+<span class="co">#&gt; 47    http://purl.obolibrary.org/obo/zfa.owl   partial</span>
+<span class="co">#&gt; 48    http://purl.obolibrary.org/obo/zfa.owl   partial</span>
+<span class="co">#&gt; 49    http://purl.obolibrary.org/obo/zfa.owl   partial</span>
+<span class="co">#&gt; 50    http://purl.obolibrary.org/obo/zfa.owl   partial</span>
+<span class="co">#&gt; 51    http://purl.obolibrary.org/obo/zfa.owl   partial</span>
+<span class="co">#&gt; 52    http://purl.obolibrary.org/obo/zfa.owl   partial</span>
+<span class="co">#&gt; 53    http://purl.obolibrary.org/obo/zfa.owl   partial</span>
+<span class="co">#&gt; 54    http://purl.obolibrary.org/obo/zfa.owl   partial</span></code></pre></div>
 <p>For a specific taxon, such as Siluriformes, you can view the taxon rank, term label, whether or not the taxon is extinct, its common name, and ID:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://rphenoscape.phenoscape.org/reference/pk_terms.html">pk_taxon_detail</a></span>(<span class="st">"Siluriformes"</span>)
 <span class="co">#&gt;                                          rank.id rank.label        label</span>
 <span class="co">#&gt; 1 http://purl.obolibrary.org/obo/TAXRANK_0000003      order Siluriformes</span>
 <span class="co">#&gt;   extinct common_name                                         id</span>
 <span class="co">#&gt; 1   FALSE     catfish http://purl.obolibrary.org/obo/VTO_0034991</span></code></pre></div>
-<p>Ontology terms are related to each other by superclass (parent) and subclass (child) relationships, among other relationships such as part_of. You can use the term classification functions <code><a href="http://rphenoscape.phenoscape.org/reference/pk_class.html">pk_anatomical_class()</a></code>, <code><a href="http://rphenoscape.phenoscape.org/reference/pk_class.html">pk_taxon_class()</a></code>,and <code><a href="http://rphenoscape.phenoscape.org/reference/pk_class.html">pk_phenotype_class()</a></code>to view the superclass and subclass relationships for anatomy, taxonomy, or phenotypic quality terms.</p>
+<p>Ontology terms are related to each other by superclass (parent) and subclass (child) relationships, among other relationships such as part_of. You can use the term classification functions <code><a href="http://rphenoscape.phenoscape.org/reference/pk_class.html">pk_anatomical_class()</a></code>, <code><a href="http://rphenoscape.phenoscape.org/reference/pk_class.html">pk_taxon_class()</a></code>, and <code><a href="http://rphenoscape.phenoscape.org/reference/pk_class.html">pk_phenotype_class()</a></code>to view the superclass and subclass relationships for anatomy, taxonomy, or phenotypic quality terms.</p>
 <p>For example, view the relationships for “fin”:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://rphenoscape.phenoscape.org/reference/pk_class.html">pk_anatomical_class</a></span>(<span class="st">"fin"</span>)
-<span class="co">#&gt; Querying the IRI for fin</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://rphenoscape.phenoscape.org/reference/pk_class.html">pk_anatomical_class</a></span>(<span class="st">"pectoral fin"</span>)
+<span class="co">#&gt; Querying the IRI for pectoral fin</span>
 <span class="co">#&gt; Retrieving classification information</span>
 <span class="co">#&gt; $label</span>
-<span class="co">#&gt; [1] "fin"</span>
+<span class="co">#&gt; [1] "pectoral fin"</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $subClassOf</span>
-<span class="co">#&gt;                                             @id     label</span>
-<span class="co">#&gt; 1 http://purl.obolibrary.org/obo/UBERON_0000026 appendage</span>
+<span class="co">#&gt;                                             @id              label</span>
+<span class="co">#&gt; 1 http://purl.obolibrary.org/obo/UBERON_0002534         paired fin</span>
+<span class="co">#&gt; 2 http://purl.obolibrary.org/obo/UBERON_0004710 pectoral appendage</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $equivalentTo</span>
 <span class="co">#&gt; list()</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $superClassOf</span>
-<span class="co">#&gt;                                                                                                                                                                                                                                                                                          @id</span>
-<span class="co">#&gt; 1                                                                                                                                                                                                                                                 http://purl.obolibrary.org/obo/XAO_0000002</span>
-<span class="co">#&gt; 2                                                                                                                                                                                                                                                 http://purl.obolibrary.org/obo/ZFA_0000108</span>
-<span class="co">#&gt; 3  http://purl.org/phenoscape/subclassof?value=%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0008897%3E%0A+and+%28%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FBFO_0000050%3E+some+%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0003101%3E%29#0d8e50eb-746d-4198-8524-aff0ac73d678</span>
-<span class="co">#&gt; 4  http://purl.org/phenoscape/subclassof?value=%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0008897%3E%0A+and+%28%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FBFO_0000050%3E+some+%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0003101%3E%29#9564f553-a93a-4495-899e-12f233824168</span>
-<span class="co">#&gt; 5  http://purl.org/phenoscape/subclassof?value=%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0008897%3E%0A+and+%28%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FBFO_0000050%3E+some+%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0003101%3E%29#b33fe59f-e303-49f2-bb51-0f150cffd1dd</span>
-<span class="co">#&gt; 6  http://purl.org/phenoscape/subclassof?value=%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0008897%3E%0A+and+%28%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FBFO_0000050%3E+some+%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0003101%3E%29#beb558ba-1e78-4ae2-95f5-aba3485f2f1e</span>
-<span class="co">#&gt; 7  http://purl.org/phenoscape/subclassof?value=%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0008897%3E%0A+and+%28%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FBFO_0000050%3E+some+%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0003101%3E%29#0336e97b-4dbf-4931-893a-70396326b38b</span>
-<span class="co">#&gt; 8  http://purl.org/phenoscape/subclassof?value=%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0008897%3E%0A+and+%28%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FBFO_0000050%3E+some+%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0003101%3E%29#eeef048f-3018-4a7d-b879-771b6f71164e</span>
-<span class="co">#&gt; 9  http://purl.org/phenoscape/subclassof?value=%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0008897%3E%0A+and+%28%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FBFO_0000050%3E+some+%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0003101%3E%29#70836752-db49-4ef8-a6f9-d4cf858ec4c7</span>
-<span class="co">#&gt; 10 http://purl.org/phenoscape/subclassof?value=%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0008897%3E%0A+and+%28%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FBFO_0000050%3E+some+%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0003101%3E%29#46acf662-5103-4753-8219-ed52e0362e47</span>
-<span class="co">#&gt; 11                                                                                                                                                                                                                                             http://purl.obolibrary.org/obo/UBERON_4000162</span>
-<span class="co">#&gt; 12                                                                                                                                                                                                                                             http://purl.obolibrary.org/obo/UBERON_0002534</span>
-<span class="co">#&gt;                                   label</span>
-<span class="co">#&gt; 1                            fin (frog)</span>
-<span class="co">#&gt; 2                       fin (zebrafish)</span>
-<span class="co">#&gt; 3  fin and (part of some male organism)</span>
-<span class="co">#&gt; 4  fin and (part of some male organism)</span>
-<span class="co">#&gt; 5  fin and (part of some male organism)</span>
-<span class="co">#&gt; 6  fin and (part of some male organism)</span>
-<span class="co">#&gt; 7  fin and (part of some male organism)</span>
-<span class="co">#&gt; 8  fin and (part of some male organism)</span>
-<span class="co">#&gt; 9  fin and (part of some male organism)</span>
-<span class="co">#&gt; 10 fin and (part of some male organism)</span>
-<span class="co">#&gt; 11                           median fin</span>
-<span class="co">#&gt; 12                           paired fin</span>
+<span class="co">#&gt;                                                                                                                                                                                                                                                                                         @id</span>
+<span class="co">#&gt; 1                                                                                                                                                                                                                                             http://purl.obolibrary.org/obo/UBERON_4200003</span>
+<span class="co">#&gt; 2                                                                                                                                                                                                                                                http://purl.obolibrary.org/obo/ZFA_0001161</span>
+<span class="co">#&gt; 3 http://purl.org/phenoscape/subclassof?value=%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000151%3E%0A+and+%28%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FBFO_0000050%3E+some+%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0002548%3E%29#159c0d7e-73f8-4a97-84f7-d86b51652dfc</span>
+<span class="co">#&gt; 4 http://purl.org/phenoscape/subclassof?value=%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000151%3E%0A+and+%28%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FBFO_0000050%3E+some+%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0002548%3E%29#0888ae16-5bb4-4cbc-8d22-425d25edf5d3</span>
+<span class="co">#&gt; 5 http://purl.org/phenoscape/subclassof?value=%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000151%3E%0A+and+%28%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FBFO_0000050%3E+some+%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000069%3E%29#a4bfb82c-cc6e-402a-a5b9-d0a8956df76a</span>
+<span class="co">#&gt; 6 http://purl.org/phenoscape/subclassof?value=%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000151%3E%0A+and+%28%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FBFO_0000050%3E+some+%3Chttp%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FUBERON_0000069%3E%29#4ae642ac-9e5a-4a19-82d2-4e5d7e636723</span>
+<span class="co">#&gt;                                          label</span>
+<span class="co">#&gt; 1                           archipterygial fin</span>
+<span class="co">#&gt; 2                     pectoral fin (zebrafish)</span>
+<span class="co">#&gt; 3        pectoral fin and (part_of some larva)</span>
+<span class="co">#&gt; 4        pectoral fin and (part_of some larva)</span>
+<span class="co">#&gt; 5 pectoral fin and (part_of some larval stage)</span>
+<span class="co">#&gt; 6 pectoral fin and (part_of some larval stage)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $`@id`</span>
-<span class="co">#&gt; [1] "http://purl.obolibrary.org/obo/UBERON_0008897"</span></code></pre></div>
+<span class="co">#&gt; [1] "http://purl.obolibrary.org/obo/UBERON_0000151"</span></code></pre></div>
+<p>Note that because the KB integrates model organism phenotypes, the results show types of pectoral fin specific to model organisms, such as “pectoral fin (zebrafish)”.</p>
 </div>
-<div id="retrieve-study-matrices-in-rphenoscape" class="section level2">
+<div id="retrieve-study-matrices-using-rphenoscape" class="section level2">
 <h2 class="hasAnchor">
-<a href="#retrieve-study-matrices-in-rphenoscape" class="anchor"></a>4. Retrieve study matrices in RPhenoscape</h2>
+<a href="#retrieve-study-matrices-using-rphenoscape" class="anchor"></a>4. Retrieve study matrices using RPhenoscape</h2>
 <p>Now we will query for ‘Ictaluridae’ and ‘fin’ (including parts) to retrieve the list of studies that contain fin characters for this taxon.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">slist &lt;-<span class="st"> </span><span class="kw"><a href="http://rphenoscape.phenoscape.org/reference/pk_get_study_list.html">pk_get_study_list</a></span>(<span class="dt">taxon =</span> <span class="st">"Ictaluridae"</span>, <span class="dt">entity =</span> <span class="st">"fin"</span>, <span class="dt">relation =</span> <span class="st">"part of"</span>)</code></pre></div>
-<p>The list is returned as a data.frame containing the study IDs and citations. Navigate to Global Environment and click on ‘slist’ to view the ID and citation (author, year) for each study in the KB that contains any ictalurid species associated with fin data. Note that taxon, entity, and quality are optional arguments in this query, and we have also included fin parts. Here we found nine studies.</p>
+<p>The list is returned as a data.frame containing the study IDs and citations. Navigate to Global Environment and click on ‘slist’ to view the ID and citation (author, year) for each study in the KB that contains any ictalurid species associated with fin data. Note that taxon, entity, and quality are optional arguments in this query, and we have also included fin parts. Here we found nine studies. Click on ‘slist’ in the Global Environment to view these studies and their IDs.</p>
 <p>Next we want to obtain the character matrix for one of these studies. Using the study IDs from the previous step, we can get a list of the character matrices as NeXML objects. We will choose the Lundberg (1992) publication, the fifth item on the list above.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lundberg_nexml &lt;-<span class="st"> </span><span class="kw"><a href="http://rphenoscape.phenoscape.org/reference/pk_get_study_xml.html">pk_get_study_xml</a></span>(slist<span class="op">$</span>id[<span class="dv">5</span>])
 <span class="co">#&gt; ....This might take a while....</span>
@@ -201,11 +358,11 @@
 <p>You can take a look at a small part of the Lundberg (1992) matrix (e.g., the first five taxa and first five characters):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lundberg_matrix[[<span class="dv">1</span>]][<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">7</span>]
 <span class="co">#&gt;                 taxa                                      otu</span>
-<span class="co">#&gt; 1  Ameiurus brunneus otu_5764bd46-a754-4bcd-ac63-4e9db5f8d454</span>
-<span class="co">#&gt; 2     Ameiurus catus otu_77217f11-b4c5-46d1-9d54-42516fb9851f</span>
-<span class="co">#&gt; 3     Ameiurus melas otu_a87479bd-6616-4cb9-9467-7abe35fe0d42</span>
-<span class="co">#&gt; 4   Ameiurus natalis otu_67195ca2-4982-4473-8ad3-3421980ba0a0</span>
-<span class="co">#&gt; 5 Ameiurus nebulosus otu_d94accc8-b7db-4419-880f-4a63c6480241</span>
+<span class="co">#&gt; 1  Ameiurus brunneus otu_25fb2de7-eb77-41c2-9b6a-2d75993ae070</span>
+<span class="co">#&gt; 2     Ameiurus catus otu_665892a2-f6ae-46d5-a9c4-516a71dbbebe</span>
+<span class="co">#&gt; 3     Ameiurus melas otu_f517f360-bd8f-44ac-9c44-b25beefed102</span>
+<span class="co">#&gt; 4   Ameiurus natalis otu_2b8235d3-671c-4f15-b3cd-5dfad9c4578a</span>
+<span class="co">#&gt; 5 Ameiurus nebulosus otu_501f8192-ee95-48fb-afa9-a4163cbe4cd1</span>
 <span class="co">#&gt;   Anal-fin rays, species mean count Anterior dentations of pectoral spine</span>
 <span class="co">#&gt; 1                           16.1-20                                 large</span>
 <span class="co">#&gt; 2                         20.1-25.5                              moderate</span>
@@ -237,7 +394,7 @@
 <h2 class="hasAnchor">
 <a href="#get-a-presenceabsence-character-matrix-using-ontotrace-in-rphenoscape" class="anchor"></a>5. Get a presence/absence character matrix using OntoTrace in RPhenoscape</h2>
 <p>In the previous step, we queried the KB for individual studies that contain characters pertaining to the fins in ictalurid catfish, and we obtained character matrices for source publications that included those characters. Now we want to get a matrix that synthesizes these characters into a single matrix.</p>
-<p><a href="http://beta.phenoscape.org/#/ontotrace">OntoTrace</a> from the KB combines characters from multiple publications into a single synthetic matrix. It allows a user to specify any number or combination of anatomical entities and taxa. It returns a matrix as a nexml object that includes only presence or absence of anatomical entities. It uses asserted data of presence or absence, i.e., originally described by an author, or inferred data. Data are inferred from asserted characters, e.g., if an author describes a part of a fin such as ‘fin ray’, the fin is inferred present and scored as such in the matrix.</p>
+<p><a href="http://kb.phenoscape.org/#/ontotrace">OntoTrace</a> from the KB combines characters from multiple publications into a single synthetic matrix. It allows a user to specify any number or combination of anatomical entities and taxa. It returns a matrix as a nexml object that includes only presence or absence of anatomical entities. It uses asserted data of presence or absence, i.e., originally described by an author, or inferred data. Data are inferred from asserted characters, e.g., if an author describes a part of a fin such as ‘fin ray’, the fin is inferred present and scored as such in the matrix.</p>
 <p>The OntoTrace default settings are to include parts of the anatomical entity and to include variable-only characters, but here we will include those that are invariant as well.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nex &lt;-<span class="st"> </span><span class="kw"><a href="http://rphenoscape.phenoscape.org/reference/pk_get_ontotrace_xml.html">pk_get_ontotrace_xml</a></span>(<span class="dt">taxon =</span> <span class="st">"Ictaluridae"</span>, <span class="dt">entity =</span> <span class="st">"fin"</span>, <span class="dt">variable_only =</span> <span class="ot">FALSE</span>)</code></pre></div>
 <p>To view the matrix within RStudio, get the matrix (m) as a <code>data.frame</code> from the NeXML object. Opening this (‘m’) in the Global Environment shows the taxa, character names, and state assignments (0, absent; 1, present) (note: the otu and otus are NeXML-internal IDs):</p>
@@ -245,32 +402,32 @@
 <p>The character and taxon lists for the matrix can also be returned. Click on ‘meta’ in the Global Environment pane to view the data.frames for taxa and entities:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">meta &lt;-<span class="st"> </span><span class="kw"><a href="http://rphenoscape.phenoscape.org/reference/pk_ontotrace.html">pk_get_ontotrace_meta</a></span>(nex)</code></pre></div>
 <p>The above returns 29 species of ictalurid catfishes and 123 anatomical entities for fins and their parts.</p>
-<p>You will need to go the <a href="http://beta.phenoscape.org/#/facet">Phenoscape KB</a> to view the supporting states, i.e., the source data upon which inferences were made or those that were directly asserted.</p>
-<p>For example, in the returned OntoTrace matrix (see ‘m’ in Global Environment (row 10)) the pelvic fin is scored as present for <em>Ictalurus australis</em>. Enter these data into the faceted browsing interface:</p>
+<p>You will need to go to the <a href="http://kb.phenoscape.org/#/facet">Phenoscape KB</a> to view the supporting states, i.e., the source data upon which inferences were made or those that were directly asserted.</p>
+<p>For example, in the returned OntoTrace matrix (see ‘m’ in Global Environment (row 10)) the pelvic fin is scored as present (‘1’) for <em>Ictalurus australis</em>. Enter these data into the faceted browsing interface: <a href="https://kb.phenoscape.org/#/facet" class="uri">https://kb.phenoscape.org/#/facet</a></p>
 <ul>
 <li>Anatomical entity = ‘pelvic fin’</li>
 <li>Quality = ‘present’</li>
 <li>Taxon = ‘Ictalurus australis’</li>
 </ul>
-<p>Looking at ‘Taxon annotations’, you will find that there are zero phenotypes, i.e., no asserted character states to ‘pelvic fin present’. Now click the ‘inferred presence’ radio button under Phenotypic quality. You will now see three phenotypes for three taxa in the KB.</p>
+<p>Looking at ‘Taxon annotations’, you will find that there are zero phenotypes, i.e., no asserted character states to ‘pelvic fin present’. Now click the ‘inferred presence’ radio button under Phenotypic quality. You will now see two phenotypes for this taxon in the KB. These phenotypes ‘pelvic fin lepidotrichium amount’ and ‘pelvic splint present’ logically imply the presence of a pelvic fin. Thus, though an author did not directly assert the presence of a pelvic fin in <em>Ictalurus australis</em>, it is inferred and thus reported as present (‘1’) in the OntoTrace matrix.</p>
 </div>
 <div id="subset-the-matrix-taxonomically" class="section level2">
 <h2 class="hasAnchor">
 <a href="#subset-the-matrix-taxonomically" class="anchor"></a>6. Subset the matrix taxonomically</h2>
-<p>In the above step you retrieved a synthetic matrix for the Ictaluridae. Now you would like to pare it down in taxonomic and anatomical scope. Let’s begin by trimming the matrix down to the presence and absence characters pertaining only to the genus Ictalurus. We will reduce the matrix to include only descendents of Ictalurus.</p>
+<p>In the above step you retrieved a synthetic matrix for the Ictaluridae. Now you would like to pare it down in taxonomic and anatomical scope. Let’s begin by trimming the matrix down to the presence and absence characters pertaining only to the genus <em>Ictalurus</em>. We will reduce the matrix to include only descendents of <em>Ictalurus</em>.</p>
 <p>First, we need to parse the list to determine which taxa in the matrix (‘m’) are descendants of <em>Ictalurus</em>. This returns a list of TRUE or FALSE assignments for each taxon in the matrix:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">is_desc &lt;-<span class="st"> </span><span class="kw"><a href="http://rphenoscape.phenoscape.org/reference/pk_is_descendant.html">pk_is_descendant</a></span>(<span class="st">'Ictalurus'</span>, m<span class="op">$</span>taxa)</code></pre></div>
 <p>We then subset the matrix m to the descendants of <em>Ictalurus</em>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ictalurus_m &lt;-<span class="st"> </span>m[is_desc, ]</code></pre></div>
-<p>View the new matrix by clicking on ‘ictalurus_m’ in the Global Environment to view the <code>data.frame</code> of the matrix.</p>
-<p>We can also subset the matrix by anatomy. In this case, let’s select characters for the pectoral fin and its parts. We will use <code><a href="http://rphenoscape.phenoscape.org/reference/pk_is_descendant.html">pk_is_descendant()</a></code> to first parse the characters (column names) to determine which are descendents of the term ‘pectoral fin’. Because this function only looks for descendent terms, we also need to specify that any characters with ‘pectoral fin’ are included, and we exclude the first three taxon-related columns:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">is_desc_pecfin &lt;-<span class="st"> </span><span class="kw"><a href="http://rphenoscape.phenoscape.org/reference/pk_is_descendant.html">pk_is_descendant</a></span>(<span class="st">'pectoral fin'</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(m)[<span class="op">-</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>)], <span class="dt">includeRels =</span> <span class="st">"part_of"</span>) <span class="op">|</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(m)[<span class="op">-</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>)] <span class="op">==</span><span class="st"> 'pectoral fin'</span> 
+<p>View the new matrix by clicking on the ‘ictalurus_m’ <code>data.frame</code> in the Global Environment.</p>
+<p>We can also subset the matrix by anatomy. In this case, let’s select characters for the pectoral fin and its parts. We will use <code><a href="http://rphenoscape.phenoscape.org/reference/pk_is_descendant.html">pk_is_descendant()</a></code> to first parse the characters (column names; note the first three taxon-related columns are excluded) to determine which are descendents (types or parts) of the term ‘pectoral fin’. Because this function only looks for descendent terms, we also need to specify that any characters pertaining to ‘pectoral fin’ itself are included.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">is_desc_pecfin &lt;-<span class="st"> </span><span class="kw"><a href="http://rphenoscape.phenoscape.org/reference/pk_is_descendant.html">pk_is_descendant</a></span>(<span class="st">'pectoral fin'</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(ictalurus_m)[<span class="op">-</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>)], <span class="dt">includeRels =</span> <span class="st">"part_of"</span>) <span class="op">|</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(ictalurus_m)[<span class="op">-</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>)] <span class="op">==</span><span class="st"> 'pectoral fin'</span> 
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/table">table</a></span>(is_desc_pecfin)
 <span class="co">#&gt; is_desc_pecfin</span>
 <span class="co">#&gt; FALSE  TRUE </span>
 <span class="co">#&gt;   109    14</span></code></pre></div>
-<p>View the character names to verify that pectoral fin related characters will be selected:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(m)[<span class="op">-</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>)][is_desc_pecfin]
+<p>Using the ‘colnames’ command below, view the character names to verify that pectoral fin related characters will be selected:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(ictalurus_m)[<span class="op">-</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>)][is_desc_pecfin]
 <span class="co">#&gt;  [1] "anterior dentation of pectoral fin spine"       </span>
 <span class="co">#&gt;  [2] "anterior distal serration of pectoral fin spine"</span>
 <span class="co">#&gt;  [3] "pectoral fin"                                   </span>
@@ -285,10 +442,37 @@
 <span class="co">#&gt; [12] "pectoral fin skeleton"                          </span>
 <span class="co">#&gt; [13] "pectoral fin spine"                             </span>
 <span class="co">#&gt; [14] "posterior dentation of pectoral fin spine"</span></code></pre></div>
-<p>We now subset the matrix m using ‘is_desc_pecfin’ and retaining the first taxon-related columns:</p>
+<p>We now subset the matrix m using ‘is_desc_pecfin’ and retain the first three taxon-related columns:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">to_keep &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="ot">TRUE</span>, <span class="ot">TRUE</span>, <span class="ot">TRUE</span>, is_desc_pecfin) 
-pecfin_m &lt;-<span class="st"> </span>m[, to_keep]</code></pre></div>
-<p>View this matrix of pectoral fin characters for Ictaluridae by clicking on ‘pecfin_m’ in the Global Environment.</p>
+pecfin_m &lt;-<span class="st"> </span>ictalurus_m[, to_keep]</code></pre></div>
+<p>View this matrix of pectoral fin characters for <em>Ictalurus</em> by clicking on ‘pecfin_m’ in the Global Environment.</p>
+</div>
+<div id="retrieve-matrix-of-anatomical-dependencies" class="section level2">
+<h2 class="hasAnchor">
+<a href="#retrieve-matrix-of-anatomical-dependencies" class="anchor"></a>6. Retrieve matrix of anatomical dependencies</h2>
+<p>Knowing how the information about an anatomical structure may rely on other layers of anatomical information is critical, if the goal is to isolate and analyze independent features. We can query the KB for a presence-absence dependency matrix for a specified set of anatomical structures. The dependency matrix is derived from the formalized knowledge of relationships among entities encoded in the ontology. In the example below, the presence of ‘pelvic splint’ is dependent on the presence of ‘pelvic fin’. In other words, the pelvic fin is implied present when the pelvic splint is present because ‘pelvic splint’ is part_of ‘pelvic fin’.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tl &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"pectoral fin"</span>, <span class="st">"pelvic fin"</span>, <span class="st">"pelvic splint"</span>, <span class="st">"antorbital"</span>, <span class="st">"preopercle"</span>)
+
+dep_mat &lt;-<span class="st"> </span><span class="kw"><a href="http://rphenoscape.phenoscape.org/reference/pa_dep_matrix.html">pa_dep_matrix</a></span>(tl, <span class="dt">.names =</span> <span class="st">"label"</span>)
+dep_mat
+<span class="co">#&gt;               pectoral fin pelvic fin pelvic splint antorbital preopercle</span>
+<span class="co">#&gt; pectoral fin             1          0             0          0          0</span>
+<span class="co">#&gt; pelvic fin               0          1             0          0          0</span>
+<span class="co">#&gt; pelvic splint            0          1             1          0          0</span>
+<span class="co">#&gt; antorbital               0          0             0          1          0</span>
+<span class="co">#&gt; preopercle               0          0             0          0          1</span></code></pre></div>
+<p>In the PARAMO tutorial, we will learn how to use these dependency matrices to reconstruct individual traits and entire phenotypes.</p>
+</div>
+<div id="retrieve-semantic-similarity-matrix" class="section level2">
+<h2 class="hasAnchor">
+<a href="#retrieve-semantic-similarity-matrix" class="anchor"></a>7. Retrieve semantic similarity matrix</h2>
+<p>We can also obtain similarity metrics for phenotypes based on ontological distance. Three similarity metrics - Jaccard, Tanimoto, and Cosine - are computed by the KB to measure similarity between terms (see RPhenoscape documentation in the Help panel for how these are measured). For example, here we compute and visualize Jaccard similarity for premaxillary tooth phenotypes in Ictaluridae:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">phens &lt;-<span class="st"> </span><span class="kw"><a href="http://rphenoscape.phenoscape.org/reference/get_phenotypes.html">get_phenotypes</a></span>(<span class="dt">entity =</span> <span class="st">"premaxillary tooth"</span>, <span class="dt">taxon =</span> <span class="st">"Ictaluridae"</span>,
+                          <span class="dt">.withTaxon =</span> <span class="ot">TRUE</span>)
+
+sm &lt;-<span class="st"> </span><span class="kw"><a href="http://rphenoscape.phenoscape.org/reference/similarity.html">jaccard_similarity</a></span>(<span class="dt">terms =</span> phens<span class="op">$</span>id, <span class="dt">.labels =</span> phens<span class="op">$</span>label, <span class="dt">.colnames =</span> <span class="st">"label"</span>)
+<span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/hclust">hclust</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/dist">as.dist</a></span>(<span class="dv">1</span><span class="op">-</span>sm)))</code></pre></div>
+<p><img src="01_rphenoscape_files/figure-html/unnamed-chunk-19-1.png" width="700"> In the PARAMO tutorial, we’ll use a semantic similarity matrix to visualize traits in a heat map. We are also developing methods that use semantic similarity to cluster phenotypes into characters and character states.</p>
 </div>
   </div>
 
@@ -300,9 +484,11 @@ pecfin_m &lt;-<span class="st"> </span>m[, to_keep]</code></pre></div>
 <li><a href="#introduction">1. Introduction</a></li>
       <li><a href="#browse-and-filter-data-in-the-kb-to-understand-the-scope-of-available-data-">2. Browse and filter data in the KB to understand the scope of available data.</a></li>
       <li><a href="#retrieve-term-info-using-rphenoscape">3. Retrieve term info using RPhenoscape</a></li>
-      <li><a href="#retrieve-study-matrices-in-rphenoscape">4. Retrieve study matrices in RPhenoscape</a></li>
+      <li><a href="#retrieve-study-matrices-using-rphenoscape">4. Retrieve study matrices using RPhenoscape</a></li>
       <li><a href="#get-a-presenceabsence-character-matrix-using-ontotrace-in-rphenoscape">5. Get a presence/absence character matrix using OntoTrace in RPhenoscape</a></li>
       <li><a href="#subset-the-matrix-taxonomically">6. Subset the matrix taxonomically</a></li>
+      <li><a href="#retrieve-matrix-of-anatomical-dependencies">6. Retrieve matrix of anatomical dependencies</a></li>
+      <li><a href="#retrieve-semantic-similarity-matrix">7. Retrieve semantic similarity matrix</a></li>
       </ul>
 </div>
       </div>

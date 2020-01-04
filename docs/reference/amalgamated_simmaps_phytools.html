@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Utility function for cleaning up character data table after amalgamating characters — dropDependentTraits • SCATE.shortcourse</title>
+<title>A wrapper for phytools that draws stochastic character maps given a corHMM fit — amalgamated_simmaps_phytools • SCATE.shortcourse</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Utility function for cleaning up character data table after amalgamating characters — dropDependentTraits" />
+<meta property="og:title" content="A wrapper for phytools that draws stochastic character maps given a corHMM fit — amalgamated_simmaps_phytools" />
 
-<meta property="og:description" content="Utility function for cleaning up character data table after amalgamating characters" />
+<meta property="og:description" content="A wrapper for phytools that draws stochastic character maps given a corHMM fit" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -117,25 +117,52 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Utility function for cleaning up character data table after amalgamating characters</h1>
-    <small class="dont-index">Source: <a href='https://github.com/phenoscape/scate-shortcourse/blob/master/R/workshop_functions.R'><code>R/workshop_functions.R</code></a></small>
-    <div class="hidden name"><code>dropDependentTraits.Rd</code></div>
+    <h1>A wrapper for phytools that draws stochastic character maps given a corHMM fit</h1>
+    <small class="dont-index">Source: <a href='https://github.com/phenoscape/scate-shortcourse/blob/master/R/auto_functions.R'><code>R/auto_functions.R</code></a></small>
+    <div class="hidden name"><code>amalgamated_simmaps_phytools.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Utility function for cleaning up character data table after amalgamating characters</p>
+    <p>A wrapper for phytools that draws stochastic character maps given a corHMM fit</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>dropDependentTraits</span>(<span class='no'>char_info</span>, <span class='no'>dep.mat</span>, <span class='no'>td</span>)</pre>
-        
+    <pre class="usage"><span class='fu'>amalgamated_simmaps_phytools</span>(<span class='no'>fits</span>, <span class='no'>...</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>fits</th>
+      <td><p>A list produced by `amalgamated_fits_corHMM`</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Additional arguments passed to `phytools::make.simmap`</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A list of stochastic character maps for each character in the dataset</p>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>This function takes the models produced from `amalgamated_fits_corHMM` and
+uses them to generate stochastic character maps.</p>
+    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-                </ul>
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
+          </ul>
 
   </div>
 </div>
