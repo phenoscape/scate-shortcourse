@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Utility function for cleaning up character data table after amalgamating characters — dropDependentTraits • SCATE.shortcourse</title>
+<title>Generates a graph and model for traits given a dependency matrix — amalgamate_deps • SCATE.shortcourse</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Utility function for cleaning up character data table after amalgamating characters — dropDependentTraits" />
+<meta property="og:title" content="Generates a graph and model for traits given a dependency matrix — amalgamate_deps" />
 
-<meta property="og:description" content="Utility function for cleaning up character data table after amalgamating characters" />
+<meta property="og:description" content="Generates a graph and model for traits given a dependency matrix" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -117,25 +117,54 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Utility function for cleaning up character data table after amalgamating characters</h1>
-    <small class="dont-index">Source: <a href='https://github.com/phenoscape/scate-shortcourse/blob/master/R/workshop_functions.R'><code>R/workshop_functions.R</code></a></small>
-    <div class="hidden name"><code>dropDependentTraits.Rd</code></div>
+    <h1>Generates a graph and model for traits given a dependency matrix</h1>
+    <small class="dont-index">Source: <a href='https://github.com/phenoscape/scate-shortcourse/blob/master/R/auto_functions.R'><code>R/auto_functions.R</code></a></small>
+    <div class="hidden name"><code>amalgamate_deps.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Utility function for cleaning up character data table after amalgamating characters</p>
+    <p>Generates a graph and model for traits given a dependency matrix</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>dropDependentTraits</span>(<span class='no'>char_info</span>, <span class='no'>dep.mat</span>, <span class='no'>td</span>)</pre>
-        
+    <pre class="usage"><span class='fu'>amalgamate_deps</span>(<span class='no'>dep_mat</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>dep_mat</th>
+      <td><p>A dependency matrix</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A list of: 
+$M Transition matrices for the Structured-Hidden State Markov Models that can be run in RevBayes, 
+corHMM or other tools
+$graph The full graph of all dependencies among traits
+$con.comp A list of the group membership etc. produced by `igraph::components`
+$traits The old trait names that were amalgamated
+$new.traits The new names of the amalgamated trait names
+$depstates A list providing the dependencies of all characters</p>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The dependency matrix can come from `rphenoscape::pa_dep_matrix` or be user generated</p>
+    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-                </ul>
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
+          </ul>
 
   </div>
 </div>

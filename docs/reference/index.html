@@ -60,7 +60,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">SCATE.shortcourse</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -86,7 +86,7 @@
       <a href="../articles/01_rphenoscape.html">RPhenoscape Tutorial</a>
     </li>
     <li>
-      <a href="../articles/PARAMO.nb.html">PARAMO Tutorial</a>
+      <a href="../articles/PARAMO.html">PARAMO Tutorial</a>
     </li>
     <li>
       <a href="../articles/glossary.html">Glossary</a>
@@ -144,6 +144,24 @@
           <p><code><a href="RAC_query.html">RAC_query()</a></code> </p>
         </td>
         <td><p>Function for aggregating characters under a specified set of terms (for example, body regions)</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="amalgamate_deps.html">amalgamate_deps()</a></code> </p>
+        </td>
+        <td><p>Generates a graph and model for traits given a dependency matrix</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="amalgamated_fits_corHMM.html">amalgamated_fits_corHMM()</a></code> </p>
+        </td>
+        <td><p>A wrapper for corHMM that fits Structured Hidden State Models</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="amalgamated_simmaps_phytools.html">amalgamated_simmaps_phytools()</a></code> </p>
+        </td>
+        <td><p>A wrapper for phytools that draws stochastic character maps given a corHMM fit</p></td>
       </tr><tr>
         
         <td>
@@ -239,14 +257,26 @@
         <td>
           <p><code><a href="paramo.html">paramo()</a></code> </p>
         </td>
-        <td><p>Final stack of maps
+        <td><p>Final stack of maps for a set of stochastic maps stored in a directory
 cc chars id to stack
 ntrees number of trees to stack
 dirW directory for zip file</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="prepareMaps.html">prepareMaps()</a></code> </p>
+          <p><code><a href="paramo.list.html">paramo.list()</a></code> </p>
+        </td>
+        <td><p>Final stack of maps for a set of stochastic maps stored in a list</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="prepareMapsRayDISC.html">prepareMapsRayDISC()</a></code> </p>
+        </td>
+        <td><p>Function for processing revbayes stochastic maps</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="prepareMapsRev.html">prepareMapsRev()</a></code> </p>
         </td>
         <td><p>Function for processing revbayes stochastic maps</p></td>
       </tr><tr>
@@ -273,6 +303,19 @@ dirW directory for zip file</p></td>
           <p><code><a href="recode_td.html">recode_td()</a></code> </p>
         </td>
         <td><p>recodes a treedata object based on amalgamated characters</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="recode_traits.html">recode_traits()</a></code> </p>
+        </td>
+        <td><p>Automatically recode amalgamated traits in PARAMO 
+Amalgamates traits using the matrices returned by amalgamate_deps</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="remove_indirect.html">remove_indirect()</a></code> </p>
+        </td>
+        <td><p>Remove indirect links in a dependency graph</p></td>
       </tr><tr>
         
         <td>
