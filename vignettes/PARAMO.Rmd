@@ -27,13 +27,14 @@ terms <- c("dermatocranium", "paired fin", "barbel")
 # Define our taxon
 taxon <- "Siluriformes"   
 
-# Apply pk_get_ontotrace_xml over all our traits in our taxon of interest, the Siluriformes. We specify
-# variable_only=FALSE to return invariant characters.
+# Apply pk_get_ontotrace_xml over all our traits in our taxon of interest, the Siluriformes and retain
+# variable characters. If you want to return invariant characters instead, select variable_only=FALSE. 
 nex <- lapply(terms, pk_get_ontotrace_xml, taxon=taxon, variable_only=TRUE)
 names(nex) <- terms
 
 .m <- lapply(nex, pk_get_ontotrace)
-# Merge together the resulting 3 matrices and remove non-trait data and duplicated columns
+
+# Merge together the resulting 3 matrices and remove non-trait data (OTU identifiers) and duplicated columns (if present)
 m <- purrr::reduce(.m, full_join, by="taxa", suffix=c("", ".y"))  
 m <- dplyr::select_at(m, dplyr::vars(-contains("otu"))) # Removes otu data
 siluriformes <- dplyr::select_at(m, vars(-contains(".y"))) # Removes duplicated columns
@@ -48,7 +49,7 @@ print_coverage(siluriformes)
 ```
 
 
-The table that prints out shows the number of taxa for which there is data in the KB ( _coverage_ ) and the proportion of taxa ( _average_ ) that have this trait (all of these are binary, presence/absence characters). 
+The table that prints out shows the number of taxa for which there is data in the KB ( _coverage_ ) and the proportion of taxa ( _average_ ) that have this trait present (all of these are binary, presence/absence characters). 
 
 This dataset is too big for our demonstration purposes. So let's filter down to a smaller set of traits that will illustrate our process. 
 
@@ -62,10 +63,10 @@ dat <- dplyr::select(siluriformes,"taxa",
               "pelvic fin", "pelvic splint", "pelvic fin ray"
               )
 
-## Let's also clean up some of the species names to only include Genus and species
+## Let's also clean up some of the species names to only include Genus and species (drop subspecies etc.)
 dat$taxa <- unname(sapply(dat$taxa, function(x) paste(strsplit(x, split=" ")[[1]][1:2], collapse="_")))
 
-dat
+head(dat)
 ```
 
 Now let's load in the Rabosky fish phylogeny and match it to the data using `treeplyr`.
@@ -84,7 +85,7 @@ anatomical_details <- lapply(traits, pk_anatomical_detail) # Query over traits a
 
 char_info <- list()
 char_info$ID <- traits
-char_info$char_statement <- sapply(anatomical_details, function(x) x$definition) # Extract definitions
+char_info$definition <- sapply(anatomical_details, function(x) x$definition) # Extract definitions
 char_info$STATE_0 <- rep(0, length(traits)) # All ontotrace matrices are binary presence/absence
 char_info$STATE_1 <- rep(1, length(traits)) # All ontotrace matrices are binary presence/absence
 char_info$IRI <- sapply(anatomical_details, function(x) x$id) # Extra a unique URL identifier called an "IRI" 
@@ -104,7 +105,7 @@ njt <- root(multi2di(njt), grep("barbel", njt$tip.label))
 ontologyHeatMap(td, njt, start=1, cex=0.25)
 ```
 
-Some of our taxa are really data poor, so let's filter them out and deal with a smaller, more manageable dataset by excluding all taxa that don't have at least 50% of the traits as data.
+Some of our taxa are really data poor, so let's filter them out and deal with a smaller, more manageable dataset by excluding all taxa that don't have at least 40% of the traits as data.
 
 ```{r}
 tdf <- filter_coverage(td, traits=0, taxa=0.4)
@@ -130,13 +131,13 @@ pf.group <- con.comp$membership["pectoral fin"] ## Which group contains "pectora
 pf.Graph <- igraph::induced_subgraph(G1, which(con.comp$membership==pf.group)) ## Pick out the subgraph with "pectoral fin"
 plot(pf.Graph, vertex.label.cex=0.75)
 ```
-In the dependency table above, for example, you can see that the presence of the pectoral fin spine is dependent on the presence of the pectoral fin.
+In the dependency graph above, for example, you can see that the presence of the pectoral fin spine is dependent on the presence of the pectoral fin.
 
-Now we can build in our dependencies into our evolutionary models. We are going to do this manually for this workshop. We have tools that extract these from graphs, but it's less obvious what's happening, and these are not robust yet. This is a major part of our project, to build tools that will construct these models in an automated fashion.
+Now we can build in our dependencies into our evolutionary models by amalgamating characters based on their dependency structure (pulled from the graph).
 
 ```{r}
 amal.deps <- amalgamate_deps(dep.mat) ## Create an object of transition matrices for the amalgamated characters
-td.comb <- recode_traits(tdf, amal.deps) ## Recode the original dataset according to the character states of the new, amalgamated characters
+td.comb <- recode_traits(tdf, amal.deps) ## Recode the original dataset according to the character states of the new, amalgamated characters (with Hidden states)
 ```
 
 If the above code didn't work for you, you can catch up by loading this dataset from the `scate-shortcourse` package
@@ -145,15 +146,16 @@ If the above code didn't work for you, you can catch up by loading this dataset 
 data(td.comb)
 ```
 
-We are going to reconstruct our stochastic character maps by first fitting the model in the R package `corHMM`, then using the model fit to generate stochastic maps in `phytools`. In the workshop, we will do a Julia Child-style switch-a-roo and analyze completed analyses, rather than actually running these, because they will take too long. 
+We can reconstruct our stochastic character maps by first fitting the model in the R package `corHMM`, then using the model fit to generate stochastic maps in `phytools`. In the workshop, we will do a Julia Child-style switch-a-roo and analyze completed analyses, rather than actually running these, because they will take too long.
 
 ```{r eval=FALSE}
+## WARNING: VERY TIME CONSUMING (~15-30 minutes)
 corhmm.fits <- amalgamated_fits_corHMM(td.comb, amal.deps)
 ```
 
 ```{r}
 data(corhmm.fits)
-trees <- amalgamated_simmaps_phytools(corhmm.fits, nsim=2)
+trees <- amalgamated_simmaps_phytools(corhmm.fits, nsim=2) # Create 2 stochastic character maps per character
 ```
 
 We can plot these simmap trees immediately and see what it looks like, we will do this again shortly with prettier labeling and colors. 
