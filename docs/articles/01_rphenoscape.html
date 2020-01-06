@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">SCATE.shortcourse</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
       </span>
     </div>
 
@@ -299,6 +299,12 @@
 <span class="co">#&gt; 52    http://purl.obolibrary.org/obo/zfa.owl   partial</span>
 <span class="co">#&gt; 53    http://purl.obolibrary.org/obo/zfa.owl   partial</span>
 <span class="co">#&gt; 54    http://purl.obolibrary.org/obo/zfa.owl   partial</span></code></pre></div>
+<p>There are several parameters to narrow and filter search results. For example, the parameter <code>matchType</code> allows restricting to exact matches only:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://rphenoscape.phenoscape.org/reference/find_term.html">find_term</a></span>(<span class="st">"pectoral fin"</span>, <span class="dt">matchTypes =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"exact"</span>))
+<span class="co">#&gt;                                              id        label</span>
+<span class="co">#&gt; 1 http://purl.obolibrary.org/obo/UBERON_0000151 pectoral fin</span>
+<span class="co">#&gt;                                 isDefinedBy matchType</span>
+<span class="co">#&gt; 1 http://purl.obolibrary.org/obo/uberon.owl     exact</span></code></pre></div>
 <p>For a specific taxon, such as Siluriformes, you can view the taxon rank, term label, whether or not the taxon is extinct, its common name, and ID:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://rphenoscape.phenoscape.org/reference/pk_terms.html">pk_taxon_detail</a></span>(<span class="st">"Siluriformes"</span>)
 <span class="co">#&gt;                                          rank.id rank.label        label</span>
@@ -467,12 +473,12 @@ dep_mat
 <h2 class="hasAnchor">
 <a href="#retrieve-semantic-similarity-matrix" class="anchor"></a>7. Retrieve semantic similarity matrix</h2>
 <p>We can also obtain similarity metrics for phenotypes based on ontological distance. Three similarity metrics - Jaccard, Tanimoto, and Cosine - are computed by the KB to measure similarity between terms (see RPhenoscape documentation in the Help panel for how these are measured). For example, here we compute and visualize Jaccard similarity for premaxillary tooth phenotypes in Ictaluridae:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">phens &lt;-<span class="st"> </span><span class="kw"><a href="http://rphenoscape.phenoscape.org/reference/get_phenotypes.html">get_phenotypes</a></span>(<span class="dt">entity =</span> <span class="st">"premaxillary tooth"</span>, <span class="dt">taxon =</span> <span class="st">"Ictaluridae"</span>,
-                          <span class="dt">.withTaxon =</span> <span class="ot">TRUE</span>)
-
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">phens &lt;-<span class="st"> </span><span class="kw"><a href="http://rphenoscape.phenoscape.org/reference/get_phenotypes.html">get_phenotypes</a></span>(<span class="dt">entity =</span> <span class="st">"premaxillary tooth"</span>, <span class="dt">taxon =</span> <span class="st">"Ictaluridae"</span>)
+<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(phens)
+<span class="co">#&gt; [1] 9</span>
 sm &lt;-<span class="st"> </span><span class="kw"><a href="http://rphenoscape.phenoscape.org/reference/similarity.html">jaccard_similarity</a></span>(<span class="dt">terms =</span> phens<span class="op">$</span>id, <span class="dt">.labels =</span> phens<span class="op">$</span>label, <span class="dt">.colnames =</span> <span class="st">"label"</span>)
 <span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/hclust">hclust</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/dist">as.dist</a></span>(<span class="dv">1</span><span class="op">-</span>sm)))</code></pre></div>
-<p><img src="01_rphenoscape_files/figure-html/unnamed-chunk-19-1.png" width="700"> In the PARAMO tutorial, we’ll use a semantic similarity matrix to visualize traits in a heat map. We are also developing methods that use semantic similarity to cluster phenotypes into characters and character states.</p>
+<p><img src="01_rphenoscape_files/figure-html/unnamed-chunk-20-1.png" width="700"> In the PARAMO tutorial, we’ll use a semantic similarity matrix to visualize traits in a heat map. We are also developing methods that use semantic similarity to cluster phenotypes into characters and character states.</p>
 </div>
   </div>
 
