@@ -79,7 +79,7 @@ pk_taxon_detail("Siluriformes")
 
 Ontology terms are related to each other by superclass (parent) and subclass (child) relationships, among other relationships such as part_of. You can use the term classification functions ```pk_anatomical_class()```, ```pk_taxon_class()```, and ```pk_phenotype_class()```to view the superclass and subclass relationships for anatomy, taxonomy, or phenotypic quality terms. 
 
-For example, view the relationships for “fin”: 
+For example, view the relationships for “pectoral fin”: 
 
 ```{r}
 pk_anatomical_class("pectoral fin")
