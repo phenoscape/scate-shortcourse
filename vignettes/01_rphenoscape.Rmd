@@ -65,6 +65,12 @@ You can also use ```find_term()``` to search the ontologies in the KB for partia
 find_term("pectoral fin")
 ```
 
+There are several parameters to narrow and filter search results. For example, the parameter `matchType` allows restricting to exact matches only:
+
+```{r}
+find_term("pectoral fin", matchTypes = c("exact"))
+```
+
 For a specific taxon, such as Siluriformes, you can view the taxon rank, term label, whether or not the taxon is extinct, its common name, and ID: 
 
 ```{r}
