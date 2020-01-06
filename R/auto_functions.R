@@ -213,12 +213,12 @@ amalgamated_fits_corHMM <- function(td, amalgamations, ...){
   trees <- list()
   fits <- list()
   for(i in 1:ncol(td$dat)){
-    .M <- amal.deps$M[[i]]
+    .M <- amalgamations$M[[i]]
     diag(.M) <- NA
     .M[.M==0] <- NA
     colnames(.M) <- rownames(.M) <- 0:(ncol(.M)-1)
     dat <- data.frame(td[,i,tip.label=TRUE])
-    .testdat <- corHMM:::factorData(dat)
+    #.testdat <- corHMM:::factorData(dat)
     .phy <- phytools::bind.tip(td$phy, "...delete...", edge.length = 0, where=length(td$phy$tip.label)+1)
     new.row <- data.frame("...delete...", paste(0:(ncol(.M)-1), collapse="&"))
     colnames(new.row) <- colnames(dat)
