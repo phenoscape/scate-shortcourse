@@ -632,16 +632,16 @@ trees &lt;-<span class="st"> </span><span class="kw"><a href="../reference/amalg
 ##       0       1 
 ## "black"   "red"</code></pre>
 <pre><code>## no colors provided. using the following legend:
-##        4        6        7 
-##  "black"    "red" "green3"</code></pre>
+##        3        4        5        6        7 
+##  "black"    "red" "green3"   "blue"   "cyan"</code></pre>
 <pre><code>## no colors provided. using the following legend:
 ##         0        12        13        14        15         2         5 
 ##   "black"     "red"  "green3"    "blue"    "cyan" "magenta"  "yellow" 
 ##         6         9 
 ##    "gray"        NA</code></pre>
 <pre><code>## no colors provided. using the following legend:
-##        0        4        5        7 
-##  "black"    "red" "green3"   "blue"</code></pre>
+##       5       7 
+## "black"   "red"</code></pre>
 <p><img src="PARAMO_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
 <p>Our next step is to aggregate the traits by their trait types. This part is not quite done by the phenoscape API, so we’re going to interact directly with the UBERON ontology. In the future, this will not be necessary. To construct manually, you simply need to provide a list of how you want the traits aggregated.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># let's modify our character info to drop dependent states and match our new amalgamated characters</span>

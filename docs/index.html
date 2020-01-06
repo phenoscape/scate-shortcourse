@@ -99,7 +99,21 @@
 <p>The RPhenoscape vignette depends only on the <a href="http://rphenoscape.phenoscape.org">RPhenoscape package</a>, which can be installed directly from Github as per its documentation. (RPhenoscape has itself a number of recursive dependencies; installing the package will install those, too.)</p>
 <p>The PARAMO vignette has a number of dependencies. These can be installed automatically by installing the workshop package, either from the command line (use <code>R CMD build</code>, followed by <code>R CMD INSTALL</code>), or from within RStudio using the <code>install_github()</code> function in the <code>remotes</code> package (which can be installed from CRAN using <code><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages()</a></code>):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"phenoscape/scate-shortcourse"</span>)</code></pre></div>
-<p>Note that this will use the default options for build arguments, which will leave out building and installing the vignettes. Since the best use of the vignettes is to go through (and potentially modify) them within RStudio, this shouldn’t be an issue.</p>
+<p>This command will likely trigger a (possibly long) list of packages that are required to be installed and upgraded, or suggested for upgrade, with a prompt for choosing how to select which packages to upgrade or install. Unless you happen to have installed an earlier version of RPhenoscape that fails to meet the required version, we recommend to use the option for installing and upgrading <em>from CRAN only</em>. (Typically, this will be option 2.)</p>
+<p>Note that the above command will use the default options for build arguments, which will leave out building and installing the vignettes. Since the best use of the vignettes is to go through (and potentially modify) them within RStudio, this shouldn’t be an issue.</p>
+<div id="installation-on-unix-linux" class="section level4">
+<h4 class="hasAnchor">
+<a href="#installation-on-unix-linux" class="anchor"></a>Installation on Unix / Linux</h4>
+<p>If your operating system is some flavor of Linux, many of the package dependencies that include compiled code will end up being installed from source. Some of these have dependencies external to R, and thus installing them from source will fail if these external dependencies are not pre-installed.</p>
+<p>Currently, the following packages are required on top of a Ubuntu 18.04 / R 5.3.3 environment:</p>
+<ul>
+<li>libmagick++-dev</li>
+<li>libgmp-dev</li>
+<li>libmpfr-dev</li>
+<li>pandoc</li>
+</ul>
+<p>Other base systems may require additional (or fewer) external packages.</p>
+</div>
 </div>
 <div id="when-and-where" class="section level3">
 <h3 class="hasAnchor">

@@ -364,11 +364,11 @@
 <p>You can take a look at a small part of the Lundberg (1992) matrix (e.g., the first five taxa and first five characters):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lundberg_matrix[[<span class="dv">1</span>]][<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">7</span>]
 <span class="co">#&gt;                 taxa                                      otu</span>
-<span class="co">#&gt; 1  Ameiurus brunneus otu_25fb2de7-eb77-41c2-9b6a-2d75993ae070</span>
-<span class="co">#&gt; 2     Ameiurus catus otu_665892a2-f6ae-46d5-a9c4-516a71dbbebe</span>
-<span class="co">#&gt; 3     Ameiurus melas otu_f517f360-bd8f-44ac-9c44-b25beefed102</span>
-<span class="co">#&gt; 4   Ameiurus natalis otu_2b8235d3-671c-4f15-b3cd-5dfad9c4578a</span>
-<span class="co">#&gt; 5 Ameiurus nebulosus otu_501f8192-ee95-48fb-afa9-a4163cbe4cd1</span>
+<span class="co">#&gt; 1  Ameiurus brunneus otu_8985e6a0-7cf3-4019-a964-a7cec83fc9eb</span>
+<span class="co">#&gt; 2     Ameiurus catus otu_c63b2154-2be6-47df-8d27-cd3568287900</span>
+<span class="co">#&gt; 3     Ameiurus melas otu_baf69862-dbe5-4e0f-8012-ba81966c146d</span>
+<span class="co">#&gt; 4   Ameiurus natalis otu_ea5132da-ca01-4b1d-afcb-3370f57e4337</span>
+<span class="co">#&gt; 5 Ameiurus nebulosus otu_dce96f1e-1bbf-4d0f-9084-0c83a7d5c2c9</span>
 <span class="co">#&gt;   Anal-fin rays, species mean count Anterior dentations of pectoral spine</span>
 <span class="co">#&gt; 1                           16.1-20                                 large</span>
 <span class="co">#&gt; 2                         20.1-25.5                              moderate</span>
@@ -478,7 +478,8 @@ dep_mat
 <span class="co">#&gt; [1] 9</span>
 sm &lt;-<span class="st"> </span><span class="kw"><a href="http://rphenoscape.phenoscape.org/reference/similarity.html">jaccard_similarity</a></span>(<span class="dt">terms =</span> phens<span class="op">$</span>id, <span class="dt">.labels =</span> phens<span class="op">$</span>label, <span class="dt">.colnames =</span> <span class="st">"label"</span>)
 <span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/hclust">hclust</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/dist">as.dist</a></span>(<span class="dv">1</span><span class="op">-</span>sm)))</code></pre></div>
-<p><img src="01_rphenoscape_files/figure-html/unnamed-chunk-20-1.png" width="700"> In the PARAMO tutorial, we’ll use a semantic similarity matrix to visualize traits in a heat map. We are also developing methods that use semantic similarity to cluster phenotypes into characters and character states.</p>
+<p><img src="01_rphenoscape_files/figure-html/unnamed-chunk-20-1.png" width="700"></p>
+<p>In the PARAMO tutorial, we’ll use a semantic similarity matrix to visualize traits in a heat map. We are also developing methods that use semantic similarity to cluster phenotypes into characters and character states.</p>
 </div>
   </div>
 
