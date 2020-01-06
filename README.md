@@ -21,7 +21,21 @@ The PARAMO vignette has a number of dependencies. These can be installed automat
 remotes::install_github("phenoscape/scate-shortcourse")
 ```
 
-Note that this will use the default options for build arguments, which will leave out building and installing the vignettes. Since the best use of the vignettes is to go through (and potentially modify) them within RStudio, this shouldn't be an issue.
+This command will likely trigger a (possibly long) list of packages that are required to be installed and upgraded, or suggested for upgrade, with a prompt for choosing how to select which packages to upgrade or install. Unless you happen to have installed an earlier version of RPhenoscape that fails to meet the required version, we recommend to use the option for installing and upgrading _from CRAN only_. (Typically, this will be option 2.)
+
+Note that the above command will use the default options for build arguments, which will leave out building and installing the vignettes. Since the best use of the vignettes is to go through (and potentially modify) them within RStudio, this shouldn't be an issue.
+
+#### Installation on Unix / Linux
+
+If your operating system is some flavor of Linux, many of the package dependencies that include compiled code will end up being installed from source. Some of these have dependencies external to R, and thus installing them from source will fail if these external dependencies are not pre-installed.
+
+Currently, the following packages are required on top of a Ubuntu 18.04 / R 5.3.3 environment:
+- libmagick++-dev
+- libgmp-dev
+- libmpfr-dev
+- pandoc
+
+Other base systems may require additional (or fewer) external packages.
 
 ### When and Where
 - [SSB 2020] Workshop in Gainesville, FL
