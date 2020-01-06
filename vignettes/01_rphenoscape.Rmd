@@ -199,9 +199,8 @@ In the PARAMO tutorial, we will learn how to use these dependency matrices to re
 We can also obtain similarity metrics for phenotypes based on ontological distance. Three similarity metrics - Jaccard, Tanimoto, and Cosine - are computed by the KB to measure similarity between terms (see RPhenoscape documentation in the Help panel for how these are measured). For example, here we compute and visualize Jaccard similarity for premaxillary tooth phenotypes in Ictaluridae:
 
 ```{r}
-phens <- get_phenotypes(entity = "premaxillary tooth", taxon = "Ictaluridae",
-                          .withTaxon = TRUE)
-
+phens <- get_phenotypes(entity = "premaxillary tooth", taxon = "Ictaluridae")
+nrow(phens)
 sm <- jaccard_similarity(terms = phens$id, .labels = phens$label, .colnames = "label")
 plot(hclust(as.dist(1-sm)))
 ```
