@@ -33,8 +33,9 @@ Note that this will use the default options for build arguments, which will leav
 * 9:00	Welcome and intros, goals
 * 9:15	Background concepts: anatomy ontologies, phenotype annotations and character dependencies
     - In parallel: tech check troubleshooting
-* 9:30	Using [Phenoscape Knowledgebase] and [RPhenoscape]
-* 10:30	_Break_
+* 9:30	Using [Phenoscape Knowledgebase]
+* 10:00 _Break_
+* 10:30	Using [RPhenoscape]
 * 10:45	Constructing stochastic character maps on a phylogeny
     - Using the PARAMO pipeline with RevBayes
     - Obtaining a presence-absence dependency matrix
