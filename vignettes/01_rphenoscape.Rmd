@@ -28,11 +28,11 @@ You begin by querying ‘Siluriformes’ in the Phenoscape KB faceted browsing p
 
 From left to right across the top tabs, for ‘Siluriformes’:
 
-- There are 4,537 unique phenotypes
-- There are 292,340 taxon annotations 
-- There are 1,452 siluriform taxa with data in the KB 
-- There are 25 publications in the KB that include catfish phenotypes
-- There are 18,430 candidate genes linked to the phenotypes
+- There are 4,969 unique phenotypes
+- There are 292,853 taxon annotations 
+- There are 1,505 siluriform taxa with data in the KB 
+- There are 40 publications in the KB that include catfish phenotypes
+- There are 19,232 candidate genes linked to the phenotypes
 
 Taxon annotations are the ontology terms tagged to original free text descriptions of phenotypes for each siluriform taxon. Click on the ‘Taxon annotations’ tab, and then the ‘Sources’ box on the right hand side of each row to see the publication source(s) and free text description of the phenotype to which each ontology annotation was tagged.
 
