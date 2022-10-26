@@ -51,12 +51,12 @@ The [RPhenoscape] package provides convenient access to the Phenoscape Knowledge
 library(rphenoscape)
 ```
 
-First let’s look up information about the query terms. You can use the term detail functions ```pk_anatomical_detail()```, ```pk_taxon_detail()```, ```pk_phenotype_detail()```, and ```pk_gene_detail()``` to retrieve an ontology term’s ID, label, and definition. 
+First let’s look up information about the query terms. You can use the term detail functions ```anatomy_term_info()```, ```taxon_info()```, ```phenotypic_quality_term_info()```, and ```gene_info()``` to retrieve an ontology term’s ID, label, and definition. 
 
 For example, view the details for the anatomy term “fin”:
 
 ```{r}
-pk_anatomical_detail("fin")
+anatomy_term_info("fin")
 ```
 
 You can also use ```find_term()``` to search the ontologies in the KB for partial name matches. For example, search for terms containing the string "pectoral fin" in the label or synonym:
@@ -74,15 +74,15 @@ find_term("pectoral fin", matchTypes = c("exact"))
 For a specific taxon, such as Siluriformes, you can view the taxon rank, term label, whether or not the taxon is extinct, its common name, and ID: 
 
 ```{r}
-pk_taxon_detail("Siluriformes")
+taxon_info("Siluriformes")
 ```
 
-Ontology terms are related to each other by superclass (parent) and subclass (child) relationships, among other relationships such as part_of. You can use the term classification functions ```pk_anatomical_class()```, ```pk_taxon_class()```, and ```pk_phenotype_class()```to view the superclass and subclass relationships for anatomy, taxonomy, or phenotypic quality terms. 
+Ontology terms are related to each other by superclass (parent) and subclass (child) relationships, among other relationships such as part_of. You can use ```term_classification()```to view the superclass and subclass relationships for a given term (e.g., anatomy, taxon).
 
 For example, view the relationships for “pectoral fin”: 
 
 ```{r}
-pk_anatomical_class("pectoral fin")
+term_classification("pectoral fin", as = "anatomy")
 ```
 Note that because the KB integrates model organism phenotypes, the results show types of pectoral fin specific to model organisms, such as "pectoral fin (zebrafish)".
 
@@ -91,21 +91,21 @@ Note that because the KB integrates model organism phenotypes, the results show 
 Now we will query for ‘Ictaluridae’ and ‘fin’ (including parts) to retrieve the list of studies that contain fin characters for this taxon.  
 
 ```{r}
-slist <- pk_get_study_list(taxon = "Ictaluridae", entity = "fin", relation = "part of")
+slist <- get_studies(taxon = "Ictaluridae", entity = "fin", includeRels = "part of")
 ```
 The list is returned as a data.frame containing the study IDs and citations. Navigate to Global Environment and click on ‘slist’ to view the ID and citation (author, year) for each study in the KB that contains any ictalurid species associated with fin data.  Note that taxon, entity, and quality are optional arguments in this query, and we have also included fin parts.  Here we found nine studies. Click on ‘slist’ in the Global Environment to view these studies and their IDs.
 
 Next we want to obtain the character matrix for one of these studies. Using the study IDs from the previous step, we can get a list of the character matrices as NeXML objects.  We will choose the Lundberg (1992) publication, the fifth item on the list above.   
 
 ```{r}
-lundberg_nexml <- pk_get_study_xml(slist$id[5])
+lundberg_nexml <- get_study_data(slist$id[5])
 ```
 Now go to Global Environment pane and click on ‘lundberg_nexml’ to view the study ID and associated NeXML object.  
 
 To view the full Lundberg (1992) matrix within RStudio, we need to first retrieve the matrix as a data.frame from the NeXML object:
 
 ```{r}
-lundberg_matrix <- pk_get_study(lundberg_nexml)
+lundberg_matrix <- get_char_matrix(lundberg_nexml)
 ```
 
 You can take a look at a small part of the Lundberg (1992) matrix (e.g., the first five taxa and first five characters): 
@@ -127,19 +127,19 @@ In the previous step, we queried the KB for individual studies that contain char
  
 
 ```{r}
-nex <- pk_get_ontotrace_xml(taxon = "Ictaluridae", entity = "fin", variable_only = FALSE)
+nex <- get_ontotrace_data(taxon = "Ictaluridae", entity = "fin", variable_only = FALSE)
 ```
 
 To view the matrix within RStudio, get the matrix (m) as a ```data.frame``` from the NeXML object. Opening this (‘m’) in the Global Environment shows the taxa, character names, and state assignments (0, absent; 1, present) (note: the otu and otus are NeXML-internal IDs):  
 
 ```{r}
-m <- pk_get_ontotrace(nex)
+m <- get_char_matrix(nex)
 ```
 
 The character and taxon lists for the matrix can also be returned. Click on ‘meta’ in the Global Environment pane to view the data.frames for taxa and entities: 
 
 ```{r}
-meta <- pk_get_ontotrace_meta(nex)
+meta <- get_char_matrix_meta(nex)
 ```
 The above returns 29 species of ictalurid catfishes and 123 anatomical entities for fins and their parts.  
 
@@ -159,7 +159,7 @@ In the above step you retrieved a synthetic matrix for the Ictaluridae.  Now you
 First, we need to parse the list to determine which taxa in the matrix (‘m’) are descendants of *Ictalurus*. This returns a list of TRUE or FALSE assignments for each taxon in the matrix:
 
 ```{r}
-is_desc <- pk_is_descendant('Ictalurus', m$taxa)
+is_desc <- is_descendant('Ictalurus', m$taxa)
 ```
 We then subset the matrix m to the descendants of *Ictalurus*:
 
@@ -168,10 +168,10 @@ ictalurus_m <- m[is_desc, ]
 ```
 View the new matrix by clicking on the ‘ictalurus_m’ ```data.frame``` in the Global Environment.
 
-We can also subset the matrix by anatomy. In this case, let’s select characters for the pectoral fin and its parts. We will use `pk_is_descendant()` to first parse the characters (column names; note the first three taxon-related columns are excluded) to determine which are descendents (types or parts) of the term ‘pectoral fin’. Because this function only looks for descendent terms, we also need to specify that any characters pertaining to 'pectoral fin' itself are included. 
+We can also subset the matrix by anatomy. In this case, let’s select characters for the pectoral fin and its parts. We will use `is_descendant()` to first parse the characters (column names; note the first three taxon-related columns are excluded) to determine which are descendents (types or parts) of the term ‘pectoral fin’. Because this function only looks for descendent terms, we also need to specify that any characters pertaining to 'pectoral fin' itself are included. 
 
 ```{r}
-is_desc_pecfin <- pk_is_descendant('pectoral fin', colnames(ictalurus_m)[-c(1,2,3)], includeRels = "part_of") | colnames(ictalurus_m)[-c(1,2,3)] == 'pectoral fin' 
+is_desc_pecfin <- is_descendant('pectoral fin', colnames(ictalurus_m)[-c(1,2,3)], includeRels = "part_of") | colnames(ictalurus_m)[-c(1,2,3)] == 'pectoral fin' 
 table(is_desc_pecfin)
 ```
 Using the ‘colnames’ command below, view the character names to verify that pectoral fin related characters will be selected:
