@@ -105,7 +105,7 @@ Now go to Global Environment pane and click on ‘lundberg_nexml’ to view the 
 To view the full Lundberg (1992) matrix within RStudio, we need to first retrieve the matrix as a data.frame from the NeXML object:
 
 ```{r}
-lundberg_matrix <- get_char_matrix(lundberg_nexml)
+lundberg_matrix <- lapply(lundberg_nexml, function(nex) get_char_matrix(nex))
 ```
 
 You can take a look at a small part of the Lundberg (1992) matrix (e.g., the first five taxa and first five characters): 
@@ -141,7 +141,7 @@ The character and taxon lists for the matrix can also be returned. Click on ‘m
 ```{r}
 meta <- get_char_matrix_meta(nex)
 ```
-The above returns 29 species of ictalurid catfishes and 123 anatomical entities for fins and their parts.  
+The above returns 29 species of ictalurid catfishes and 127 anatomical entities for fins and their parts.  
 
 You will need to go to the [Phenoscape KB] to view the supporting states, i.e., the source data upon which inferences were made or those that were directly asserted.  
 
