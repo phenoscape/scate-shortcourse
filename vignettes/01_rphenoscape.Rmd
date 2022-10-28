@@ -24,7 +24,7 @@ This workshop uses trait data for vertebrates that has been annotated (tagged) w
 
 You would like to understand the evolution of morphological traits in a taxonomic group, and you need a matrix to map to your (typically molecular) phylogenetic tree.  You come to the Phenoscape KB to see what types of data are available across the members of your clade.  In this exercise, you are an ichthyologist, interested in catfishes (Siluriformes), specifically the bullhead catfishes in the family Ictaluridae.
 
-You begin by querying ‘Siluriformes’ in the Phenoscape KB faceted browsing page (http://kb.phenoscape.org/#/facet).  You immediately see the scope of the data:
+You begin by querying ‘Siluriformes’ in the Phenoscape KB [faceted browsing page]. You immediately see the scope of the data:
 
 From left to right across the top tabs, for ‘Siluriformes’:
 
@@ -145,7 +145,7 @@ The above returns 29 species of ictalurid catfishes and 127 anatomical entities 
 
 You will need to go to the [Phenoscape KB] to view the supporting states, i.e., the source data upon which inferences were made or those that were directly asserted.  
 
-For example, in the returned OntoTrace matrix (see ‘m’ in Global Environment (row 10)) the pelvic fin is scored as present ('1') for *Ictalurus australis*. Enter these data into the faceted browsing interface: https://kb.phenoscape.org/#/facet
+For example, in the returned OntoTrace matrix (see ‘m’ in Global Environment (row 10)) the pelvic fin is scored as present ('1') for *Ictalurus australis*. Enter these data on the [faceted browsing page]:
 
 - Anatomical entity = ‘pelvic fin’
 - Quality = ‘present’
@@ -213,6 +213,7 @@ plot(hclust(as.dist(1-sm)))
 
 In the PARAMO tutorial, we'll use a semantic similarity matrix to visualize traits in a heat map. We are also developing methods that use semantic similarity to cluster phenotypes into characters and character states. 
 
-[OntoTrace]: http://kb.phenoscape.org/#/ontotrace
-[Phenoscape KB]: http://kb.phenoscape.org/#/facet
+[OntoTrace]: http://kb.phenoscape.org/ontotrace
+[Phenoscape KB]: http://kb.phenoscape.org/
 [RPhenoscape]: http://rphenoscape.phenoscape.org/
+[faceted browsing page]: https://kb.phenoscape.org/facet?quality=&publicationsPage=1&tab=taxa&geneAnnotationsPage=1&includeParts=false&includeSerialHomologs=false&includeHistoricalHomologs=false&phenotypesPage=1&taxon=&genesPage=1&taxaAnnotationsPage=1&taxaPage=1&entity=&qualityMode=quality
