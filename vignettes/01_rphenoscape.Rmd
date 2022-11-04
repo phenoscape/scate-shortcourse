@@ -51,40 +51,32 @@ The [RPhenoscape] package provides convenient access to the Phenoscape Knowledge
 library(rphenoscape)
 ```
 
-First let’s look up information about the query terms. You can use the term detail functions ```anatomy_term_info()```, ```taxon_info()```, ```phenotypic_quality_term_info()```, and ```gene_info()``` to retrieve an ontology term’s ID, label, and definition. 
-
-For example, view the details for the anatomy term “fin”:
+First let’s look up information about the query terms. The `find_term()` function searches the KB for terms matching a given search text, and will return the ID (term IRI), label, source ontology IRI, and type of match (e.g., exact, broad). For example, search for terms containing the string “fin” in the label or synonym:
 
 ```{r}
-anatomy_term_info("fin")
+find_term("fin")
 ```
+Note that because the KB integrates model organism phenotypes, the results show types of fin specific to model organisms, such as "fin (zebrafish)".
 
-You can also use ```find_term()``` to search the ontologies in the KB for partial name matches. For example, search for terms containing the string "pectoral fin" in the label or synonym:
+There are several parameters available to narrow and filter search results. For example, the parameter `matchType` allows restricting to exact matches only:
 
 ```{r}
-find_term("pectoral fin")
+find_term("fin", matchTypes = c("exact"))
 ```
+To retrieve more details about a given term, such as definition, synonyms and classification, you can pass the term IRI (e.g., 'http://purl.obolibrary.org/obo/UBERON_0008897' for fin) to the function `as.terminfo()`. Classification details include the superclass (parent) and subclass (child) relationships for a given ontology term, along with other relationships such as part_of. 
 
-There are several parameters to narrow and filter search results. For example, the parameter `matchType` allows restricting to exact matches only:
+For example, view the relationships and term info for “pectoral fin”: 
 
 ```{r}
-find_term("pectoral fin", matchTypes = c("exact"))
+pecfin <- find_term('pectoral fin', matchType='exact')
+as.terminfo(pecfin)
 ```
 
-For a specific taxon, such as Siluriformes, you can view the taxon rank, term label, whether or not the taxon is extinct, its common name, and ID: 
-
+For a specific taxon, such as Siluriformes, you can also view the taxon rank, whether or not the taxon is extinct, and its common name: 
 ```{r}
-taxon_info("Siluriformes")
+taxon <- find_term('Siluriformes') 
+as.terminfo(taxon)
 ```
-
-Ontology terms are related to each other by superclass (parent) and subclass (child) relationships, among other relationships such as part_of. You can use ```term_classification()```to view the superclass and subclass relationships for a given term (e.g., anatomy, taxon).
-
-For example, view the relationships for “pectoral fin”: 
-
-```{r}
-term_classification("pectoral fin", as = "anatomy")
-```
-Note that because the KB integrates model organism phenotypes, the results show types of pectoral fin specific to model organisms, such as "pectoral fin (zebrafish)".
 
 ## 4. Retrieve study matrices using RPhenoscape
 
@@ -130,7 +122,7 @@ In the previous step, we queried the KB for individual studies that contain char
 nex <- get_ontotrace_data(taxon = "Ictaluridae", entity = "fin", variable_only = FALSE)
 ```
 
-To view the matrix within RStudio, get the matrix (m) as a ```data.frame``` from the NeXML object. Opening this (‘m’) in the Global Environment shows the taxa, character names, and state assignments (0, absent; 1, present) (note: the otu and otus are NeXML-internal IDs):  
+To view the matrix within RStudio, get the matrix (m) as a `data.frame` from the NeXML object. Opening this (‘m’) in the Global Environment shows the taxa, character names, and state assignments (0, absent; 1, present) (note: the otu and otus are NeXML-internal IDs):  
 
 ```{r}
 m <- get_char_matrix(nex)
@@ -141,7 +133,7 @@ The character and taxon lists for the matrix can also be returned. Click on ‘m
 ```{r}
 meta <- get_char_matrix_meta(nex)
 ```
-The above returns 29 species of ictalurid catfishes and 127 anatomical entities for fins and their parts.  
+The above returns 29 species of ictalurid catfishes and 124 anatomical entities for fins and their parts.  
 
 You will need to go to the [Phenoscape KB] to view the supporting states, i.e., the source data upon which inferences were made or those that were directly asserted.  
 
@@ -166,7 +158,7 @@ We then subset the matrix m to the descendants of *Ictalurus*:
 ```{r}
 ictalurus_m <- m[is_desc, ]
 ```
-View the new matrix by clicking on the ‘ictalurus_m’ ```data.frame``` in the Global Environment.
+View the new matrix by clicking on the ‘ictalurus_m’ `data.frame` in the Global Environment.
 
 We can also subset the matrix by anatomy. In this case, let’s select characters for the pectoral fin and its parts. We will use `is_descendant()` to first parse the characters (column names; note the first three taxon-related columns are excluded) to determine which are descendents (types or parts) of the term ‘pectoral fin’. Because this function only looks for descendent terms, we also need to specify that any characters pertaining to 'pectoral fin' itself are included. 
 
