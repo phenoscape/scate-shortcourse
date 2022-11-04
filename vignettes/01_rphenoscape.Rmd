@@ -97,7 +97,7 @@ Now go to Global Environment pane and click on ‘lundberg_nexml’ to view the 
 To view the full Lundberg (1992) matrix within RStudio, we need to first retrieve the matrix as a data.frame from the NeXML object:
 
 ```{r}
-lundberg_matrix <- lapply(lundberg_nexml, function(nex) get_char_matrix(nex))
+lundberg_matrix <- get_char_matrix(lundberg_nexml[[1]])
 ```
 
 You can take a look at a small part of the Lundberg (1992) matrix (e.g., the first five taxa and first five characters): 
