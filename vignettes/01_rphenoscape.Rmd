@@ -160,7 +160,7 @@ ictalurus_m <- m[is_desc, ]
 ```
 View the new matrix by clicking on the ‘ictalurus_m’ `data.frame` in the Global Environment.
 
-We can also subset the matrix by anatomy. In this case, let’s select characters for the pectoral fin and its parts. We will use `is_descendant()` to first parse the characters (column names; note the first three taxon-related columns are excluded) to determine which are descendents (types or parts) of the term ‘pectoral fin’. Because this function only looks for descendent terms, we also need to specify that any characters pertaining to 'pectoral fin' itself are included. 
+We can also subset the matrix by anatomy. In this case, let’s select characters for the pectoral fin and its parts. We will use [`is_descendant()`](https://rphenoscape.phenoscape.org/reference/is_relation.html) to first parse the characters (column names; note the first three taxon-related columns are excluded) to determine which are descendents (types or parts) of the term ‘pectoral fin’. Because this function only looks for descendent terms, we also need to specify that any characters pertaining to 'pectoral fin' itself are included. 
 
 ```{r}
 is_desc_pecfin <- is_descendant('pectoral fin', colnames(ictalurus_m)[-c(1,2,3)], includeRels = "part_of") | colnames(ictalurus_m)[-c(1,2,3)] == 'pectoral fin' 
