@@ -51,7 +51,7 @@ The [RPhenoscape] package provides convenient access to the Phenoscape Knowledge
 library(rphenoscape)
 ```
 
-First let’s look up information about the query terms. The `find_term()` function searches the KB for terms matching a given search text, and will return the ID (term IRI), label, source ontology IRI, and type of match (e.g., exact, broad). For example, search for terms containing the string “fin” in the label or synonym:
+First let’s look up information about the query terms. The [`find_term()`](https://rphenoscape.phenoscape.org/reference/find_term.html) function searches the KB for terms matching a given search text, and will return the ID (term IRI), label, source ontology IRI, and type of match (e.g., exact, broad). For example, search for terms containing the string “fin” in the label or synonym:
 
 ```{r}
 find_term("fin")
