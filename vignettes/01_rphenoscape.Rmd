@@ -63,7 +63,7 @@ There are several parameters available to narrow and filter search results. For 
 ```{r}
 find_term("fin", matchTypes = c("exact"))
 ```
-To retrieve more details about a given term, such as definition, synonyms and classification, you can pass the term IRI (e.g., 'http://purl.obolibrary.org/obo/UBERON_0008897' for fin) to the function `as.terminfo()`. Classification details include the superclass (parent) and subclass (child) relationships for a given ontology term, along with other relationships such as part_of. 
+To retrieve more details about a given term, such as definition, synonyms and classification, you can pass the term IRI (e.g., 'http://purl.obolibrary.org/obo/UBERON_0008897' for fin) to the function [`as.terminfo()`](https://rphenoscape.phenoscape.org/reference/terminfo.html). Classification details include the superclass (parent) and subclass (child) relationships for a given ontology term, along with other relationships such as part_of. 
 
 For example, view the relationships and term info for “pectoral fin”: 
 
