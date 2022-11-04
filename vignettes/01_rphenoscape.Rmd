@@ -208,4 +208,4 @@ In the PARAMO tutorial, we'll use a semantic similarity matrix to visualize trai
 [OntoTrace]: http://kb.phenoscape.org/ontotrace
 [Phenoscape KB]: http://kb.phenoscape.org/
 [RPhenoscape]: http://rphenoscape.phenoscape.org/
-[faceted browsing page]: https://kb.phenoscape.org/facet?quality=&publicationsPage=1&tab=taxa&geneAnnotationsPage=1&includeParts=false&includeSerialHomologs=false&includeHistoricalHomologs=false&phenotypesPage=1&taxon=&genesPage=1&taxaAnnotationsPage=1&taxaPage=1&entity=&qualityMode=quality
+[faceted browsing page]: https://kb.phenoscape.org/facet
