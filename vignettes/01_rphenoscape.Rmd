@@ -103,7 +103,7 @@ lundberg_matrix <- get_char_matrix(lundberg_nexml[[1]])
 You can take a look at a small part of the Lundberg (1992) matrix (e.g., the first five taxa and first five characters): 
 
 ```{r}
-lundberg_matrix[[1]][1:5, 1:7]
+lundberg_matrix[1:5, 1:7]
 ```
 Now navigate to Global Environment and click on ‘lundberg_matrix’ to view the matrix, including the total number of taxa and characters (i.e., the dimensions of the data.frame). To view the entire matrix in this panel, click on the first icon that appears to the right when you hover over the second row.
 
