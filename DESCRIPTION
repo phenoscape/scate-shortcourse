@@ -1,6 +1,6 @@
 Package: SCATE.shortcourse
 Title: Short Course on Phylogenetic Comparative Analysis of Integrated Anatomical Traits
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: 
     c(person("Hilmar", "Lapp",
              email = "hilmar.lapp@duke.edu",
@@ -29,7 +29,7 @@ BugReports: https://github.com/phenoscape/scate-shortcourse/issues
 Depends:
     R (>= 3.5.0),
     RNeXML,
-    rphenoscape (>= 0.2.12),
+    rphenoscape (>= 0.3.0),
     treeplyr
 Imports:
     igraph,
