@@ -13,6 +13,10 @@ recode_traits <- function(td, M){
     # if trait is not connected (ie has no dependencies)
     if(pracma::strcmp(M$traits[[i]], M$new_traits[[i]]) == TRUE){
       states <- setNames(c("0", "1"), 1:2)
+	  ##
+	  td$dat[[i]] %>% as.character %>%  tidyr::replace_na("?") -> td$dat[[i]]
+	  td$dat <- type.convert(as.data.frame(td$dat), as.is = T)
+      ##
       td <- recode_td(td, trait_name, states)
       td$dat[[trait_name]][td$dat[[trait_name]]=="?"] <- paste0(((1:length(states))-1), collapse="&")
     }
@@ -21,6 +25,10 @@ recode_traits <- function(td, M){
       gtraits <- M$traits[[i]]
       # set states
       states <- colnames(M$M[[trait_name]])
+	  ##
+	  td$dat[[i]] %>% as.character %>%  tidyr::replace_na("?") -> td$dat[[i]]
+	  td$dat <- type.convert(as.data.frame(td$dat), as.is = T)
+      ##
       depstates <- M$depstates[[trait_name]]
       td <-recode_td(td, gtraits, states, depstates) 
       td$dat[[trait_name]][td$dat[[trait_name]]=="?"] <- paste0(((1:length(states))-1), collapse="&")
