@@ -29,10 +29,10 @@ taxon <- "Siluriformes"
 
 # Apply pk_get_ontotrace_xml over all our traits in our taxon of interest, the Siluriformes and retain
 # variable characters. If you want to return invariant characters instead, select variable_only=FALSE. 
-nex <- lapply(terms, pk_get_ontotrace_xml, taxon=taxon, variable_only=TRUE)
+nex <- lapply(terms, get_ontotrace_data, taxon=taxon, variable_only=TRUE)
 names(nex) <- terms
 
-.m <- lapply(nex, pk_get_ontotrace)
+.m <- lapply(nex, get_char_matrix)
 
 # Merge together the resulting 3 matrices and remove non-trait data (OTU identifiers) and duplicated columns (if present)
 m <- purrr::reduce(.m, full_join, by="taxa", suffix=c("", ".y"))  
@@ -81,7 +81,7 @@ We want to learn about these traits, so we're going to build a nice data table t
 
 ```{r}
 traits <- colnames(td$dat)
-anatomical_details <- lapply(traits, pk_anatomical_detail) # Query over traits and get anatomical details 
+anatomical_details <- lapply(traits, anatomy_term_info) # Query over traits and get anatomical details 
 
 char_info <- list()
 char_info$ID <- traits
@@ -150,7 +150,7 @@ We can reconstruct our stochastic character maps by first fitting the model in t
 
 ```{r eval=FALSE}
 ## WARNING: VERY TIME CONSUMING (~15-30 minutes)
-corhmm.fits <- amalgamated_fits_corHMM(td.comb, amal.deps)
+corhmm.fits <- amalgamated_fits_corHMM(td.comb, amal.deps, model = "ER")
 ```
 
 ```{r}
